@@ -9,7 +9,7 @@ This code provides an implemenation of a novel continual learning interpretabili
 saliency maps. This folder contains the implementation for iTAML; the algorithm was implemented using PyTorch.
 
 ## Installation & Requirements
-This code was has been tested using `Python 3.6.8` on a CentOS operating system. 
+This code was tested using `Python 3.6.8` on a CentOS operating system. 
 
 ### Dependencies
 The following dependencies are required to run this code:
@@ -31,11 +31,11 @@ pip install -r requirements.txt
 ## Usage
 To run the code the following command can be used:
 ```
-./datasetRun.sh
+./DATASET.sh
 ```
-Here `dataset` should be replaced with the desired dataset for testing. For example, in order to run the MNIST dataset the following command should be used:
+Here `DATASET` should be replaced with the desired dataset for testing. For example, in order to run the MNIST dataset the following command should be used:
 ```
-./mnistRun.sh
+./MNIST.sh
 ```
 
 ## Credit
