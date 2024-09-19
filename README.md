@@ -1,4 +1,4 @@
-# Continual Learning: Interpretability and Analysis of Adversial Attacks
+# Continual Learning Interpretability:  Analysis of Adversial Attacks and Defense 
 
 Implementation of a saliency map-based interpretability algorithm for use with the Incremental Task-Agnostic
 Meta-learning Approach (iTAML) and Random Path Selection for Incremental Learning (RPS), and Deep Generative
