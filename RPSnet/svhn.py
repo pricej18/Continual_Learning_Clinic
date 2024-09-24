@@ -47,9 +47,10 @@ import matplotlib.pyplot as plt
 
 
 class args:
-    epochs = 10
-    checkpoint = "results/svhn/RPS_net_svhnSal"
-    savepoint = "results/svhn/pathnet_svhnSal"
+    #epochs = 10
+    epochs = 1
+    checkpoint = "results/svhn/RPS_net_svhn"
+    savepoint = "results/svhn/pathnet_svhn"
     dataset = "SVHN"
     num_class = 10
     class_per_task = 2
@@ -72,6 +73,7 @@ class args:
     jump = 1
     
 state = {key:value for key, value in args.__dict__.items() if not key.startswith('__') and not callable(key)}
+classes = ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
 print(state)
 memory = 4400
 # Use CUDA
@@ -181,10 +183,9 @@ def create_saliency_map(model, path, saliency_loader, pred, ses):
         if ind==0: grads = saliency.attribute(input, target=sal_labels[ind].item(), abs=False, additional_forward_args = (path, -1))
         else: grads = saliency.attribute(input, target=sal_labels2[ind].item(), abs=False, additional_forward_args = (path, -1))
         
-        #grads = grads.reshape(28,28)
         squeeze_grads = grads.squeeze().cpu().detach()
-        squeeze_grads = torch.unsqueeze(squeeze_grads,0).numpy()
-        grads = np.transpose(squeeze_grads, (1, 2, 0))
+        print("After Squeeze: " + str(squeeze_grads.shape))
+        grads = np.transpose(squeeze_grads.numpy(), (1, 2, 0))
 
         if ind==0: print('Truth:', classes[sal_labels[ind]])
         else: print('Truth:', classes[sal_labels2[ind]])
@@ -193,15 +194,14 @@ def create_saliency_map(model, path, saliency_loader, pred, ses):
         # Denormalization
         MEAN = torch.tensor([0.4914, 0.4822, 0.4465])
         STD = torch.tensor([0.2023, 0.1994, 0.2010])
-
-        original_image = selected_imgs[ind].cpu() * STD[:, None, None] + MEAN[:, None, None]
         
-        original_image = np.transpose(original_image.detach().numpy(), (1, 2, 0))
+        if ind==0:
+            original_image = sal_imgs[ind].cpu() * STD[:, None, None] + MEAN[:, None, None]
+            original_image = np.transpose((sal_imgs[ind].cpu().detach().numpy()), (1, 2, 0))       
+        else:
+            original_image = sal_imgs2[ind].cpu() * STD[:, None, None] + MEAN[:, None, None]
+            original_image = np.transpose((sal_imgs2[ind].cpu().detach().numpy()), (1, 2, 0))       
         
-        if ind==0: original_image = np.transpose((sal_imgs[ind].cpu().detach().numpy() / 2) + 0.5, (1, 2, 0))       
-        else: original_image = np.transpose((sal_imgs2[ind].cpu().detach().numpy() / 2) + 0.5, (1, 2, 0))       
-        
-        #original_image = selected_imgs[ind].cpu().detach().numpy()  
 
         methods=["original_image","blended_heat_map"]
         signs=["all","absolute_value"]

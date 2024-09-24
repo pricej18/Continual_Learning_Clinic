@@ -1,7 +1,7 @@
 Using TensorFlow backend.
 The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
 The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
-{'epochs': 10, 'checkpoint': 'results/svhn/RPS_net_svhnSal', 'savepoint': 'results/svhn/pathnet_svhnSal', 'dataset': 'SVHN', 'num_class': 10, 'class_per_task': 2, 'M': 8, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 128, 'test_batch': 128, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [6, 8, 16], 'gamma': 0.5, 'rigidness_coff': 2.5, 'jump': 1}
+{'epochs': 1, 'checkpoint': 'results/svhn/RPS_net_svhn', 'savepoint': 'results/svhn/pathnet_svhn', 'dataset': 'SVHN', 'num_class': 10, 'class_per_task': 2, 'M': 8, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 128, 'test_batch': 128, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [6, 8, 16], 'gamma': 0.5, 'rigidness_coff': 2.5, 'jump': 1}
     Total params: 89.55M
 Starting with session 0
 test case : 0
@@ -48,27 +48,9 @@ infer_path
  [1. 0. 0. 0. 0. 0. 0. 0.]]
 Number of layers being trained :  13
 
-Epoch: [1 | 10] LR: 0.001000 Sess: 0
-
-Epoch: [2 | 10] LR: 0.001000 Sess: 0
-
-Epoch: [3 | 10] LR: 0.001000 Sess: 0
-
-Epoch: [4 | 10] LR: 0.001000 Sess: 0
-
-Epoch: [5 | 10] LR: 0.001000 Sess: 0
-
-Epoch: [6 | 10] LR: 0.001000 Sess: 0
-
-Epoch: [7 | 10] LR: 0.000500 Sess: 0
-
-Epoch: [8 | 10] LR: 0.000500 Sess: 0
-
-Epoch: [9 | 10] LR: 0.000250 Sess: 0
-
-Epoch: [10 | 10] LR: 0.000250 Sess: 0
+Epoch: [1 | 1] LR: 0.001000 Sess: 0
 Best acc:
-66.37110726643598
+83.76946366782006
 tensor([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -82,329 +64,43 @@ tensor([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0], device='cuda:0')
+After Squeeze: torch.Size([3, 32, 32])
+Truth: 0
+Predicted: 1
+After Squeeze: torch.Size([3, 32, 32])
+Truth: 0
+Predicted: 0
 Traceback (most recent call last):
   File "svhnSal.py", line 410, in <module>
     main()
-  File "svhnSal.py", line 380, in main
-    create_saliency_map(model, infer_path, saliency_loader, pred, ses)
-  File "svhnSal.py", line 181, in create_saliency_map
-    if ind==0: grads = saliency.attribute(input, target=sal_labels[ind].item(), abs=False, additional_forward_args = (path, -1))
-  File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/captum/log/__init__.py", line 42, in wrapper
-    return func(*args, **kwargs)
-  File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/captum/attr/_core/saliency.py", line 131, in attribute
-    self.forward_func, inputs, target, additional_forward_args
-  File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/captum/_utils/gradient.py", line 119, in compute_gradients
-    grads = torch.autograd.grad(torch.unbind(outputs), inputs)
-  File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/torch/autograd/__init__.py", line 236, in grad
-    inputs, allow_unused, accumulate_grad=False)
-RuntimeError: One of the differentiated Tensors appears to not have been used in the graph. Set allow_unused=True if this is the desired behavior.
+  File "svhnSal.py", line 394, in main
+    best_model = get_best_model(ses, args.checkpoint)
+  File "/home/abanyi17/RPSnet-master/util.py", line 29, in get_best_model
+    a = np.argmax(best_acc)
+  File "<__array_function__ internals>", line 6, in argmax
+  File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 1188, in argmax
+    return _wrapfunc(a, 'argmax', axis=axis, out=out)
+  File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 55, in _wrapfunc
+    return _wrapit(obj, method, *args, **kwds)
+  File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 44, in _wrapit
+    result = getattr(asarray(obj), method)(*args, **kwds)
+ValueError: attempt to get argmax of an empty sequence
 Using TensorFlow backend.
-/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/torch/nn/_reduction.py:42: UserWarning: size_average and reduce args will be deprecated, please use reduction='none' instead.
-  warnings.warn(warning.format(ret))
-The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
-The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
-{'epochs': 10, 'checkpoint': 'results/svhn/RPS_net_svhnSal', 'savepoint': 'results/svhn/pathnet_svhnSal', 'dataset': 'SVHN', 'num_class': 10, 'class_per_task': 2, 'M': 8, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 128, 'test_batch': 128, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [6, 8, 16], 'gamma': 0.5, 'rigidness_coff': 2.5, 'jump': 1}
+{'epochs': 1, 'checkpoint': 'results/svhn/RPS_net_svhn', 'savepoint': 'results/svhn/pathnet_svhn', 'dataset': 'SVHN', 'num_class': 10, 'class_per_task': 2, 'M': 8, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 128, 'test_batch': 128, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [6, 8, 16], 'gamma': 0.5, 'rigidness_coff': 2.5, 'jump': 1}
     Total params: 89.55M
-66.371107 0
-Starting with session 1
-test case : 0
-#################################################################################
-path
- [[0. 0. 0. 0. 0. 1. 0. 0.]
- [0. 0. 1. 0. 0. 0. 0. 0.]
- [1. 0. 0. 0. 0. 0. 0. 0.]
- [0. 0. 0. 0. 0. 0. 1. 0.]
- [0. 0. 0. 1. 0. 0. 0. 0.]
- [0. 0. 0. 0. 0. 1. 0. 0.]
- [0. 0. 0. 0. 1. 0. 0. 0.]
- [1. 0. 0. 0. 0. 0. 0. 0.]
- [0. 0. 0. 0. 1. 0. 0. 0.]]
-fixed_path
- [[1. 0. 0. 0. 0. 0. 0. 0.]
- [1. 0. 0. 0. 0. 0. 0. 0.]
- [1. 0. 0. 0. 0. 0. 0. 0.]
- [1. 0. 0. 0. 0. 0. 0. 0.]
- [1. 0. 0. 0. 0. 0. 0. 0.]
- [1. 0. 0. 0. 0. 0. 0. 0.]
- [1. 0. 0. 0. 0. 0. 0. 0.]
- [1. 0. 0. 0. 0. 0. 0. 0.]
- [1. 0. 0. 0. 0. 0. 0. 0.]]
-train_path
- [[0. 0. 0. 0. 0. 1. 0. 0.]
- [0. 0. 1. 0. 0. 0. 0. 0.]
- [0. 0. 0. 0. 0. 0. 0. 0.]
- [0. 0. 0. 0. 0. 0. 1. 0.]
- [0. 0. 0. 1. 0. 0. 0. 0.]
- [0. 0. 0. 0. 0. 1. 0. 0.]
- [0. 0. 0. 0. 1. 0. 0. 0.]
- [0. 0. 0. 0. 0. 0. 0. 0.]
- [0. 0. 0. 0. 1. 0. 0. 0.]]
-infer_path
- [[1. 0. 0. 0. 0. 1. 0. 0.]
- [1. 0. 1. 0. 0. 0. 0. 0.]
- [1. 0. 0. 0. 0. 0. 0. 0.]
- [1. 0. 0. 0. 0. 0. 1. 0.]
- [1. 0. 0. 1. 0. 0. 0. 0.]
- [1. 0. 0. 0. 0. 1. 0. 0.]
- [1. 0. 0. 0. 1. 0. 0. 0.]
- [1. 0. 0. 0. 0. 0. 0. 0.]
- [1. 0. 0. 0. 1. 0. 0. 0.]]
-Number of layers being trained :  11
-
-Epoch: [1 | 10] LR: 0.001000 Sess: 1
-
-Epoch: [2 | 10] LR: 0.001000 Sess: 1
-
-Epoch: [3 | 10] LR: 0.001000 Sess: 1
-
-Epoch: [4 | 10] LR: 0.001000 Sess: 1
-
-Epoch: [5 | 10] LR: 0.001000 Sess: 1
-
-Epoch: [6 | 10] LR: 0.001000 Sess: 1
-
-Epoch: [7 | 10] LR: 0.000500 Sess: 1
-
-Epoch: [8 | 10] LR: 0.000500 Sess: 1
-
-Epoch: [9 | 10] LR: 0.000250 Sess: 1
-
-Epoch: [10 | 10] LR: 0.000250 Sess: 1
-Best acc:
-44.96007643485976
-tensor([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0], device='cuda:0')
-Sal2, i=10??:
-tensor([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0], device='cuda:0')
 Traceback (most recent call last):
   File "svhnSal.py", line 410, in <module>
     main()
-  File "svhnSal.py", line 380, in main
-    create_saliency_map(model, infer_path, saliency_loader, pred, ses)
-  File "svhnSal.py", line 181, in create_saliency_map
-    if ind==0: grads = saliency.attribute(input, target=sal_labels[ind].item(), abs=False, additional_forward_args = (path, -1))
-  File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/captum/log/__init__.py", line 42, in wrapper
-    return func(*args, **kwargs)
-  File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/captum/attr/_core/saliency.py", line 131, in attribute
-    self.forward_func, inputs, target, additional_forward_args
-  File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/captum/_utils/gradient.py", line 119, in compute_gradients
-    grads = torch.autograd.grad(torch.unbind(outputs), inputs)
-  File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/torch/autograd/__init__.py", line 236, in grad
-    inputs, allow_unused, accumulate_grad=False)
-RuntimeError: One of the differentiated Tensors appears to not have been used in the graph. Set allow_unused=True if this is the desired behavior.
-Using TensorFlow backend.
-/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/torch/nn/_reduction.py:42: UserWarning: size_average and reduce args will be deprecated, please use reduction='none' instead.
-  warnings.warn(warning.format(ret))
-The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
-The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
-{'epochs': 10, 'checkpoint': 'results/svhn/RPS_net_svhnSal', 'savepoint': 'results/svhn/pathnet_svhnSal', 'dataset': 'SVHN', 'num_class': 10, 'class_per_task': 2, 'M': 8, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 128, 'test_batch': 128, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [6, 8, 16], 'gamma': 0.5, 'rigidness_coff': 2.5, 'jump': 1}
-    Total params: 89.55M
-44.960076 0
-Starting with session 2
-test case : 0
-#################################################################################
-path
- [[0. 0. 0. 0. 0. 1. 0. 0.]
- [0. 0. 0. 0. 0. 1. 0. 0.]
- [0. 0. 0. 0. 0. 0. 0. 1.]
- [0. 0. 0. 0. 0. 0. 1. 0.]
- [0. 0. 0. 0. 0. 1. 0. 0.]
- [0. 1. 0. 0. 0. 0. 0. 0.]
- [0. 0. 0. 0. 1. 0. 0. 0.]
- [0. 0. 1. 0. 0. 0. 0. 0.]
- [0. 0. 0. 0. 0. 0. 1. 0.]]
-fixed_path
- [[1. 0. 0. 0. 0. 1. 0. 0.]
- [1. 0. 1. 0. 0. 0. 0. 0.]
- [1. 0. 0. 0. 0. 0. 0. 0.]
- [1. 0. 0. 0. 0. 0. 1. 0.]
- [1. 0. 0. 1. 0. 0. 0. 0.]
- [1. 0. 0. 0. 0. 1. 0. 0.]
- [1. 0. 0. 0. 1. 0. 0. 0.]
- [1. 0. 0. 0. 0. 0. 0. 0.]
- [1. 0. 0. 0. 1. 0. 0. 0.]]
-train_path
- [[0. 0. 0. 0. 0. 0. 0. 0.]
- [0. 0. 0. 0. 0. 1. 0. 0.]
- [0. 0. 0. 0. 0. 0. 0. 1.]
- [0. 0. 0. 0. 0. 0. 0. 0.]
- [0. 0. 0. 0. 0. 1. 0. 0.]
- [0. 1. 0. 0. 0. 0. 0. 0.]
- [0. 0. 0. 0. 0. 0. 0. 0.]
- [0. 0. 1. 0. 0. 0. 0. 0.]
- [0. 0. 0. 0. 0. 0. 1. 0.]]
-infer_path
- [[1. 0. 0. 0. 0. 1. 0. 0.]
- [1. 0. 1. 0. 0. 1. 0. 0.]
- [1. 0. 0. 0. 0. 0. 0. 1.]
- [1. 0. 0. 0. 0. 0. 1. 0.]
- [1. 0. 0. 1. 0. 1. 0. 0.]
- [1. 1. 0. 0. 0. 1. 0. 0.]
- [1. 0. 0. 0. 1. 0. 0. 0.]
- [1. 0. 1. 0. 0. 0. 0. 0.]
- [1. 0. 0. 0. 1. 0. 1. 0.]]
-Number of layers being trained :  10
-
-Epoch: [1 | 10] LR: 0.001000 Sess: 2
-
-Epoch: [2 | 10] LR: 0.001000 Sess: 2
-
-Epoch: [3 | 10] LR: 0.001000 Sess: 2
-
-Epoch: [4 | 10] LR: 0.001000 Sess: 2
-
-Epoch: [5 | 10] LR: 0.001000 Sess: 2
-
-Epoch: [6 | 10] LR: 0.001000 Sess: 2
-
-Epoch: [7 | 10] LR: 0.000500 Sess: 2
-
-Epoch: [8 | 10] LR: 0.000500 Sess: 2
-
-Epoch: [9 | 10] LR: 0.000250 Sess: 2
-
-Epoch: [10 | 10] LR: 0.000250 Sess: 2
-Best acc:
-32.21310613257433
-tensor([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0], device='cuda:0')
-Sal2, i=10??:
-tensor([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0], device='cuda:0')
-Traceback (most recent call last):
-  File "svhnSal.py", line 410, in <module>
-    main()
-  File "svhnSal.py", line 380, in main
-    create_saliency_map(model, infer_path, saliency_loader, pred, ses)
-  File "svhnSal.py", line 181, in create_saliency_map
-    if ind==0: grads = saliency.attribute(input, target=sal_labels[ind].item(), abs=False, additional_forward_args = (path, -1))
-  File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/captum/log/__init__.py", line 42, in wrapper
-    return func(*args, **kwargs)
-  File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/captum/attr/_core/saliency.py", line 131, in attribute
-    self.forward_func, inputs, target, additional_forward_args
-  File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/captum/_utils/gradient.py", line 119, in compute_gradients
-    grads = torch.autograd.grad(torch.unbind(outputs), inputs)
-  File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/torch/autograd/__init__.py", line 236, in grad
-    inputs, allow_unused, accumulate_grad=False)
-RuntimeError: One of the differentiated Tensors appears to not have been used in the graph. Set allow_unused=True if this is the desired behavior.
-Using TensorFlow backend.
-/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/torch/nn/_reduction.py:42: UserWarning: size_average and reduce args will be deprecated, please use reduction='none' instead.
-  warnings.warn(warning.format(ret))
-The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
-The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
-{'epochs': 10, 'checkpoint': 'results/svhn/RPS_net_svhnSal', 'savepoint': 'results/svhn/pathnet_svhnSal', 'dataset': 'SVHN', 'num_class': 10, 'class_per_task': 2, 'M': 8, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 128, 'test_batch': 128, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [6, 8, 16], 'gamma': 0.5, 'rigidness_coff': 2.5, 'jump': 1}
-    Total params: 89.55M
-32.213106 0
-Starting with session 3
-test case : 0
-#################################################################################
-path
- [[0. 1. 0. 0. 0. 0. 0. 0.]
- [0. 0. 0. 1. 0. 0. 0. 0.]
- [0. 0. 0. 0. 1. 0. 0. 0.]
- [1. 0. 0. 0. 0. 0. 0. 0.]
- [0. 0. 1. 0. 0. 0. 0. 0.]
- [0. 0. 1. 0. 0. 0. 0. 0.]
- [0. 0. 1. 0. 0. 0. 0. 0.]
- [0. 0. 1. 0. 0. 0. 0. 0.]
- [0. 0. 0. 0. 1. 0. 0. 0.]]
-fixed_path
- [[1. 0. 0. 0. 0. 1. 0. 0.]
- [1. 0. 1. 0. 0. 1. 0. 0.]
- [1. 0. 0. 0. 0. 0. 0. 1.]
- [1. 0. 0. 0. 0. 0. 1. 0.]
- [1. 0. 0. 1. 0. 1. 0. 0.]
- [1. 1. 0. 0. 0. 1. 0. 0.]
- [1. 0. 0. 0. 1. 0. 0. 0.]
- [1. 0. 1. 0. 0. 0. 0. 0.]
- [1. 0. 0. 0. 1. 0. 1. 0.]]
-train_path
- [[0. 1. 0. 0. 0. 0. 0. 0.]
- [0. 0. 0. 1. 0. 0. 0. 0.]
- [0. 0. 0. 0. 1. 0. 0. 0.]
- [0. 0. 0. 0. 0. 0. 0. 0.]
- [0. 0. 1. 0. 0. 0. 0. 0.]
- [0. 0. 1. 0. 0. 0. 0. 0.]
- [0. 0. 1. 0. 0. 0. 0. 0.]
- [0. 0. 0. 0. 0. 0. 0. 0.]
- [0. 0. 0. 0. 0. 0. 0. 0.]]
-infer_path
- [[1. 1. 0. 0. 0. 1. 0. 0.]
- [1. 0. 1. 1. 0. 1. 0. 0.]
- [1. 0. 0. 0. 1. 0. 0. 1.]
- [1. 0. 0. 0. 0. 0. 1. 0.]
- [1. 0. 1. 1. 0. 1. 0. 0.]
- [1. 1. 1. 0. 0. 1. 0. 0.]
- [1. 0. 1. 0. 1. 0. 0. 0.]
- [1. 0. 1. 0. 0. 0. 0. 0.]
- [1. 0. 0. 0. 1. 0. 1. 0.]]
-Number of layers being trained :  10
-
-Epoch: [1 | 10] LR: 0.001000 Sess: 3
-
-Epoch: [2 | 10] LR: 0.001000 Sess: 3
-
-Epoch: [3 | 10] LR: 0.001000 Sess: 3
-
-Epoch: [4 | 10] LR: 0.001000 Sess: 3
-
-Epoch: [5 | 10] LR: 0.001000 Sess: 3
-
-Epoch: [6 | 10] LR: 0.001000 Sess: 3
-
-Epoch: [7 | 10] LR: 0.000500 Sess: 3
-
-Epoch: [8 | 10] LR: 0.000500 Sess: 3
-
-Epoch: [9 | 10] LR: 0.000250 Sess: 3
-
-Epoch: [10 | 10] LR: 0.000250 Sess: 3
-Best acc:
-22.932181730721314
-tensor([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0], device='cuda:0')
-Sal2, i=10??:
-tensor([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0], device='cuda:0')
-Traceback (most recent call last):
-  File "svhnSal.py", line 410, in <module>
-    main()
-  File "svhnSal.py", line 380, in main
-    create_saliency_map(model, infer_path, saliency_loader, pred, ses)
-  File "svhnSal.py", line 181, in create_saliency_map
-    if ind==0: grads = saliency.attribute(input, target=sal_labels[ind].item(), abs=False, additional_forward_args = (path, -1))
-  File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/captum/log/__init__.py", line 42, in wrapper
-    return func(*args, **kwargs)
-  File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/captum/attr/_core/saliency.py", line 131, in attribute
-    self.forward_func, inputs, target, additional_forward_args
-  File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/captum/_utils/gradient.py", line 119, in compute_gradients
-    grads = torch.autograd.grad(torch.unbind(outputs), inputs)
-  File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/torch/autograd/__init__.py", line 236, in grad
-    inputs, allow_unused, accumulate_grad=False)
-RuntimeError: One of the differentiated Tensors appears to not have been used in the graph. Set allow_unused=True if this is the desired behavior.
-slurmstepd: error: *** JOB 18924 ON csm-gpu-001 CANCELLED AT 2024-09-24T08:02:59 ***
+  File "svhnSal.py", line 266, in main
+    load_test_case = get_best_model(ses-1, args.checkpoint)
+  File "/home/abanyi17/RPSnet-master/util.py", line 29, in get_best_model
+    a = np.argmax(best_acc)
+  File "<__array_function__ internals>", line 6, in argmax
+  File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 1188, in argmax
+    return _wrapfunc(a, 'argmax', axis=axis, out=out)
+  File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 55, in _wrapfunc
+    return _wrapit(obj, method, *args, **kwds)
+  File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 44, in _wrapit
+    result = getattr(asarray(obj), method)(*args, **kwds)
+ValueError: attempt to get argmax of an empty sequence
+slurmstepd: error: *** JOB 18962 ON csm-gpu-001 CANCELLED AT 2024-09-24T14:10:00 ***

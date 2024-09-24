@@ -428,75 +428,75 @@ class RPS_net_cifar(nn.Module):
             M = self.args.M
             div = 1
 
-            y = self.conv1[0](x.detach())
+            y = self.conv1[0](x)
             for j in range(1, self.args.M):
                 if path[0][j] == 1:
-                    y += self.conv1[j](x.detach())
+                    y = y + self.conv1[j](x)
             x = F.relu(y)
 
-            y = self.conv2[0](x.detach())
+            y = self.conv2[0](x)
             for j in range(1, self.args.M):
                 if path[1][j] == 1:
-                    y += self.conv2[j](x.detach())
-            x = y + x.detach()
+                    y = y + self.conv2[j](x)
+            x = y + x
             x = F.relu(x)
 
-            y = self.conv3[0](x.detach())
+            y = self.conv3[0](x)
             for j in range(1, self.args.M):
                 if path[2][j] == 1:
-                    y += self.conv3[j](x.detach())
-            x = y + x.detach()
+                    y = y + self.conv3[j](x)
+            x = y + x
             x = F.relu(x)
 
-            y = self.conv4[-1](x.detach())
+            y = self.conv4[-1](x)
             for j in range(self.args.M):
                 if path[3][j] == 1:
-                    y += self.conv4[j](x.detach())
+                    y = y + self.conv4[j](x)
             x = y  # Note: No modification in place
             x = F.relu(x)
 
-            y = self.conv5[0](x.detach())
+            y = self.conv5[0](x)
             for j in range(1, self.args.M):
                 if path[4][j] == 1:
-                    y += self.conv5[j](x.detach())
-            x = y + x.detach()
+                    y = y + self.conv5[j](x)
+            x = y + x
             x = F.relu(x)
             x = self.pool1(x)
 
-            y = self.conv6[-1](x.detach())
+            y = self.conv6[-1](x)
             for j in range(self.args.M):
                 if path[5][j] == 1:
-                    y += self.conv6[j](x.detach())
+                    y = y + self.conv6[j](x)
             x = y  # No modification in place
             x = F.relu(x)
 
-            y = self.conv7[0](x.detach())
+            y = self.conv7[0](x)
             for j in range(1, self.args.M):
                 if path[6][j] == 1:
-                    y += self.conv7[j](x.detach())
+                    y = y + self.conv7[j](x)
             x = y  # No modification in place
             x = F.relu(x)
             x = self.pool2(x)
 
             
-            y = self.conv8[-1](x.detach())
+            y = self.conv8[-1](x)
             for j in range(self.args.M):
                 if path[7][j] == 1:
-                    y += self.conv8[j](x.detach())
+                    y = y + self.conv8[j](x)
             x = y  # No modification in place
             x = F.relu(x)
             
 
-            y = self.conv9[0](x.detach())
+            y = self.conv9[0](x)
             for j in range(1, self.args.M):
                 if path[8][j] == 1:
-                    y += self.conv9[j](x.detach())
-            x = y + x.detach()  # No modification in place
+                    y = y + self.conv9[j](x)
+            x = y + x  # No modification in place
             x = F.relu(x)
 
             x = F.avg_pool2d(x, (8, 8), stride=(1, 1))
             x = x.view(-1, self.a5)
-            x = self.final_layers[last](x.detach())
+            x = self.final_layers[last](x)
 
             return x
 
