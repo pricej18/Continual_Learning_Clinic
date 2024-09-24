@@ -94,7 +94,7 @@ class Learner():
 
             print('\nEpoch: [%d | %d] LR: %f Sess: %d' % (epoch + 1, self.args.epochs, self.state['lr'],self.args.sess))
             self.train(epoch, self.infer_path, -1)
-            self.test(epoch, self.infer_path, -1)
+            pred = self.test(epoch, self.infer_path, -1)
             
 
             # append logger file
@@ -117,6 +117,9 @@ class Learner():
 
         print('Best acc:')
         print(self.best_acc)
+        
+        # For Saliency
+        return pred
 
     def train(self, epoch, path, last):
         # switch to train mode
@@ -138,8 +141,6 @@ class Learner():
             targets_one_hot = torch.FloatTensor(inputs.shape[0], self.args.num_class)
             targets_one_hot.zero_()
             targets_one_hot.scatter_(1, targets[:,None], 1)
-            print(inputs.shape, self.args.num_class, targets_one_hot.shape)
-
 
 
 
@@ -152,8 +153,6 @@ class Learner():
 
             # compute output
             outputs = self.model(inputs, path, -1)
-            print(outputs.shape)
-
             preds=outputs.masked_select(targets_one_hot.eq(1))
             
             tar_ce=targets
@@ -253,7 +252,10 @@ class Learner():
 
             loss = F.cross_entropy(outputs, targets)
 
-
+            ##### Saliency
+            if batch_idx == 0:
+                _, preds = torch.max(outputs, 1)
+                sal_pred = preds
 
             # measure accuracy and record loss
             if(self.args.dataset=="MNIST" or self.args.dataset=="SVHN"):
@@ -283,6 +285,10 @@ class Learner():
             bar.next()
         bar.finish()
         self.test_loss= losses.avg;self.test_acc= top1.avg
+        
+        ##### Saliency
+        return sal_pred
+        
 
     def save_checkpoint(self,state, is_best, checkpoint='checkpoint', filename='checkpoint.pth.tar',session=0, test_case=0):
 #         filepath = os.path.join(checkpoint, filename)
@@ -313,3 +319,4 @@ class Learner():
 
         print(confusion_matrix)
         return confusion_matrix
+

@@ -17,7 +17,7 @@ from __future__ import print_function
 # import torchvision.transforms as transforms
 # import torchvision.datasets as datasets
 # import copy
-# import torch
+import torch
 import torch.nn as nn
 import torch.nn.functional as F
 # import torch.optim as optim
@@ -105,6 +105,7 @@ class RPS_net(nn.Module):
 
             # conv8
             for i in range(self.args.M):
+                exec("self.m8" + str(i) + " = nn.Sequential(nn.Conv2d(256, 512, kernel_size=3, stride=1, padding=1),nn.BatchNorm2d(512),nn.ReLU(), nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),nn.BatchNorm2d(512))")
                 exec("self.m8" + str(i) + " = nn.Sequential(nn.Conv2d(256, 512, kernel_size=3, stride=1, padding=1),nn.BatchNorm2d(512),nn.ReLU(), nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),nn.BatchNorm2d(512))")
                 exec("self.conv8.append(self.m8" + str(i) + ")")
             exec("self.m8" + str("x") + " = nn.Sequential(nn.Conv2d(256, 512, kernel_size=3, stride=1, padding=1),nn.BatchNorm2d(512),nn.ReLU())")
@@ -306,22 +307,25 @@ class RPS_net_cifar(nn.Module):
                 exec("self.conv8.append(self.m8" + str(i) + ")")
             exec("self.m8" + str("x") + " = nn.Sequential(nn.Conv2d("+str(a4)+", "+str(a5)+", kernel_size=3, stride=1, padding=1),nn.BatchNorm2d("+str(a5)+"),nn.ReLU())")
             exec("self.conv8.append(self.m8" + str("x") + ")")
-
+            
             # conv9
             for i in range(self.args.M):
                 exec("self.m9" + str(i) + " = nn.Sequential(nn.Conv2d("+str(a5)+", "+str(a5)+", kernel_size=3, stride=1, padding=1),nn.BatchNorm2d("+str(a5)+"),nn.ReLU(), nn.Conv2d("+str(a5)+", "+str(a5)+", kernel_size=3, stride=1, padding=1),nn.BatchNorm2d("+str(a5)+"))")
+            #    exec("self.m9" + str(i) + " = nn.Sequential(nn.Conv2d("+str(a4)+", "+str(a5)+", kernel_size=3, stride=1, padding=1),nn.BatchNorm2d("+str(a5)+"),nn.ReLU(), nn.Conv2d("+str(a5)+", "+str(a5)+", kernel_size=3, stride=1, padding=1),nn.BatchNorm2d("+str(a5)+"))")
                 exec("self.conv9.append(self.m9" + str(i) + ")")
             self.pool3 = nn.MaxPool2d(kernel_size=2, stride=2)
             
             
             
             if len(self.final_layers) < 1:
-                self.final_layer1 = nn.Linear(a5, self.args.num_class)
+                #self.final_layer1 = nn.Linear(a5, 100)
+                self.final_layer1 = nn.Linear(a5, 10)
                 self.final_layers.append(self.final_layer1)
 
             
             self.cuda()
 
+        '''
         def forward(self, x, path, last):
 
             M = self.args.M
@@ -416,7 +420,86 @@ class RPS_net_cifar(nn.Module):
             x = self.final_layers[last](x)
             
             return x
-        
+        '''
+        torch.autograd.set_detect_anomaly(True)
+        def forward(self, x, path, last):
+            x.requires_grad_()
+
+            M = self.args.M
+            div = 1
+
+            y = self.conv1[0](x.detach())
+            for j in range(1, self.args.M):
+                if path[0][j] == 1:
+                    y += self.conv1[j](x.detach())
+            x = F.relu(y)
+
+            y = self.conv2[0](x.detach())
+            for j in range(1, self.args.M):
+                if path[1][j] == 1:
+                    y += self.conv2[j](x.detach())
+            x = y + x.detach()
+            x = F.relu(x)
+
+            y = self.conv3[0](x.detach())
+            for j in range(1, self.args.M):
+                if path[2][j] == 1:
+                    y += self.conv3[j](x.detach())
+            x = y + x.detach()
+            x = F.relu(x)
+
+            y = self.conv4[-1](x.detach())
+            for j in range(self.args.M):
+                if path[3][j] == 1:
+                    y += self.conv4[j](x.detach())
+            x = y  # Note: No modification in place
+            x = F.relu(x)
+
+            y = self.conv5[0](x.detach())
+            for j in range(1, self.args.M):
+                if path[4][j] == 1:
+                    y += self.conv5[j](x.detach())
+            x = y + x.detach()
+            x = F.relu(x)
+            x = self.pool1(x)
+
+            y = self.conv6[-1](x.detach())
+            for j in range(self.args.M):
+                if path[5][j] == 1:
+                    y += self.conv6[j](x.detach())
+            x = y  # No modification in place
+            x = F.relu(x)
+
+            y = self.conv7[0](x.detach())
+            for j in range(1, self.args.M):
+                if path[6][j] == 1:
+                    y += self.conv7[j](x.detach())
+            x = y  # No modification in place
+            x = F.relu(x)
+            x = self.pool2(x)
+
+            
+            y = self.conv8[-1](x.detach())
+            for j in range(self.args.M):
+                if path[7][j] == 1:
+                    y += self.conv8[j](x.detach())
+            x = y  # No modification in place
+            x = F.relu(x)
+            
+
+            y = self.conv9[0](x.detach())
+            for j in range(1, self.args.M):
+                if path[8][j] == 1:
+                    y += self.conv9[j](x.detach())
+            x = y + x.detach()  # No modification in place
+            x = F.relu(x)
+
+            x = F.avg_pool2d(x, (8, 8), stride=(1, 1))
+            x = x.view(-1, self.a5)
+            x = self.final_layers[last](x.detach())
+
+            return x
+
         
 class RPS_net_mlp(nn.Module):
 

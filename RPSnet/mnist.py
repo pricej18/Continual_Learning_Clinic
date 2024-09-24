@@ -34,8 +34,6 @@ import random
 from torch.utils.data import Dataset, TensorDataset
 
 from rps_net import RPS_net_mlp, RPS_net_cifar
-#from rps_net import RPS_net_mlp
-#from rps_net2 import RPS_net_cifar
 from learner import Learner
 from util import *
 from cifar_dataset import CIFAR100
@@ -46,11 +44,12 @@ from captum.attr import visualization as viz
 import matplotlib.pyplot as plt
 
 
+
 class args:
     epochs = 10
-    checkpoint = "results/svhn/RPS_net_svhnSal"
-    savepoint = "results/svhn/pathnet_svhnSal"
-    dataset = "SVHN"
+    checkpoint = "results/mnist/RPS_net_minst"
+    savepoint = "results/mnist/pathnet_mnist"
+    dataset = "MNIST"
     num_class = 10
     class_per_task = 2
     M = 8
@@ -73,6 +72,7 @@ class args:
     
 state = {key:value for key, value in args.__dict__.items() if not key.startswith('__') and not callable(key)}
 print(state)
+classes = ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
 memory = 4400
 # Use CUDA
 use_cuda = torch.cuda.is_available()
@@ -154,6 +154,9 @@ class CustomTensorDataset(Dataset):
         return self.tensors[0].size(0)
     
     
+    
+
+
 def create_saliency_map(model, path, saliency_loader, pred, ses):
     ##### Create Saliency Maps
     data_iter = iter(saliency_loader)
@@ -162,14 +165,14 @@ def create_saliency_map(model, path, saliency_loader, pred, ses):
     predicted = pred.squeeze()
     
     saliency = Saliency(model)
-    print(sal_labels)
+    #print(sal_labels)
 
     # Finds a '1' for testing
     for i in range(10):
         sal_imgs2, sal_labels2 = next(data_iter)
     sal_imgs2, sal_labels2 = sal_imgs2.cuda(), sal_labels2.cuda()
-    print("Sal2, i=10??:")
-    print(sal_labels2)
+    #print("Sal2, i=10??:")
+    #print(sal_labels2)
     
     fig, ax = plt.subplots(1,4,figsize=(10,4))
     for ind in range(0,2):
@@ -181,25 +184,17 @@ def create_saliency_map(model, path, saliency_loader, pred, ses):
         if ind==0: grads = saliency.attribute(input, target=sal_labels[ind].item(), abs=False, additional_forward_args = (path, -1))
         else: grads = saliency.attribute(input, target=sal_labels2[ind].item(), abs=False, additional_forward_args = (path, -1))
         
-        #grads = grads.reshape(28,28)
+        grads = grads.reshape(28,28)
         squeeze_grads = grads.squeeze().cpu().detach()
         squeeze_grads = torch.unsqueeze(squeeze_grads,0).numpy()
         grads = np.transpose(squeeze_grads, (1, 2, 0))
 
-        if ind==0: print('Truth:', classes[sal_labels[ind]])
-        else: print('Truth:', classes[sal_labels2[ind]])
-        print('Predicted:', classes[predicted[ind]])
+        #if ind==0: print('Truth:', classes[sal_labels[ind]])
+        #else: print('Truth:', classes[sal_labels2[ind]])
+        #print('Predicted:', classes[predicted[ind]])
         
-        # Denormalization
-        MEAN = torch.tensor([0.4914, 0.4822, 0.4465])
-        STD = torch.tensor([0.2023, 0.1994, 0.2010])
-
-        original_image = selected_imgs[ind].cpu() * STD[:, None, None] + MEAN[:, None, None]
-        
-        original_image = np.transpose(original_image.detach().numpy(), (1, 2, 0))
-        
-        if ind==0: original_image = np.transpose((sal_imgs[ind].cpu().detach().numpy() / 2) + 0.5, (1, 2, 0))       
-        else: original_image = np.transpose((sal_imgs2[ind].cpu().detach().numpy() / 2) + 0.5, (1, 2, 0))       
+        if ind==0: original_image = np.transpose((sal_imgs[ind].reshape(28,28).unsqueeze(0).cpu().detach().numpy() / 2) + 0.5, (1, 2, 0))       
+        else: original_image = np.transpose((sal_imgs2[ind].reshape(28,28).unsqueeze(0).cpu().detach().numpy() / 2) + 0.5, (1, 2, 0))       
         
         #original_image = selected_imgs[ind].cpu().detach().numpy()  
 
@@ -222,8 +217,9 @@ def create_saliency_map(model, path, saliency_loader, pred, ses):
                 ax[2*ind+i].tick_params(left = False, right = False, labelleft = False, 
                                 labelbottom = False, bottom = False) 
             
-    fig.savefig(f"SaliencyMaps/SVHN/Sess{ses}SalMap.png")
-    fig.show()      
+    fig.savefig(f"SaliencyMaps/MNIST/Sess{ses}SalMap.png")
+    fig.show()  
+
     
 
 def main():
@@ -231,17 +227,16 @@ def main():
     if not os.path.isdir(args.checkpoint):
         mkdir_p(args.checkpoint)
         
-    if not os.path.isdir("models/svhn/"+args.checkpoint.split("/")[-1]):
-        print("Making checkpoint directory...")
-        mkdir_p("models/svhn/"+args.checkpoint.split("/")[-1])
-    args.savepoint = "models/svhn/"+args.checkpoint.split("/")[-1]
+    if not os.path.isdir("models/mnist/"+args.checkpoint.split("/")[-1]):
+        mkdir_p("models/mnist/"+args.checkpoint.split("/")[-1])
+    args.savepoint = "models/mnist/"+args.checkpoint.split("/")[-1]
     
     
     
 
 
-#    model = RPS_net_mlp(args).cuda() 
-    model = RPS_net_cifar(args).cuda()    #for SVHN and CIFAR10 
+    model = RPS_net_mlp(args).cuda() 
+#     model = RPS_net_cifar(args).cuda()    #for SVHN and CIFAR10 
     print('    Total params: %.2fM' % (sum(p.numel() for p in model.parameters())/1000000.0))
 
     start_sess = int(sys.argv[2])
@@ -249,13 +244,12 @@ def main():
     args.test_case = test_case
 
 
-    (x_train, y_train), (x_test, y_test) = load_svhn()
+#     (x_train, y_train), (x_test, y_test) = load_svhn()
 #     (x_train, y_train), (x_test, y_test) = load_cifar10()
-#    (x_train, y_train), (x_test, y_test) = load_mnist()
+    (x_train, y_train), (x_test, y_test) = load_mnist()
     
-        
     for ses in range(start_sess, start_sess+1):
-        
+            
         if(ses==0):
             path = get_path(args.L,args.M,args.N)*0 
             path[:,0] = 1
@@ -305,8 +299,7 @@ def main():
         print("train_path\n", train_path)
         print("infer_path\n", infer_path)
         
-        # Adjust number of classes and other parameters as necessary
-        args.num_class = 10  # SVHN has 10 classes
+        
         
         ids_train = []
         for j in range((ses*args.class_per_task), (ses+1)*args.class_per_task):
@@ -348,7 +341,7 @@ def main():
             transforms.Resize(32),
             transforms.RandomCrop(32, padding=4),
             transforms.RandomHorizontalFlip(),
-            #transforms.RandomRotation(10),
+            transforms.RandomRotation(10),
             transforms.ToTensor(),
         ])
 
@@ -358,24 +351,28 @@ def main():
             transforms.ToTensor(),
         ])
 
-        
-        train_dataset = CustomTensorDataset((torch.tensor(train_data), torch.tensor(train_label).long()), transform=transform_train)
-        train_loader = utils.DataLoader(train_dataset, batch_size=args.train_batch, shuffle=True)
+    
+        train_dataset = utils.TensorDataset(torch.from_numpy(train_data).float(), torch.from_numpy(train_label).long()) # create your datset
+        train_dataset2 = CustomTensorDataset((torch.tensor(train_data), torch.tensor(train_label).long()), transform=transform_train)
+        train_loader = utils.DataLoader(train_dataset, batch_size=args.train_batch, shuffle=True) # create your data
 
-        test_dataset = CustomTensorDataset((torch.tensor(test_data), torch.tensor(test_label).long()), transform=transform_test)
+
+        test_dataset = utils.TensorDataset(torch.from_numpy(test_data).float(), torch.from_numpy(test_label).long()) # create your datset
+        test_dataset2 = CustomTensorDataset((torch.tensor(test_data), torch.tensor(test_label).long()), transform=transform_test)
         test_loader = utils.DataLoader(test_dataset, batch_size=args.test_batch)
         
         ### Saliency
         #if ses==0:
         saliency_loader = test_loader
             #print("Ses 0 : saliency_loader = " + str(saliency_loader))
+            
 
-        main_learner = Learner(model=model, args=args, trainloader=train_loader,
-                               testloader=test_loader, old_model=copy.deepcopy(model),
-                               use_cuda=use_cuda, path=path,
-                               fixed_path=fixed_path, train_path=train_path, infer_path=infer_path)
+        main_learner=Learner(model=model,args=args,trainloader=train_loader,
+                             testloader=test_loader,old_model=copy.deepcopy(model),
+                             use_cuda=use_cuda, path=path, 
+                             fixed_path=fixed_path, train_path=train_path, infer_path=infer_path)
         pred = main_learner.learn()
-        
+
         ### Saliency
         create_saliency_map(model, infer_path, saliency_loader, pred, ses)
         
@@ -389,12 +386,11 @@ def main():
         np.save(args.checkpoint+"/fixed_path_"+str(ses)+"_"+str(test_case)+".npy", fixed_path)
         
         
-        
-        
         best_model = get_best_model(ses, args.checkpoint)
     
         cfmat = main_learner.get_confusion_matrix(infer_path)
         np.save(args.checkpoint+"/confusion_matrix_"+str(ses)+"_"+str(test_case)+".npy", cfmat)
+        
         
     print('done with session {:d}'.format(ses))
     print('#################################################################################')
