@@ -1,0 +1,9 @@
+numpy==1.19.15
+matplotlib==3.3.4
+Pillow==8.4.0
+scipy==1.4.1
+torch==1.10.1
+torchvision==0.11.2
+tensorflow==2.2.0
+keras==2.3.1
+captum==0.7.0
