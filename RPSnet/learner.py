@@ -93,6 +93,7 @@ class Learner():
             self.adjust_learning_rate(epoch)
 
             print('\nEpoch: [%d | %d] LR: %f Sess: %d' % (epoch + 1, self.args.epochs, self.state['lr'],self.args.sess))
+            torch.autograd.set_detect_anomaly(True)
             self.train(epoch, self.infer_path, -1)
             pred = self.test(epoch, self.infer_path, -1)
             
@@ -114,10 +115,10 @@ class Learner():
         logger.close()
         logger.plot()
         savefig(os.path.join(self.args.checkpoint, 'log.eps'))
-
+        
         print('Best acc:')
         print(self.best_acc)
-        
+
         # For Saliency
         return pred
 
@@ -136,11 +137,16 @@ class Learner():
         for batch_idx, (inputs, targets) in enumerate(self.trainloader):
             # measure data loading time
             data_time.update(time.time() - end)
-
-
+               
+            
+            
             targets_one_hot = torch.FloatTensor(inputs.shape[0], self.args.num_class)
             targets_one_hot.zero_()
             targets_one_hot.scatter_(1, targets[:,None], 1)
+            
+            #print("Update 1")
+            #print("inputs.shape: " + str(inputs.shape))
+            #print("targets_one_hot: " + str(targets_one_hot.shape))
 
 
 
@@ -256,6 +262,8 @@ class Learner():
             if batch_idx == 0:
                 _, preds = torch.max(outputs, 1)
                 sal_pred = preds
+            
+
 
             # measure accuracy and record loss
             if(self.args.dataset=="MNIST" or self.args.dataset=="SVHN"):
@@ -288,7 +296,6 @@ class Learner():
         
         ##### Saliency
         return sal_pred
-        
 
     def save_checkpoint(self,state, is_best, checkpoint='checkpoint', filename='checkpoint.pth.tar',session=0, test_case=0):
 #         filepath = os.path.join(checkpoint, filename)

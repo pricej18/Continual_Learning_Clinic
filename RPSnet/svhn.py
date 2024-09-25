@@ -47,7 +47,7 @@ import matplotlib.pyplot as plt
 
 
 class args:
-    #epochs = 10
+#    epochs = 10
     epochs = 1
     checkpoint = "results/svhn/RPS_net_svhn"
     savepoint = "results/svhn/pathnet_svhn"
@@ -87,17 +87,6 @@ if use_cuda:
 
 
     
-
-
-def load_mnist():
-    from keras.datasets import mnist
-    (x_train, y_train), (x_test, y_test) = mnist.load_data()
-
-    x_train = x_train.reshape(-1, 784).astype('float32') / 255.
-    x_test = x_test.reshape(-1, 784).astype('float32') / 255.
-    return (x_train, y_train), (x_test, y_test)
-
-
 def load_svhn():
     from scipy import io as spio
     from keras.utils import to_categorical
@@ -115,23 +104,7 @@ def load_svhn():
     y_train = np.reshape(y_train, (-1))
     y_test = np.reshape(y_test, (-1))
 
-    
     return (x_train, y_train), (x_test, y_test)
-
-
-
-def load_cifar10():
-    from keras.datasets import cifar10
-    (x_train, y_train), (x_test, y_test) = cifar10.load_data()
-
-    x_train = x_train.reshape(-1, 3, 32, 32).astype('float32') / 255.
-    x_test = x_test.reshape(-1, 3, 32, 32).astype('float32') / 255.
-
-    y_train = np.reshape(y_train, (-1))
-    y_test = np.reshape(y_test, (-1))
-    return (x_train, y_train), (x_test, y_test)
-
-
 
 
 class CustomTensorDataset(Dataset):
@@ -156,6 +129,7 @@ class CustomTensorDataset(Dataset):
         return self.tensors[0].size(0)
     
     
+    
 def create_saliency_map(model, path, saliency_loader, pred, ses):
     ##### Create Saliency Maps
     data_iter = iter(saliency_loader)
@@ -164,43 +138,35 @@ def create_saliency_map(model, path, saliency_loader, pred, ses):
     predicted = pred.squeeze()
     
     saliency = Saliency(model)
-    print(sal_labels)
 
     # Finds a '1' for testing
-    for i in range(10):
+    for i in range(len(saliency_loader)-1):
         sal_imgs2, sal_labels2 = next(data_iter)
-    sal_imgs2, sal_labels2 = sal_imgs2.cuda(), sal_labels2.cuda()
-    print("Sal2, i=10??:")
-    print(sal_labels2)
+        if sal_labels2[0] == torch.tensor([ses+i*args.class_per_task]): break
     
     fig, ax = plt.subplots(1,4,figsize=(10,4))
     for ind in range(0,2):
-        if ind==0: input = sal_imgs[ind].unsqueeze(0)
-        else: input = sal_imgs2[ind].unsqueeze(0)
+        if ind==0: input = sal_imgs[0].unsqueeze(0)
+        else: input = sal_imgs2[0].unsqueeze(0)
 
         input.requires_grad = True
 
-        if ind==0: grads = saliency.attribute(input, target=sal_labels[ind].item(), abs=False, additional_forward_args = (path, -1))
-        else: grads = saliency.attribute(input, target=sal_labels2[ind].item(), abs=False, additional_forward_args = (path, -1))
+        if ind==0: grads = saliency.attribute(input, target=sal_labels[0].item(), abs=False, additional_forward_args = (path, -1))
+        else: grads = saliency.attribute(input, target=sal_labels2[0].item(), abs=False, additional_forward_args = (path, -1))
         
         squeeze_grads = grads.squeeze().cpu().detach()
-        print("After Squeeze: " + str(squeeze_grads.shape))
         grads = np.transpose(squeeze_grads.numpy(), (1, 2, 0))
 
-        if ind==0: print('Truth:', classes[sal_labels[ind]])
-        else: print('Truth:', classes[sal_labels2[ind]])
-        print('Predicted:', classes[predicted[ind]])
+        if ind==0: print('Truth:', classes[sal_labels[0]])
+        else: print('Truth:', classes[sal_labels2[0]])
         
         # Denormalization
         MEAN = torch.tensor([0.4914, 0.4822, 0.4465])
         STD = torch.tensor([0.2023, 0.1994, 0.2010])
         
-        if ind==0:
-            original_image = sal_imgs[ind].cpu() * STD[:, None, None] + MEAN[:, None, None]
-            original_image = np.transpose((sal_imgs[ind].cpu().detach().numpy()), (1, 2, 0))       
-        else:
-            original_image = sal_imgs2[ind].cpu() * STD[:, None, None] + MEAN[:, None, None]
-            original_image = np.transpose((sal_imgs2[ind].cpu().detach().numpy()), (1, 2, 0))       
+        if ind==0: original_image = sal_imgs[0].cpu() * STD[:, None, None] + MEAN[:, None, None]
+        else: original_image = sal_imgs2[0].cpu() * STD[:, None, None] + MEAN[:, None, None]
+        original_image = np.transpose((original_image.detach().numpy()), (1, 2, 0))       
         
 
         methods=["original_image","blended_heat_map"]
@@ -226,13 +192,13 @@ def create_saliency_map(model, path, saliency_loader, pred, ses):
     fig.show()      
     
 
+
 def main():
 
     if not os.path.isdir(args.checkpoint):
         mkdir_p(args.checkpoint)
         
     if not os.path.isdir("models/svhn/"+args.checkpoint.split("/")[-1]):
-        print("Making checkpoint directory...")
         mkdir_p("models/svhn/"+args.checkpoint.split("/")[-1])
     args.savepoint = "models/svhn/"+args.checkpoint.split("/")[-1]
     
@@ -240,7 +206,6 @@ def main():
     
 
 
-#    model = RPS_net_mlp(args).cuda() 
     model = RPS_net_cifar(args).cuda()    #for SVHN and CIFAR10 
     print('    Total params: %.2fM' % (sum(p.numel() for p in model.parameters())/1000000.0))
 
@@ -250,8 +215,6 @@ def main():
 
 
     (x_train, y_train), (x_test, y_test) = load_svhn()
-#     (x_train, y_train), (x_test, y_test) = load_cifar10()
-#    (x_train, y_train), (x_test, y_test) = load_mnist()
     
         
     for ses in range(start_sess, start_sess+1):
@@ -305,8 +268,6 @@ def main():
         print("train_path\n", train_path)
         print("infer_path\n", infer_path)
         
-        # Adjust number of classes and other parameters as necessary
-        args.num_class = 10  # SVHN has 10 classes
         
         ids_train = []
         for j in range((ses*args.class_per_task), (ses+1)*args.class_per_task):
@@ -365,10 +326,9 @@ def main():
         test_dataset = CustomTensorDataset((torch.tensor(test_data), torch.tensor(test_label).long()), transform=transform_test)
         test_loader = utils.DataLoader(test_dataset, batch_size=args.test_batch)
         
+        
         ### Saliency
-        #if ses==0:
         saliency_loader = test_loader
-            #print("Ses 0 : saliency_loader = " + str(saliency_loader))
 
         main_learner = Learner(model=model, args=args, trainloader=train_loader,
                                testloader=test_loader, old_model=copy.deepcopy(model),
