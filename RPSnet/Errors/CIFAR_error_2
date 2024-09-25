@@ -223,4 +223,4 @@ Traceback (most recent call last):
   File "/home/pricej18/rpsnet/RPSnet-master/rpsnet_env/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 44, in _wrapit
     result = getattr(asarray(obj), method)(*args, **kwds)
 ValueError: attempt to get argmax of an empty sequence
-Done CODE
+Done CODE.
