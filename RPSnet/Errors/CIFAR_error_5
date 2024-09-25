@@ -1,0 +1,190 @@
+{'checkpoint': 'results/cifar100/RPS_CIFAR_M8_J1', 'labels_data': 'prepare/cifar100_10.pkl', 'savepoint': '', 'num_class': 100, 'class_per_task': 10, 'M': 8, 'jump': 2, 'rigidness_coff': 2.5, 'dataset': 'CIFAR', 'epochs': 100, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 128, 'test_batch': 128, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [20, 40, 60, 80], 'gamma': 0.5}
+    Total params: 89.59M
+Starting with session 0
+test case : 0
+#################################################################################
+path
+ [[1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]]
+fixed_path
+ [[0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]]
+train_path
+ [[1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]]
+Files already downloaded and verified
+Number of layers being trained :  13
+
+Epoch: [1 | 100] LR: 0.001000 Sess: 0
+Traceback (most recent call last):
+  File "cifar.py", line 219, in <module>
+    main()
+  File "cifar.py", line 189, in main
+    main_learner.learn()
+  File "/home/pricej18/rpsnet/RPSnet-master/learner.py", line 96, in learn
+    self.train(epoch, self.infer_path, -1)
+  File "/home/pricej18/rpsnet/RPSnet-master/learner.py", line 187, in train
+    prec1, prec5 = accuracy(output=outputs.data[:,0:self.args.class_per_task*(1+self.args.sess)], target=targets.cuda().data, topk=(1, 5))
+  File "/home/pricej18/rpsnet/RPSnet-master/utils/eval.py", line 35, in accuracy
+    correct_k = correct[:k].view(-1).float().sum(0, keepdim=True)
+RuntimeError: view size is not compatible with input tensor's size and stride (at least one dimension spans across two contiguous subspaces). Use .reshape(...) instead.
+/home/pricej18/rpsnet/RPSnet-master/util.py:20: UserWarning: loadtxt: Empty input file: "results/cifar100/RPS_CIFAR_M8_J1/session_0_0_log.txt"
+  f = np.loadtxt(checkpoint+"/"+file, skiprows=1)
+{'checkpoint': 'results/cifar100/RPS_CIFAR_M8_J1', 'labels_data': 'prepare/cifar100_10.pkl', 'savepoint': '', 'num_class': 100, 'class_per_task': 10, 'M': 8, 'jump': 2, 'rigidness_coff': 2.5, 'dataset': 'CIFAR', 'epochs': 100, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 128, 'test_batch': 128, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [20, 40, 60, 80], 'gamma': 0.5}
+    Total params: 89.59M
+Traceback (most recent call last):
+  File "cifar.py", line 219, in <module>
+    main()
+  File "cifar.py", line 134, in main
+    load_test_case = get_best_model(ses-1, args.checkpoint)
+  File "/home/pricej18/rpsnet/RPSnet-master/util.py", line 29, in get_best_model
+    a = np.argmax(best_acc)
+  File "<__array_function__ internals>", line 6, in argmax
+  File "/home/pricej18/rpsnet/RPSnet-master/rpsnet_env/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 1188, in argmax
+    return _wrapfunc(a, 'argmax', axis=axis, out=out)
+  File "/home/pricej18/rpsnet/RPSnet-master/rpsnet_env/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 55, in _wrapfunc
+    return _wrapit(obj, method, *args, **kwds)
+  File "/home/pricej18/rpsnet/RPSnet-master/rpsnet_env/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 44, in _wrapit
+    result = getattr(asarray(obj), method)(*args, **kwds)
+ValueError: attempt to get argmax of an empty sequence
+{'checkpoint': 'results/cifar100/RPS_CIFAR_M8_J1', 'labels_data': 'prepare/cifar100_10.pkl', 'savepoint': '', 'num_class': 100, 'class_per_task': 10, 'M': 8, 'jump': 2, 'rigidness_coff': 2.5, 'dataset': 'CIFAR', 'epochs': 100, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 128, 'test_batch': 128, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [20, 40, 60, 80], 'gamma': 0.5}
+    Total params: 89.59M
+Traceback (most recent call last):
+  File "cifar.py", line 219, in <module>
+    main()
+  File "cifar.py", line 134, in main
+    load_test_case = get_best_model(ses-1, args.checkpoint)
+  File "/home/pricej18/rpsnet/RPSnet-master/util.py", line 29, in get_best_model
+    a = np.argmax(best_acc)
+  File "<__array_function__ internals>", line 6, in argmax
+  File "/home/pricej18/rpsnet/RPSnet-master/rpsnet_env/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 1188, in argmax
+    return _wrapfunc(a, 'argmax', axis=axis, out=out)
+  File "/home/pricej18/rpsnet/RPSnet-master/rpsnet_env/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 55, in _wrapfunc
+    return _wrapit(obj, method, *args, **kwds)
+  File "/home/pricej18/rpsnet/RPSnet-master/rpsnet_env/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 44, in _wrapit
+    result = getattr(asarray(obj), method)(*args, **kwds)
+ValueError: attempt to get argmax of an empty sequence
+{'checkpoint': 'results/cifar100/RPS_CIFAR_M8_J1', 'labels_data': 'prepare/cifar100_10.pkl', 'savepoint': '', 'num_class': 100, 'class_per_task': 10, 'M': 8, 'jump': 2, 'rigidness_coff': 2.5, 'dataset': 'CIFAR', 'epochs': 100, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 128, 'test_batch': 128, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [20, 40, 60, 80], 'gamma': 0.5}
+    Total params: 89.59M
+Traceback (most recent call last):
+  File "cifar.py", line 219, in <module>
+    main()
+  File "cifar.py", line 134, in main
+    load_test_case = get_best_model(ses-1, args.checkpoint)
+  File "/home/pricej18/rpsnet/RPSnet-master/util.py", line 29, in get_best_model
+    a = np.argmax(best_acc)
+  File "<__array_function__ internals>", line 6, in argmax
+  File "/home/pricej18/rpsnet/RPSnet-master/rpsnet_env/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 1188, in argmax
+    return _wrapfunc(a, 'argmax', axis=axis, out=out)
+  File "/home/pricej18/rpsnet/RPSnet-master/rpsnet_env/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 55, in _wrapfunc
+    return _wrapit(obj, method, *args, **kwds)
+  File "/home/pricej18/rpsnet/RPSnet-master/rpsnet_env/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 44, in _wrapit
+    result = getattr(asarray(obj), method)(*args, **kwds)
+ValueError: attempt to get argmax of an empty sequence
+{'checkpoint': 'results/cifar100/RPS_CIFAR_M8_J1', 'labels_data': 'prepare/cifar100_10.pkl', 'savepoint': '', 'num_class': 100, 'class_per_task': 10, 'M': 8, 'jump': 2, 'rigidness_coff': 2.5, 'dataset': 'CIFAR', 'epochs': 100, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 128, 'test_batch': 128, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [20, 40, 60, 80], 'gamma': 0.5}
+    Total params: 89.59M
+Traceback (most recent call last):
+  File "cifar.py", line 219, in <module>
+    main()
+  File "cifar.py", line 134, in main
+    load_test_case = get_best_model(ses-1, args.checkpoint)
+  File "/home/pricej18/rpsnet/RPSnet-master/util.py", line 29, in get_best_model
+    a = np.argmax(best_acc)
+  File "<__array_function__ internals>", line 6, in argmax
+  File "/home/pricej18/rpsnet/RPSnet-master/rpsnet_env/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 1188, in argmax
+    return _wrapfunc(a, 'argmax', axis=axis, out=out)
+  File "/home/pricej18/rpsnet/RPSnet-master/rpsnet_env/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 55, in _wrapfunc
+    return _wrapit(obj, method, *args, **kwds)
+  File "/home/pricej18/rpsnet/RPSnet-master/rpsnet_env/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 44, in _wrapit
+    result = getattr(asarray(obj), method)(*args, **kwds)
+ValueError: attempt to get argmax of an empty sequence
+{'checkpoint': 'results/cifar100/RPS_CIFAR_M8_J1', 'labels_data': 'prepare/cifar100_10.pkl', 'savepoint': '', 'num_class': 100, 'class_per_task': 10, 'M': 8, 'jump': 2, 'rigidness_coff': 2.5, 'dataset': 'CIFAR', 'epochs': 100, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 128, 'test_batch': 128, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [20, 40, 60, 80], 'gamma': 0.5}
+    Total params: 89.59M
+Traceback (most recent call last):
+  File "cifar.py", line 219, in <module>
+    main()
+  File "cifar.py", line 134, in main
+    load_test_case = get_best_model(ses-1, args.checkpoint)
+  File "/home/pricej18/rpsnet/RPSnet-master/util.py", line 29, in get_best_model
+    a = np.argmax(best_acc)
+  File "<__array_function__ internals>", line 6, in argmax
+  File "/home/pricej18/rpsnet/RPSnet-master/rpsnet_env/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 1188, in argmax
+    return _wrapfunc(a, 'argmax', axis=axis, out=out)
+  File "/home/pricej18/rpsnet/RPSnet-master/rpsnet_env/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 55, in _wrapfunc
+    return _wrapit(obj, method, *args, **kwds)
+  File "/home/pricej18/rpsnet/RPSnet-master/rpsnet_env/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 44, in _wrapit
+    result = getattr(asarray(obj), method)(*args, **kwds)
+ValueError: attempt to get argmax of an empty sequence
+{'checkpoint': 'results/cifar100/RPS_CIFAR_M8_J1', 'labels_data': 'prepare/cifar100_10.pkl', 'savepoint': '', 'num_class': 100, 'class_per_task': 10, 'M': 8, 'jump': 2, 'rigidness_coff': 2.5, 'dataset': 'CIFAR', 'epochs': 100, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 128, 'test_batch': 128, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [20, 40, 60, 80], 'gamma': 0.5}
+    Total params: 89.59M
+Traceback (most recent call last):
+  File "cifar.py", line 219, in <module>
+    main()
+  File "cifar.py", line 134, in main
+    load_test_case = get_best_model(ses-1, args.checkpoint)
+  File "/home/pricej18/rpsnet/RPSnet-master/util.py", line 29, in get_best_model
+    a = np.argmax(best_acc)
+  File "<__array_function__ internals>", line 6, in argmax
+  File "/home/pricej18/rpsnet/RPSnet-master/rpsnet_env/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 1188, in argmax
+    return _wrapfunc(a, 'argmax', axis=axis, out=out)
+  File "/home/pricej18/rpsnet/RPSnet-master/rpsnet_env/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 55, in _wrapfunc
+    return _wrapit(obj, method, *args, **kwds)
+  File "/home/pricej18/rpsnet/RPSnet-master/rpsnet_env/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 44, in _wrapit
+    result = getattr(asarray(obj), method)(*args, **kwds)
+ValueError: attempt to get argmax of an empty sequence
+{'checkpoint': 'results/cifar100/RPS_CIFAR_M8_J1', 'labels_data': 'prepare/cifar100_10.pkl', 'savepoint': '', 'num_class': 100, 'class_per_task': 10, 'M': 8, 'jump': 2, 'rigidness_coff': 2.5, 'dataset': 'CIFAR', 'epochs': 100, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 128, 'test_batch': 128, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [20, 40, 60, 80], 'gamma': 0.5}
+    Total params: 89.59M
+Traceback (most recent call last):
+  File "cifar.py", line 219, in <module>
+    main()
+  File "cifar.py", line 134, in main
+    load_test_case = get_best_model(ses-1, args.checkpoint)
+  File "/home/pricej18/rpsnet/RPSnet-master/util.py", line 29, in get_best_model
+    a = np.argmax(best_acc)
+  File "<__array_function__ internals>", line 6, in argmax
+  File "/home/pricej18/rpsnet/RPSnet-master/rpsnet_env/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 1188, in argmax
+    return _wrapfunc(a, 'argmax', axis=axis, out=out)
+  File "/home/pricej18/rpsnet/RPSnet-master/rpsnet_env/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 55, in _wrapfunc
+    return _wrapit(obj, method, *args, **kwds)
+  File "/home/pricej18/rpsnet/RPSnet-master/rpsnet_env/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 44, in _wrapit
+    result = getattr(asarray(obj), method)(*args, **kwds)
+ValueError: attempt to get argmax of an empty sequence
+{'checkpoint': 'results/cifar100/RPS_CIFAR_M8_J1', 'labels_data': 'prepare/cifar100_10.pkl', 'savepoint': '', 'num_class': 100, 'class_per_task': 10, 'M': 8, 'jump': 2, 'rigidness_coff': 2.5, 'dataset': 'CIFAR', 'epochs': 100, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 128, 'test_batch': 128, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [20, 40, 60, 80], 'gamma': 0.5}
+    Total params: 89.59M
+Traceback (most recent call last):
+  File "cifar.py", line 219, in <module>
+    main()
+  File "cifar.py", line 134, in main
+    load_test_case = get_best_model(ses-1, args.checkpoint)
+  File "/home/pricej18/rpsnet/RPSnet-master/util.py", line 29, in get_best_model
+    a = np.argmax(best_acc)
+  File "<__array_function__ internals>", line 6, in argmax
+  File "/home/pricej18/rpsnet/RPSnet-master/rpsnet_env/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 1188, in argmax
+    return _wrapfunc(a, 'argmax', axis=axis, out=out)
+  File "/home/pricej18/rpsnet/RPSnet-master/rpsnet_env/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 55, in _wrapfunc
+    return _wrapit(obj, method, *args, **kwds)
+  File "/home/pricej18/rpsnet/RPSnet-master/rpsnet_env/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 44, in _wrapit
+    result = getattr(asarray(obj), method)(*args, **kwds)
+ValueError: attempt to get argmax of an empty sequence
+Done CODE
