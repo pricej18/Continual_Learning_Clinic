@@ -319,108 +319,12 @@ class RPS_net_cifar(nn.Module):
             
             if len(self.final_layers) < 1:
                 #self.final_layer1 = nn.Linear(a5, 100)
-                self.final_layer1 = nn.Linear(a5, 10)
+                self.final_layer1 = nn.Linear(a5, args.num_class)
                 self.final_layers.append(self.final_layer1)
 
             
             self.cuda()
 
-        '''
-        def forward(self, x, path, last):
-
-            M = self.args.M
-            div =1
-            p=0.5
-            
-            y = self.conv1[0](x)
-            for j in range(1,self.args.M):
-                if(path[0][j]==1):
-                    y += self.conv1[j](x)
-            x = F.relu(y)
-
-            
-            
-            
-            
-        
-            y = self.conv2[0](x)
-            for j in range(1,self.args.M):
-                if(path[1][j]==1):
-                    y += self.conv2[j](x)
-            x = y + x
-            x = F.relu(x)
-            
-            y = self.conv3[0](x)
-            for j in range(1,self.args.M):
-                if(path[2][j]==1):
-                    y += self.conv3[j](x)
-            x = y + x
-            x = F.relu(x)
-
-
-            
-            
-            
-            y = self.conv4[-1](x)
-            for j in range(self.args.M):
-                if(path[3][j]==1):
-                    y += self.conv4[j](x)
-            x = y
-            x = F.relu(x)
-            
-            y = self.conv5[0](x)
-            for j in range(1, self.args.M):
-                if(path[4][j]==1):
-                    y += self.conv5[j](x)
-            x = y + x
-            x = F.relu(x)
-            x = self.pool1(x)  
-            
-            
-            
-            
-            
-            y = self.conv6[-1](x)
-            for j in range(self.args.M):
-                if(path[5][j]==1):
-                    y += self.conv6[j](x)
-            x = y 
-            x = F.relu(x)
-            
-            y = self.conv7[0](x)
-            for j in range(1, self.args.M):
-                if(path[6][j]==1):
-                    y += self.conv7[j](x)
-            x = y
-            x = F.relu(x)
-            x = self.pool2(x)
-            
-            
-            
-            
-            
-            y = self.conv8[-1](x)
-            for j in range(self.args.M):
-                if(path[7][j]==1):
-                    y += self.conv8[j](x)
-            x = y 
-            x = F.relu(x)
-            
-            y = self.conv9[0](x)
-            for j in range(1, self.args.M):
-                if(path[8][j]==1):
-                    y += self.conv9[j](x)
-            x = y + x
-            x = F.relu(x)
-#             x = self.pool3(x)
-            
-
-            x = F.avg_pool2d(x, (8, 8), stride=(1,1))
-            x = x.view(-1, self.a5)
-            x = self.final_layers[last](x)
-            
-            return x
-        '''
         torch.autograd.set_detect_anomaly(True)
         def forward(self, x, path, last):
             x.requires_grad_()
