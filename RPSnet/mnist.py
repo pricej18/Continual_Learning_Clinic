@@ -82,9 +82,7 @@ random.seed(seed)
 torch.manual_seed(seed)
 if use_cuda:
     torch.cuda.manual_seed_all(seed)
-
-
-    
+   
 
 
 def load_mnist():
@@ -94,41 +92,6 @@ def load_mnist():
     x_train = x_train.reshape(-1, 784).astype('float32') / 255.
     x_test = x_test.reshape(-1, 784).astype('float32') / 255.
     return (x_train, y_train), (x_test, y_test)
-
-
-def load_svhn():
-    from scipy import io as spio
-    from keras.utils import to_categorical
-    import numpy as np
-    svhn = spio.loadmat("train_32x32.mat")
-    x_train = np.einsum('ijkl->lijk', svhn["X"]).astype(np.float32) / 255.
-    y_train = (svhn["y"] - 1)
-
-    svhn_test = spio.loadmat("test_32x32.mat")
-    x_test = np.einsum('ijkl->lijk', svhn_test["X"]).astype(np.float32) / 255.
-    y_test = (svhn_test["y"] - 1)
-
-    x_train = np.transpose(x_train, [0,3,1,2])
-    x_test = np.transpose(x_test, [0,3,1,2])
-    y_train = np.reshape(y_train, (-1))
-    y_test = np.reshape(y_test, (-1))
-
-    
-    return (x_train, y_train), (x_test, y_test)
-
-
-
-def load_cifar10():
-    from keras.datasets import cifar10
-    (x_train, y_train), (x_test, y_test) = cifar10.load_data()
-
-    x_train = x_train.reshape(-1, 3, 32, 32).astype('float32') / 255.
-    x_test = x_test.reshape(-1, 3, 32, 32).astype('float32') / 255.
-
-    y_train = np.reshape(y_train, (-1))
-    y_test = np.reshape(y_test, (-1))
-    return (x_train, y_train), (x_test, y_test)
-
 
 
 
@@ -171,7 +134,7 @@ def create_saliency_map(model, path, saliency_loader, pred, ses):
     for i in range(10):
         sal_imgs2, sal_labels2 = next(data_iter)
     sal_imgs2, sal_labels2 = sal_imgs2.cuda(), sal_labels2.cuda()
-    #print("Sal2, i=10??:")
+    #print("Sal 2:")
     #print(sal_labels2)
     
     fig, ax = plt.subplots(1,4,figsize=(10,4))
@@ -195,8 +158,6 @@ def create_saliency_map(model, path, saliency_loader, pred, ses):
         
         if ind==0: original_image = np.transpose((sal_imgs[ind].reshape(28,28).unsqueeze(0).cpu().detach().numpy() / 2) + 0.5, (1, 2, 0))       
         else: original_image = np.transpose((sal_imgs2[ind].reshape(28,28).unsqueeze(0).cpu().detach().numpy() / 2) + 0.5, (1, 2, 0))       
-        
-        #original_image = selected_imgs[ind].cpu().detach().numpy()  
 
         methods=["original_image","blended_heat_map"]
         signs=["all","absolute_value"]
@@ -236,7 +197,6 @@ def main():
 
 
     model = RPS_net_mlp(args).cuda() 
-#     model = RPS_net_cifar(args).cuda()    #for SVHN and CIFAR10 
     print('    Total params: %.2fM' % (sum(p.numel() for p in model.parameters())/1000000.0))
 
     start_sess = int(sys.argv[2])
@@ -244,8 +204,6 @@ def main():
     args.test_case = test_case
 
 
-#     (x_train, y_train), (x_test, y_test) = load_svhn()
-#     (x_train, y_train), (x_test, y_test) = load_cifar10()
     (x_train, y_train), (x_test, y_test) = load_mnist()
     
     for ses in range(start_sess, start_sess+1):
