@@ -1,0 +1,172 @@
+Options is running...
+usage: ./main.py [-h] [--get-stamp] [--seed SEED] [--no-gpus] [--no-save] [--full-stag STAG]
+                 [--full-ltag LTAG] [--test] [--data-dir D_DIR] [--model-dir M_DIR]
+                 [--plot-dir P_DIR] [--results-dir R_DIR] [--time] [--pdf] [--visdom]
+                 [--results-dict] [--loss-log N] [--acc-log N] [--acc-n ACC_N] [--sample-log N]
+                 [--sample-n SAMPLE_N] [--no-samples]
+                 [--experiment {splitMNIST,permMNIST,CIFAR10,CIFAR100}]
+                 [--scenario {task,domain,class}] [--contexts N] [--iters ITERS] [--batch BATCH]
+                 [--no-norm] [--conv-type {standard,resNet}] [--n-blocks N_BLOCKS] [--depth DEPTH]
+                 [--reducing-layers RL] [--channels CHANNELS] [--conv-bn CONV_BN]
+                 [--conv-nl {relu,leakyrelu}] [--global-pooling] [--fc-layers FC_LAY]
+                 [--fc-units N] [--fc-drop FC_DROP] [--fc-bn FC_BN]
+                 [--fc-nl {relu,leakyrelu,none}] [--z-dim Z_DIM] [--singlehead] [--lr LR]
+                 [--optimizer {adam,adam_reset,sgd}] [--momentum MOMENTUM] [--pre-convE]
+                 [--convE-ltag LTAG] [--seed-to-ltag] [--freeze-convE]
+                 [--active-classes {all,all-so-far,current}] [--recon-loss {MSE,BCE}] [--bce]
+                 [--bce-distill] [--joint] [--cummulative] [--xdg] [--gating-prop PROP]
+                 [--separate-networks] [--ewc] [--si] [--ncl] [--ewc-kfac] [--owm]
+                 [--weight-penalty] [--reg-strength LAMDA] [--precondition] [--alpha ALPHA]
+                 [--importance-weighting {fisher,si,owm}] [--fisher-n FISHER_N] [--fisher-batch N]
+                 [--fisher-labels {all,sample,pred,true}] [--fisher-kfac] [--fisher-init]
+                 [--fisher-prior SIZE] [--epsilon EPSILON] [--offline] [--gamma GAMMA] [--lwf]
+                 [--distill] [--temp TEMP] [--fromp] [--tau TAU] [--budget BUDGET]
+                 [--use-full-capacity] [--sample-selection {random,herding,fromp}] [--add-buffer]
+                 [--replay {none,all,generative,current,buffer}]
+                 [--use-replay {normal,inequality,both}] [--agem] [--eps-agem EPS_AGEM]
+                 [--g-z-dim G_Z_DIM] [--g-fc-lay G_FC_LAY] [--g-fc-uni G_FC_UNI]
+                 [--g-iters G_ITERS] [--lr-gen LR_GEN] [--brain-inspired] [--feedback]
+                 [--prior {standard,GMM}] [--per-class] [--n-modes N_MODES] [--dg-gates]
+                 [--dg-type TYPE] [--dg-prop DG_PROP] [--hidden] [--icarl] [--prototypes]
+                 [--gen-classifier] [--eval-s EVAL_S]
+
+Run an individual continual learning experiment using the "academic continual learning setting".
+
+options:
+  -h, --help            show this help message and exit
+  --get-stamp           print param-stamp & exit
+  --seed SEED           [first] random seed (for each random-module used)
+  --no-gpus             don't use GPUs
+  --no-save             don't save trained models
+  --full-stag STAG      tag for saving full model
+  --full-ltag LTAG      tag for loading full model
+  --test                evaluate previously saved model
+  --data-dir D_DIR      default: /esat/opal/tmp/back-ups/three-scenarios/store/datasets
+  --model-dir M_DIR     default: /esat/opal/tmp/back-ups/three-scenarios/store/models
+  --plot-dir P_DIR      default: /esat/opal/tmp/back-ups/three-scenarios/store/plots
+  --results-dir R_DIR   default: /esat/opal/tmp/back-ups/three-scenarios/store/results
+
+Evaluation Parameters:
+  --time                keep track of total training time
+  --pdf                 generate pdf with results
+  --visdom              use visdom for on-the-fly plots
+  --results-dict        output dict with results after each task
+  --loss-log N          # iters after which to plot loss (def: # iters)
+  --acc-log N           # iters after which to plot accuracy (def: # iters)
+  --acc-n ACC_N         # samples to evaluate accuracy (after each context)
+  --sample-log N        # iters after which to plot samples (def: # iters)
+  --sample-n SAMPLE_N   # images to show
+  --no-samples          don't plot generated images
+
+Problem Specification:
+  --experiment {splitMNIST,permMNIST,CIFAR10,CIFAR100}
+  --scenario {task,domain,class}
+  --contexts N          number of contexts
+  --iters ITERS         # iterations (mini-batches) per context
+  --batch BATCH         mini batch size (# observations per iteration)
+  --no-norm             don't normalize images (only for CIFAR)
+
+Parameters Main Model:
+  --conv-type {standard,resNet}
+  --n-blocks N_BLOCKS   # blocks per conv-layer (only for 'resNet')
+  --depth DEPTH         # of convolutional layers (0 = only fc-layers)
+  --reducing-layers RL  # of layers with stride (=image-size halved)
+  --channels CHANNELS   # of channels 1st conv-layer (doubled every 'rl')
+  --conv-bn CONV_BN     use batch-norm in the conv-layers (yes|no)
+  --conv-nl {relu,leakyrelu}
+  --global-pooling      ave global pool after conv-layers
+  --fc-layers FC_LAY    # of fully-connected layers
+  --fc-units N          # of units in hidden fc-layers
+  --fc-drop FC_DROP     dropout probability for fc-units
+  --fc-bn FC_BN         use batch-norm in the fc-layers (no|yes)
+  --fc-nl {relu,leakyrelu,none}
+  --z-dim Z_DIM         size of latent representation (if used, def=100)
+  --singlehead          for Task-IL: use a 'single-headed' output layer (instead of a 'multi-
+                        headed' one)
+
+Training Parameters:
+  --lr LR               learning rate
+  --optimizer {adam,adam_reset,sgd}
+  --momentum MOMENTUM   momentum (if using SGD optimizer)
+  --pre-convE           use pretrained convE-layers
+  --convE-ltag LTAG     tag for loading convE-layers
+  --seed-to-ltag        add seed to tag when loading convE-layers
+  --freeze-convE        freeze convE-layers
+  --active-classes {all,all-so-far,current}
+                        for Class-IL: which classes to set to 'active'?
+
+Loss Parameters:
+  --recon-loss {MSE,BCE}
+  --bce                 use binary (instead of multi-class) classification loss
+  --bce-distill         distilled loss on previous classes for new examples (if --bce &
+                        --scenario="class")
+
+Baseline Options:
+  --joint               train once on data of all contexts
+  --cummulative         train incrementally on data of all contexts so far
+
+Context-Specific Component:
+  --xdg                 use 'Context-dependent Gating' (Masse et al, 2018)
+  --gating-prop PROP    -> XdG: prop neurons per layer to gate
+  --separate-networks   train separate network per context
+
+Parameter Regularization:
+  --ewc                 select defaults for 'EWC' (Kirkpatrick et al, 2017)
+  --si                  select defaults for 'SI' (Zenke et al, 2017)
+  --ncl                 select defaults for 'NCL' (Kao, Jensen et al., 2021)
+  --ewc-kfac            select defaults for 'KFAC-EWC' (Ritter et al. 2018)
+  --owm                 select defaults for 'OWM' (Zeng et al. 2019)
+  --weight-penalty      penalize parameters important for past contexts
+  --reg-strength LAMDA  regularisation strength for weight penalty
+  --precondition        parameter regularization by gradient projection
+  --alpha ALPHA         small constant stabilizing inversion importance matrix
+  --importance-weighting {fisher,si,owm}
+  --fisher-n FISHER_N   -> Fisher: sample size estimating Fisher Information
+  --fisher-batch N      -> Fisher: batch size estimating FI (should be 1)
+  --fisher-labels {all,sample,pred,true}
+                        -> Fisher: what labels to use to calculate FI?
+  --fisher-kfac         -> Fisher: use KFAC approximation rather than diagonal
+  --fisher-init         -> Fisher: start with prior (as in NCL)
+  --fisher-prior SIZE   -> Fisher: prior-strength in 'data_size' (as in NCL)
+  --epsilon EPSILON     -> SI: dampening parameter
+  --offline             separate penalty term per context (as original EWC)
+  --gamma GAMMA         forgetting coefficient Fishers (as in Online EWC)
+
+Functional Regularization:
+  --lwf                 select defaults for 'LwF' (Li & Hoiem, 2017)
+  --distill             use distillation-loss for the replayed data
+  --temp TEMP           temperature for distillation loss
+  --fromp               use 'FROMP' (Pan et al, 2020)
+  --tau TAU             -> FROMP: regularization strength
+
+Memory Buffer Parameters:
+  --budget BUDGET       how many samples can be stored of each class?
+  --use-full-capacity   use budget of future classes to initially store more
+  --sample-selection {random,herding,fromp}
+  --add-buffer          add memory buffer to current context's training data
+
+Replay:
+  --replay {none,all,generative,current,buffer}
+  --use-replay {normal,inequality,both}
+  --agem                select defaults for 'A-GEM' (Chaudhry et al, 2019)
+  --eps-agem EPS_AGEM   parameter to ensure numerical stability of A-GEM
+  --g-z-dim G_Z_DIM     size latent space generator (def: as classifier)
+  --g-fc-lay G_FC_LAY   [fc_layers] in generator (def: as classifier)
+  --g-fc-uni G_FC_UNI   [fc_units] in generator (def: as classifier)
+  --g-iters G_ITERS     # batches to train generator (def: as classifier)
+  --lr-gen LR_GEN       learning rate generator (def: as classifier)
+  --brain-inspired      select defaults for 'BI-R' (van de Ven et al, 2020)
+  --feedback            equip main model with feedback connections
+  --prior {standard,GMM}
+  --per-class           if selected, each class has its own modes
+  --n-modes N_MODES     how many modes for prior (per class)? (def=1)
+  --dg-gates            use context-specific gates in decoder
+  --dg-type TYPE        decoder-gates: based on contexts or classes?
+  --dg-prop DG_PROP     decoder-gates: masking-prop
+  --hidden              gen models at 'internal level' (after conv-layers)
+
+Template-Based Classification:
+  --icarl               select defaults for 'iCaRL' (Rebuffi et al, 2017)
+  --prototypes          classify using nearest-exemplar-mean rule
+  --gen-classifier      use 'Generative Classifier' (van de Ven et al, 2021)
+  --eval-s EVAL_S       -> Generative Classifier: number of importance samples
