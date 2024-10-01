@@ -34,6 +34,8 @@ import random
 from torch.utils.data import Dataset, TensorDataset
 
 from rps_net import RPS_net_mlp, RPS_net_cifar
+#from rps_net import RPS_net_mlp
+#from rps_net2 import RPS_net_cifar
 from learner import Learner
 from util import *
 from cifar_dataset import CIFAR100
@@ -44,12 +46,12 @@ from captum.attr import visualization as viz
 import matplotlib.pyplot as plt
 
 
-
 class args:
-    epochs = 10
-    checkpoint = "results/mnist/RPS_net_minst"
-    savepoint = "results/mnist/pathnet_mnist"
-    dataset = "MNIST"
+#    epochs = 10
+    epochs = 1
+    checkpoint = "results/cifar10/RPS_net_cifar10"
+    savepoint = "results/cifar10/pathnet_cifar10"
+    dataset = "CIFAR10"
     num_class = 10
     class_per_task = 2
     M = 8
@@ -71,8 +73,8 @@ class args:
     jump = 1
     
 state = {key:value for key, value in args.__dict__.items() if not key.startswith('__') and not callable(key)}
+classes = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
 print(state)
-classes = ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
 memory = 4400
 # Use CUDA
 use_cuda = torch.cuda.is_available()
@@ -85,51 +87,19 @@ if use_cuda:
 
 
     
-
-
-def load_mnist():
-    from keras.datasets import mnist
-    (x_train, y_train), (x_test, y_test) = mnist.load_data()
-
-    x_train = x_train.reshape(-1, 784).astype('float32') / 255.
-    x_test = x_test.reshape(-1, 784).astype('float32') / 255.
-    return (x_train, y_train), (x_test, y_test)
-
-
-def load_svhn():
-    from scipy import io as spio
-    from keras.utils import to_categorical
-    import numpy as np
-    svhn = spio.loadmat("train_32x32.mat")
-    x_train = np.einsum('ijkl->lijk', svhn["X"]).astype(np.float32) / 255.
-    y_train = (svhn["y"] - 1)
-
-    svhn_test = spio.loadmat("test_32x32.mat")
-    x_test = np.einsum('ijkl->lijk', svhn_test["X"]).astype(np.float32) / 255.
-    y_test = (svhn_test["y"] - 1)
-
-    x_train = np.transpose(x_train, [0,3,1,2])
-    x_test = np.transpose(x_test, [0,3,1,2])
-    y_train = np.reshape(y_train, (-1))
-    y_test = np.reshape(y_test, (-1))
-
-    
-    return (x_train, y_train), (x_test, y_test)
-
-
-
 def load_cifar10():
     from keras.datasets import cifar10
     (x_train, y_train), (x_test, y_test) = cifar10.load_data()
 
-    x_train = x_train.reshape(-1, 3, 32, 32).astype('float32') / 255.
-    x_test = x_test.reshape(-1, 3, 32, 32).astype('float32') / 255.
+    #x_train = x_train.reshape(-1, 3, 32, 32).astype('float32') / 255.
+    #x_test = x_test.reshape(-1, 3, 32, 32).astype('float32') / 255.
+    
+    x_train = np.transpose(x_train, [0,3,1,2]).astype('float32') / 255.
+    x_test = np.transpose(x_train, [0,3,1,2]).astype('float32') / 255.
 
     y_train = np.reshape(y_train, (-1))
     y_test = np.reshape(y_test, (-1))
     return (x_train, y_train), (x_test, y_test)
-
-
 
 
 class CustomTensorDataset(Dataset):
@@ -155,48 +125,45 @@ class CustomTensorDataset(Dataset):
     
     
     
-
-
 def create_saliency_map(model, path, saliency_loader, pred, ses):
     ##### Create Saliency Maps
     data_iter = iter(saliency_loader)
     sal_imgs, sal_labels = next(data_iter)
-    sal_imgs, sal_labels = sal_imgs.cuda(), sal_labels.cuda()
     predicted = pred.squeeze()
     
     saliency = Saliency(model)
-    #print(sal_labels)
 
     # Finds a '1' for testing
-    for i in range(10):
+    for i in range(len(saliency_loader)-1):
         sal_imgs2, sal_labels2 = next(data_iter)
-    sal_imgs2, sal_labels2 = sal_imgs2.cuda(), sal_labels2.cuda()
-    #print("Sal2, i=10??:")
-    #print(sal_labels2)
+        if sal_labels2[0] == torch.tensor([1]): break
+    sal_imgs, sal_labels, sal_imgs2, sal_labels2 = sal_imgs.cuda(), sal_labels.cuda(), sal_imgs2.cuda(), sal_labels2.cuda()
     
     fig, ax = plt.subplots(1,4,figsize=(10,4))
     for ind in range(0,2):
-        if ind==0: input = sal_imgs[ind].unsqueeze(0)
-        else: input = sal_imgs2[ind].unsqueeze(0)
+        if ind==0: input = sal_imgs[0].unsqueeze(0)
+        else: input = sal_imgs2[0].unsqueeze(0)
+        print(input.shape)
 
         input.requires_grad = True
 
-        if ind==0: grads = saliency.attribute(input, target=sal_labels[ind].item(), abs=False, additional_forward_args = (path, -1))
-        else: grads = saliency.attribute(input, target=sal_labels2[ind].item(), abs=False, additional_forward_args = (path, -1))
+        if ind==0: grads = saliency.attribute(input, target=sal_labels[0].item(), abs=False, additional_forward_args = (path, -1))
+        else: grads = saliency.attribute(input, target=sal_labels2[0].item(), abs=False, additional_forward_args = (path, -1))
         
-        grads = grads.reshape(28,28)
         squeeze_grads = grads.squeeze().cpu().detach()
-        squeeze_grads = torch.unsqueeze(squeeze_grads,0).numpy()
-        grads = np.transpose(squeeze_grads, (1, 2, 0))
+        grads = np.transpose(squeeze_grads.numpy(), (1, 2, 0))
 
-        #if ind==0: print('Truth:', classes[sal_labels[ind]])
-        #else: print('Truth:', classes[sal_labels2[ind]])
-        #print('Predicted:', classes[predicted[ind]])
+        if ind==0: print('Truth:', classes[sal_labels[0]])
+        else: print('Truth:', classes[sal_labels2[0]])
         
-        if ind==0: original_image = np.transpose((sal_imgs[ind].reshape(28,28).unsqueeze(0).cpu().detach().numpy() / 2) + 0.5, (1, 2, 0))       
-        else: original_image = np.transpose((sal_imgs2[ind].reshape(28,28).unsqueeze(0).cpu().detach().numpy() / 2) + 0.5, (1, 2, 0))       
+        # Denormalization
+        MEAN = torch.tensor([0.4914, 0.4822, 0.4465])
+        STD = torch.tensor([0.2023, 0.1994, 0.2010])
         
-        #original_image = selected_imgs[ind].cpu().detach().numpy()  
+        if ind==0: original_image = sal_imgs[0].cpu()# * STD[:, None, None] + MEAN[:, None, None]
+        else: original_image = sal_imgs2[0].cpu() * STD[:, None, None] + MEAN[:, None, None]
+        original_image = np.transpose(original_image.detach().numpy(), (1, 2, 0))   
+        
 
         methods=["original_image","blended_heat_map"]
         signs=["all","absolute_value"]
@@ -217,26 +184,25 @@ def create_saliency_map(model, path, saliency_loader, pred, ses):
                 ax[2*ind+i].tick_params(left = False, right = False, labelleft = False, 
                                 labelbottom = False, bottom = False) 
             
-    fig.savefig(f"SaliencyMaps/MNIST/Sess{ses}SalMap.png")
-    fig.show()  
-
+    fig.savefig(f"SaliencyMaps/CIFAR10/Sess{ses}SalMap.png")
+    fig.show()      
     
+
 
 def main():
 
     if not os.path.isdir(args.checkpoint):
         mkdir_p(args.checkpoint)
         
-    if not os.path.isdir("models/mnist/"+args.checkpoint.split("/")[-1]):
-        mkdir_p("models/mnist/"+args.checkpoint.split("/")[-1])
-    args.savepoint = "models/mnist/"+args.checkpoint.split("/")[-1]
+    if not os.path.isdir("models/cifar10/"+args.checkpoint.split("/")[-1]):
+        mkdir_p("models/cifar10/"+args.checkpoint.split("/")[-1])
+    args.savepoint = "models/cifar10/"+args.checkpoint.split("/")[-1]
     
     
     
 
 
-    model = RPS_net_mlp(args).cuda() 
-#     model = RPS_net_cifar(args).cuda()    #for SVHN and CIFAR10 
+    model = RPS_net_cifar(args).cuda()    #for SVHN and CIFAR10 
     print('    Total params: %.2fM' % (sum(p.numel() for p in model.parameters())/1000000.0))
 
     start_sess = int(sys.argv[2])
@@ -244,9 +210,7 @@ def main():
     args.test_case = test_case
 
 
-#     (x_train, y_train), (x_test, y_test) = load_svhn()
-#     (x_train, y_train), (x_test, y_test) = load_cifar10()
-    (x_train, y_train), (x_test, y_test) = load_mnist()
+    (x_train, y_train), (x_test, y_test) = load_cifar10()
     
     for ses in range(start_sess, start_sess+1):
             
@@ -342,12 +306,14 @@ def main():
             transforms.RandomCrop(32, padding=4),
             transforms.RandomHorizontalFlip(),
             transforms.RandomRotation(10),
+            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
             transforms.ToTensor(),
         ])
 
         transform_test = transforms.Compose([
             transforms.ToPILImage(),
             transforms.Resize(32),
+            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
             transforms.ToTensor(),
         ])
 
@@ -362,9 +328,7 @@ def main():
         test_loader = utils.DataLoader(test_dataset, batch_size=args.test_batch)
         
         ### Saliency
-        #if ses==0:
         saliency_loader = test_loader
-            #print("Ses 0 : saliency_loader = " + str(saliency_loader))
             
 
         main_learner=Learner(model=model,args=args,trainloader=train_loader,
@@ -398,9 +362,7 @@ def main():
         if(is_all_done(ses, args.epochs, args.checkpoint)):
             break
         else:
-            time.sleep(10)
-            
-            
+            time.sleep(10)            
             
 if __name__ == '__main__':
     main()

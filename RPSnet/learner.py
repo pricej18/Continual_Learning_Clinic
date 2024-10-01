@@ -188,7 +188,7 @@ class Learner():
 
 
             # measure accuracy and record loss
-            if(self.args.dataset=="MNIST" or self.args.dataset=="SVHN"):
+            if(self.args.dataset=="MNIST" or self.args.dataset=="SVHN" or self.args.dataset=="CIFAR10"):
                 prec1, prec5 = accuracy(output=outputs.data[:,0:self.args.class_per_task*(1+self.args.sess)], target=targets.cuda().data, topk=(1, 1))
             else:
                 prec1, prec5 = accuracy(output=outputs.data[:,0:self.args.class_per_task*(1+self.args.sess)], target=targets.cuda().data, topk=(1, 5))
@@ -266,7 +266,7 @@ class Learner():
 
 
             # measure accuracy and record loss
-            if(self.args.dataset=="MNIST" or self.args.dataset=="SVHN"):
+            if(self.args.dataset=="MNIST" or self.args.dataset=="SVHN" or self.args.dataset=="CIFAR10"):
                 prec1, prec5 = accuracy(outputs.data[:,0:self.args.class_per_task*(1+self.args.sess)], targets.cuda().data, topk=(1, 1))
             else:    
                 prec1, prec5 = accuracy(outputs.data[:,0:self.args.class_per_task*(1+self.args.sess)], targets.cuda().data, topk=(1, 5))

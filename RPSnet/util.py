@@ -16,15 +16,19 @@ def get_best_model(task_search, checkpoint):
     best_acc = []
     best_acc_b = []
     for file in log_files_b:
+        print(file)
         try:
-            f = np.loadtxt(checkpoint+"/"+file, skiprows=1)
+            f = np.loadtxt(checkpoint+"/"+file, skiprows=1)          
             best_acc.append(max(f[-1,-1], f[-1,-2]) )
             best_acc_b.append(int(file.split("_")[2]))
         except:
             pass
 
+    
     bets_acc = np.array(best_acc)
     bets_acc_b = np.array(best_acc_b)
+    
+    
 
     a = np.argmax(best_acc)
     print(best_acc[a], best_acc_b[a])
