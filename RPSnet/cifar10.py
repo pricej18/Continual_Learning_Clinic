@@ -160,7 +160,7 @@ def create_saliency_map(model, path, saliency_loader, pred, ses):
         STD = torch.tensor([0.2023, 0.1994, 0.2010])
         
         if ind==0: original_image = sal_imgs[0].cpu()# * STD[:, None, None] + MEAN[:, None, None]
-        else: original_image = sal_imgs2[0].cpu() * STD[:, None, None] + MEAN[:, None, None]
+        else: original_image = sal_imgs2[0].cpu()# * STD[:, None, None] + MEAN[:, None, None]
         original_image = np.transpose(original_image.detach().numpy(), (1, 2, 0))   
         
 
