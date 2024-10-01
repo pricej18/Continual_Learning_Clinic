@@ -47,8 +47,7 @@ import matplotlib.pyplot as plt
 
 
 class args:
-#    epochs = 10
-    epochs = 1
+    epochs = 10
     checkpoint = "results/cifar10/RPS_net_cifar10"
     savepoint = "results/cifar10/pathnet_cifar10"
     dataset = "CIFAR10"
@@ -95,7 +94,7 @@ def load_cifar10():
     #x_test = x_test.reshape(-1, 3, 32, 32).astype('float32') / 255.
     
     x_train = np.transpose(x_train, [0,3,1,2]).astype('float32') / 255.
-    x_test = np.transpose(x_train, [0,3,1,2]).astype('float32') / 255.
+    x_test = np.transpose(x_test, [0,3,1,2]).astype('float32') / 255.
 
     y_train = np.reshape(y_train, (-1))
     y_test = np.reshape(y_test, (-1))
