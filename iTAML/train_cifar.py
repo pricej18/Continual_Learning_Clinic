@@ -1,404 +1,243 @@
 '''
-RPS network training on CIFAR100
+TaICML incremental learning
 Copyright (c) Jathushan Rajasegaran, 2019
 '''
 from __future__ import print_function
-
 import argparse
 import os
 import shutil
 import time
-import random
 import pickle
 import torch
 import pdb
-import torch.nn as nn
-import torch.nn.parallel
-import torch.backends.cudnn as cudnn
-import torch.optim as optim
-import torch.utils.data as data
-import torchvision.transforms as transforms
-import torchvision.datasets as datasets
-from utils import Bar, Logger, AverageMeter, accuracy, mkdir_p, savefig
-
 import numpy as np
 import copy
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-import torch.optim as optim
-from torch.autograd import Variable
-from torch.autograd import gradcheck
 import sys
 import random
-from torch.utils.data import Dataset, TensorDataset
+import collections
 
-from rps_net import RPS_net_mlp, RPS_net_cifar
-from learner import Learner
-from util import *
-from cifar_dataset import CIFAR100
+from utils import mkdir_p
+from basic_net import *
+# from learner_task_reptile import Learner
+# from learner_task_FOMAML import Learner
+# from learner_task_joint import Learner
+from learner_task_itaml import Learner
+import incremental_dataloader as data
 
 # Saliency Imports
 from captum.attr import Saliency
 from captum.attr import visualization as viz
 import matplotlib.pyplot as plt
 
-
-
 class args:
-    epochs = 10
-    checkpoint = "results/mnist/RPS_net_minst"
-    savepoint = "results/mnist/pathnet_mnist"
-    dataset = "MNIST"
-    num_class = 10
-    class_per_task = 2
-    M = 8
-    L = 9
-    N = 1
-    lr = 0.001
+
+    checkpoint = "results/cifar100/meta2_cifar_T10_71"
+    savepoint = "models/" + "/".join(checkpoint.split("/")[1:])
+    data_path = "../Datasets/CIFAR100/"
+    num_class = 100
+    class_per_task = 10
+    num_task = 10
+    test_samples_per_class = 100
+    dataset = "cifar100"
+    optimizer = "radam"
+    
+    epochs = 70
+    lr = 0.01
     train_batch = 128
-    test_batch = 128
+    test_batch = 100
     workers = 16
-    resume = False
-    arch = "res-18"
-    start_epoch = 0
-    evaluate = False
     sess = 0
-    test_case = 0
-    schedule = [6, 8, 16]
-    gamma = 0.5
-    rigidness_coff = 2.5
-    jump = 1
+    schedule = [20,40,60]
+    gamma = 0.2
+    random_classes = False
+    validation = 0
+    memory = 2000
+    mu = 1
+    beta = 1.0
+    r = 2
     
 state = {key:value for key, value in args.__dict__.items() if not key.startswith('__') and not callable(key)}
 print(state)
-classes = ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
-memory = 4400
-# Use CUDA
-use_cuda = torch.cuda.is_available()
+classes = ('beaver', 'dolphin', 'otter', 'seal', 'whale', 'aquarium fish',
+    'flatfish', 'ray', 'shark', 'trout','orchids', 'poppies', 'roses',
+    'sunflowers', 'tulips', 'bottles', 'bowls', 'cans', 'cups', 'plates',
+	'apples', 'mushrooms', 'oranges', 'pears', 'sweet peppers', 'clock',
+    'computer keyboard', 'lamp', 'telephone', 'television', 'bed', 'chair',
+    'couch', 'table', 'wardrobe', 'bee', 'beetle', 'butterfly', 'caterpillar',
+    'cockroach', 'bear', 'leopard', 'lion', 'tiger', 'wolf', 'bridge',
+    'castle', 'house', 'road', 'skyscraper', 'cloud', 'forest', 'mountain',
+    'plain', 'sea', 'camel', 'cattle', 'chimpanzee', 'elephant', 'kangaroo',
+	'fox', 'porcupine', 'possum', 'raccoon', 'skunk', 'crab', 'lobster',
+    'snail', 'spider', 'worm', 'baby', 'boy', 'girl', 'man', 'woman',
+    'crocodile', 'dinosaur', 'lizard', 'snake', 'turtle', 'hamster', 'mouse',
+    'rabbit', 'shrew', 'squirrel', 'maple', 'oak', 'palm', 'pine', 'willow',
+	'bicycle', 'bus', 'motorcycle', 'pickup truck', 'train', 'lawn-mower',
+    'rocket', 'streetcar', 'tank', 'tractor'
+    )
 
+use_cuda = torch.cuda.is_available()
 seed = random.randint(1, 10000)
+seed = 7572 
 random.seed(seed)
+np.random.seed(seed)
 torch.manual_seed(seed)
 if use_cuda:
     torch.cuda.manual_seed_all(seed)
 
-
-    
-
-
-def load_mnist():
-    from keras.datasets import mnist
-    (x_train, y_train), (x_test, y_test) = mnist.load_data()
-
-    x_train = x_train.reshape(-1, 784).astype('float32') / 255.
-    x_test = x_test.reshape(-1, 784).astype('float32') / 255.
-    return (x_train, y_train), (x_test, y_test)
-
-
-def load_svhn():
-    from scipy import io as spio
-    from keras.utils import to_categorical
-    import numpy as np
-    svhn = spio.loadmat("train_32x32.mat")
-    x_train = np.einsum('ijkl->lijk', svhn["X"]).astype(np.float32) / 255.
-    y_train = (svhn["y"] - 1)
-
-    svhn_test = spio.loadmat("test_32x32.mat")
-    x_test = np.einsum('ijkl->lijk', svhn_test["X"]).astype(np.float32) / 255.
-    y_test = (svhn_test["y"] - 1)
-
-    x_train = np.transpose(x_train, [0,3,1,2])
-    x_test = np.transpose(x_test, [0,3,1,2])
-    y_train = np.reshape(y_train, (-1))
-    y_test = np.reshape(y_test, (-1))
-
-    
-    return (x_train, y_train), (x_test, y_test)
-
-
-
-def load_cifar10():
-    from keras.datasets import cifar10
-    (x_train, y_train), (x_test, y_test) = cifar10.load_data()
-
-    x_train = x_train.reshape(-1, 3, 32, 32).astype('float32') / 255.
-    x_test = x_test.reshape(-1, 3, 32, 32).astype('float32') / 255.
-
-    y_train = np.reshape(y_train, (-1))
-    y_test = np.reshape(y_test, (-1))
-    return (x_train, y_train), (x_test, y_test)
-
-
-
-
-class CustomTensorDataset(Dataset):
-    """TensorDataset with support of transforms.
-    """
-    def __init__(self, tensors, transform=None):
-        assert all(tensors[0].size(0) == tensor.size(0) for tensor in tensors)
-        self.tensors = tensors
-        self.transform = transform
-
-    def __getitem__(self, index):
-        x = self.tensors[0][index]
-
-        if self.transform:
-            x = self.transform(x)
-
-        y = self.tensors[1][index]
-
-        return x, y
-
-    def __len__(self):
-        return self.tensors[0].size(0)
-    
-    
-    
-
-
-def create_saliency_map(model, path, saliency_loader, pred, ses):
-    ##### Create Saliency Maps
+def create_saliency_map(model, saliency_loader, pred, ses):
+    # Get Images, one for each class
     data_iter = iter(saliency_loader)
     sal_imgs, sal_labels = next(data_iter)
-    sal_imgs, sal_labels = sal_imgs.cuda(), sal_labels.cuda()
-    predicted = pred.squeeze()
-    
-    saliency = Saliency(model)
     print(sal_labels)
 
-    # Finds a '1' for testing
-    for i in range(10):
-        sal_imgs2, sal_labels2 = next(data_iter)
-    sal_imgs2, sal_labels2 = sal_imgs2.cuda(), sal_labels2.cuda()
-    print("Sal2, i=10??:")
-    print(sal_labels2)
-    
-    selected_imgs = torch.cat((sal_imgs[0].reshape(1),sal_imgs2[0].reshape(1)))
-    selected_labels = torch.cat((sal_labels[0].reshape(1),sal_labels2[0].reshape(1)))
+    num = -1
+    selected_labels = []
+    for img in sal_imgs:
+        num = num + 1
+        if len(selected_labels) > 9: break
+        if selected_labels and sal_labels[num] in torch.index_select(sal_labels,0,torch.tensor(selected_labels)): continue
+        else: selected_labels.append(num)
     print(selected_labels)
-
+    selected_imgs = torch.index_select(sal_imgs, 0, torch.tensor(selected_labels))
+    sal_imgs, sal_labels, selected_imgs = sal_imgs.cuda(), sal_labels.cuda(), selected_imgs.cuda()
+    predicted = pred.squeeze()
     
-    fig, ax = plt.subplots(1,4,figsize=(10,4))
-    for ind in range(0,2):
+    
+    model.set_saliency(True)
+    saliency = Saliency(model)
+    
+    fig, ax = plt.subplots(2,10,figsize=(17,5))
+    for ind in range(0,10):
         input = selected_imgs[ind].unsqueeze(0)
         input.requires_grad = True
 
-        grads = saliency.attribute(input, target=selected_labels[ind].item(), abs=False, additional_forward_args = (path, -1))
-        grads = grads.reshape(28,28)
-        squeeze_grads = grads.squeeze().cpu().detach()
-        squeeze_grads = torch.unsqueeze(squeeze_grads,0).numpy()
-        grads = np.transpose(squeeze_grads, (1, 2, 0))
+        grads = saliency.attribute(input, target=sal_labels[selected_labels[ind]].item(), abs=False)
+        grads = np.transpose(grads.squeeze().cpu().detach().numpy(), (1, 2, 0))
+        #grads = grads.squeeze().cpu().detach().numpy()
 
-        print('Truth:', classes[selected_labels[ind]])
-        print('Predicted:', classes[predicted[ind]])
+        print('Truth:', classes[sal_labels[selected_labels[ind]]])
+        print('Predicted:', classes[predicted[selected_labels[ind]]])
+
+
+        # Denormalization
+        MEAN = torch.tensor([0.5071, 0.4867, 0.4408])
+        STD = torch.tensor([0.2675, 0.2565, 0.2761])
+
+        original_image = selected_imgs[ind].cpu() * STD[:, None, None] + MEAN[:, None, None]
         
-        original_image = np.transpose((selected_imgs[ind].reshape(28,28).unsqueeze(0).cpu().detach().numpy() / 2) + 0.5, (1, 2, 0))       
-        #original_image = selected_imgs[ind].cpu().detach().numpy()  
+        original_image = np.transpose(original_image.detach().numpy(), (1, 2, 0))
 
         methods=["original_image","blended_heat_map"]
         signs=["all","absolute_value"]
         titles=["Original Image","Saliency Map"]
         colorbars=[False,True]
-        for i in range(0,2):
-            plt_fig_axis = (fig,ax[2*ind+i])
-            if i==1:
-                _ = viz.visualize_image_attr(grads, original_image,
-                                            method=methods[i],
-                                            sign=signs[i],
-                                            plt_fig_axis=plt_fig_axis,
-                                            show_colorbar=colorbars[i],
-                                            title=titles[i])
-            else:
-                ax[2*ind+i].imshow(original_image, cmap='gray')
-                ax[2*ind+i].set_title('Original Image')
-                ax[2*ind+i].tick_params(left = False, right = False, labelleft = False, 
-                                labelbottom = False, bottom = False) 
-            
-    fig.savefig(f"SaliencyMaps/MNIST/Sess{ses}SalMap.png")
-    fig.show()  
 
-    
+        if ind > 4:
+            row = 1
+            ind = ind - 5
+        else: row = 0
+
+        for i in range(0,2):
+            plt_fig_axis = (fig,ax[row][2*ind+i])
+            _ = viz.visualize_image_attr(grads, original_image,
+                                        method=methods[i],
+                                        sign=signs[i],
+                                        fig_size=(4,4),
+                                        plt_fig_axis=plt_fig_axis,
+                                        show_colorbar=colorbars[i],
+                                        title=titles[i])
+                
+    fig.savefig(f"SaliencyMaps/CIFAR100/Sess{ses}SalMap.png")
+    fig.show()
+    model.set_saliency(False)
+
 
 def main():
 
+    model = BasicNet1(args, 0).cuda() 
+#     model = nn.DataParallel(model).cuda()
+
+    print('  Total params: %.2fM ' % (sum(p.numel() for p in model.parameters())/1000000.0))
+
+
     if not os.path.isdir(args.checkpoint):
         mkdir_p(args.checkpoint)
+    if not os.path.isdir(args.savepoint):
+        mkdir_p(args.savepoint)
+    np.save(args.checkpoint + "/seed.npy", seed)
+    try:
+        shutil.copy2('train_cifar.py', args.checkpoint)
+        shutil.copy2('learner_task_itaml.py', args.checkpoint)
+    except:
+        pass
+    inc_dataset = data.IncrementalDataset(
+                        dataset_name=args.dataset,
+                        args = args,
+                        random_order=args.random_classes,
+                        shuffle=True,
+                        seed=1,
+                        batch_size=args.train_batch,
+                        workers=args.workers,
+                        validation_split=args.validation,
+                        increment=args.class_per_task,
+                    )
         
-    if not os.path.isdir("models/mnist/"+args.checkpoint.split("/")[-1]):
-        mkdir_p("models/mnist/"+args.checkpoint.split("/")[-1])
-    args.savepoint = "models/mnist/"+args.checkpoint.split("/")[-1]
+    start_sess = int(sys.argv[1])
+    memory = None
+    print("Seed: " + str(seed))
     
-    
-    
-
-
-    model = RPS_net_mlp(args).cuda() 
-#     model = RPS_net_cifar(args).cuda()    #for SVHN and CIFAR10 
-    print('    Total params: %.2fM' % (sum(p.numel() for p in model.parameters())/1000000.0))
-
-    start_sess = int(sys.argv[2])
-    test_case = sys.argv[1]
-    args.test_case = test_case
-
-
-#     (x_train, y_train), (x_test, y_test) = load_svhn()
-#     (x_train, y_train), (x_test, y_test) = load_cifar10()
-    (x_train, y_train), (x_test, y_test) = load_mnist()
-    
-    for ses in range(start_sess, start_sess+1):
-            
+    for ses in range(start_sess, args.num_task):
+        args.sess=ses 
+        
         if(ses==0):
-            path = get_path(args.L,args.M,args.N)*0 
-            path[:,0] = 1
-            fixed_path = get_path(args.L,args.M,args.N)*0 
-            train_path = path.copy()
-            infer_path = path.copy()
-        else:
-            load_test_case = get_best_model(ses-1, args.checkpoint)
-            if(ses%args.jump==0):   #get a new path
-                fixed_path = np.load(args.checkpoint+"/fixed_path_"+str(ses-1)+"_"+str(load_test_case)+".npy")
-                path = get_path(args.L,args.M,args.N)
-                train_path = get_path(args.L,args.M,args.N)*0 
-            else:
-                if((ses//args.jump)*2==0):
-                    fixed_path = get_path(args.L,args.M,args.N)*0
-                else:
-                    load_test_case_x = get_best_model((ses//args.jump)*args.jump-1, args.checkpoint)
-                    fixed_path = np.load(args.checkpoint+"/fixed_path_"+str((ses//args.jump)*args.jump-1)+"_"+str(load_test_case_x)+".npy")
-                path = np.load(args.checkpoint+"/path_"+str(ses-1)+"_"+str(load_test_case)+".npy")
-                train_path = get_path(args.L,args.M,args.N)*0 
-            infer_path = get_path(args.L,args.M,args.N)*0 
-            for j in range(args.L):
-                for i in range(args.M):
-                    if(fixed_path[j,i]==0 and path[j,i]==1):
-                        train_path[j,i]=1
-                    if(fixed_path[j,i]==1 or path[j,i]==1):
-                        infer_path[j,i]=1
+            torch.save(model.state_dict(), os.path.join(args.savepoint, 'base_model.pth.tar'))
+            mask = {}
             
-        np.save(args.checkpoint+"/path_"+str(ses)+"_"+str(test_case)+".npy", path)
-        if(ses==0):
-            fixed_path_x = path.copy()
-        else:
-            fixed_path_x = fixed_path.copy()
-            for j in range(args.L):
-                for i in range(args.M):
-                    if(fixed_path_x[j,i]==0 and path[j,i]==1):
-                        fixed_path_x[j,i]=1
-        np.save(args.checkpoint+"/fixed_path_"+str(ses)+"_"+str(test_case)+".npy", fixed_path_x)
+        if(start_sess==ses and start_sess!=0): 
+            inc_dataset._current_task = ses
+            with open(args.savepoint + "/sample_per_task_testing_"+str(args.sess-1)+".pickle", 'rb') as handle:
+                sample_per_task_testing = pickle.load(handle)
+            inc_dataset.sample_per_task_testing = sample_per_task_testing
+            args.sample_per_task_testing = sample_per_task_testing
+        
+        
+        if ses>0: 
+            path_model=os.path.join(args.savepoint, 'session_'+str(ses-1) + '_model_best.pth.tar')  
+            prev_best=torch.load(path_model)
+            model.load_state_dict(prev_best)
+            
+            with open(args.savepoint + "/memory_"+str(args.sess-1)+".pickle", 'rb') as handle:
+                memory = pickle.load(handle)
+            
+        task_info, train_loader, val_loader, test_loader, for_memory = inc_dataset.new_task(memory)
+        ### Saliency
+        if ses==0: saliency_loader = test_loader
+        
+        print(task_info)
+        print(inc_dataset.sample_per_task_testing)
+        args.sample_per_task_testing = inc_dataset.sample_per_task_testing
         
         
         
-        print('Starting with session {:d}'.format(ses))
-        print('test case : ' + str(test_case))
-        print('#################################################################################')
-        print("path\n",path)
-        print("fixed_path\n",fixed_path)
-        print("train_path\n", train_path)
-        print("infer_path\n", infer_path)
+        main_learner=Learner(model=model,args=args,trainloader=train_loader, testloader=test_loader, use_cuda=use_cuda)
         
+        pred=main_learner.learn()
+        memory = inc_dataset.get_memory(memory, for_memory)       
         
-        
-        ids_train = []
-        for j in range((ses*args.class_per_task), (ses+1)*args.class_per_task):
-            ids_train.append(np.where(y_train==j)[0])
-        ids_test = []
-        for j in range((ses+1)*args.class_per_task):
-            ids_test.append(np.where(y_test==j)[0])
-
-        ids_train = flatten_list(ids_train)
-        ids_test = flatten_list(ids_test)
-
-        if(ses>0):
-            ids_exp = []
-            for j in range((ses)*args.class_per_task):
-                ex_id =np.where(y_train==j)[0]
-                sample_per_class = memory//(ses*args.class_per_task)
-                if(len(ex_id)>sample_per_class):
-                    ids_exp.append(ex_id[0:sample_per_class])
-                else:
-                    ids_exp.append(ex_id)
-            ids_exp = np.tile(flatten_list(ids_exp),10)
-            train_data = np.vstack([x_train[ids_train], x_train[ids_exp]])
-            train_label = np.vstack([np.reshape(y_train[ids_train],(-1,1)), np.reshape(y_train[ids_exp],(-1,1))])
-            train_label = flatten_list(train_label)
-
-        else:
-            ids_exp = []
-            train_data = x_train[ids_train]
-            train_label = y_train[ids_train]
-        
-        test_data = x_test[ids_test]
-        test_label = y_test[ids_test]
-
-        import torch.utils.data as utils
-        args.sess = ses
-        
-        transform_train = transforms.Compose([
-            transforms.ToPILImage(),
-            transforms.Resize(32),
-            transforms.RandomCrop(32, padding=4),
-            transforms.RandomHorizontalFlip(),
-            transforms.RandomRotation(10),
-            transforms.ToTensor(),
-        ])
-
-        transform_test = transforms.Compose([
-            transforms.ToPILImage(),
-            transforms.Resize(32),
-            transforms.ToTensor(),
-        ])
-
-    
-        train_dataset = utils.TensorDataset(torch.from_numpy(train_data).float(), torch.from_numpy(train_label).long()) # create your datset
-        train_dataset2 = CustomTensorDataset((torch.tensor(train_data), torch.tensor(train_label).long()), transform=transform_train)
-        train_loader = utils.DataLoader(train_dataset, batch_size=args.train_batch, shuffle=True) # create your data
-
-
-        test_dataset = utils.TensorDataset(torch.from_numpy(test_data).float(), torch.from_numpy(test_label).long()) # create your datset
-        test_dataset2 = CustomTensorDataset((torch.tensor(test_data), torch.tensor(test_label).long()), transform=transform_test)
-        test_loader = utils.DataLoader(test_dataset, batch_size=args.test_batch)
+        acc_task = main_learner.meta_test(main_learner.best_model, memory, inc_dataset)
         
         ### Saliency
-        #if ses==0:
-        saliency_loader = test_loader
-            #print("Ses 0 : saliency_loader = " + str(saliency_loader))
-            
+        create_saliency_map(model, saliency_loader, pred, ses)
+        
+        with open(args.savepoint + "/memory_"+str(args.sess)+".pickle", 'wb') as handle:
+            pickle.dump(memory, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
-        main_learner=Learner(model=model,args=args,trainloader=train_loader,
-                             testloader=test_loader,old_model=copy.deepcopy(model),
-                             use_cuda=use_cuda, path=path, 
-                             fixed_path=fixed_path, train_path=train_path, infer_path=infer_path)
-        pred = main_learner.learn()
-
-        ### Saliency
-        create_saliency_map(model, infer_path, saliency_loader, pred, ses)
-        
-        if(ses==0):
-            fixed_path = path.copy()
-        else:
-            for j in range(args.L):
-                for i in range(args.M):
-                    if(fixed_path[j,i]==0 and path[j,i]==1):
-                        fixed_path[j,i]=1
-        np.save(args.checkpoint+"/fixed_path_"+str(ses)+"_"+str(test_case)+".npy", fixed_path)
-        
-        
-        best_model = get_best_model(ses, args.checkpoint)
-    
-        cfmat = main_learner.get_confusion_matrix(infer_path)
-        np.save(args.checkpoint+"/confusion_matrix_"+str(ses)+"_"+str(test_case)+".npy", cfmat)
-        
-        
-    print('done with session {:d}'.format(ses))
-    print('#################################################################################')
-    while(1):
-        if(is_all_done(ses, args.epochs, args.checkpoint)):
-            break
-        else:
-            time.sleep(10)
+        with open(args.savepoint + "/acc_task_"+str(args.sess)+".pickle", 'wb') as handle:
+            pickle.dump(acc_task, handle, protocol=pickle.HIGHEST_PROTOCOL)
             
-            
-            
+        with open(args.savepoint + "/sample_per_task_testing_"+str(args.sess)+".pickle", 'wb') as handle:
+            pickle.dump(args.sample_per_task_testing, handle, protocol=pickle.HIGHEST_PROTOCOL)
+        
+        time.sleep(10)
 if __name__ == '__main__':
     main()
