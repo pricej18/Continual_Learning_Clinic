@@ -1,7 +1,7 @@
 Using TensorFlow backend.
 The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
 The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
-{'epochs': 1, 'checkpoint': 'results/svhn/RPS_net_svhn', 'savepoint': 'results/svhn/pathnet_svhn', 'dataset': 'SVHN', 'num_class': 10, 'class_per_task': 2, 'M': 8, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 128, 'test_batch': 128, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [6, 8, 16], 'gamma': 0.5, 'rigidness_coff': 2.5, 'jump': 1}
+{'epochs': 10, 'checkpoint': 'results/svhn/RPS_net_svhn', 'savepoint': 'results/svhn/pathnet_svhn', 'dataset': 'SVHN', 'num_class': 10, 'class_per_task': 2, 'M': 8, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 128, 'test_batch': 128, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [6, 8, 16], 'gamma': 0.5, 'rigidness_coff': 2.5, 'jump': 1}
     Total params: 89.55M
 Starting with session 0
 test case : 0
@@ -48,52 +48,421 @@ infer_path
  [1. 0. 0. 0. 0. 0. 0. 0.]]
 Number of layers being trained :  13
 
-Epoch: [1 | 1] LR: 0.001000 Sess: 0
+Epoch: [1 | 10] LR: 0.001000 Sess: 0
+
+Epoch: [2 | 10] LR: 0.001000 Sess: 0
+
+Epoch: [3 | 10] LR: 0.001000 Sess: 0
+
+Epoch: [4 | 10] LR: 0.001000 Sess: 0
+
+Epoch: [5 | 10] LR: 0.001000 Sess: 0
+
+Epoch: [6 | 10] LR: 0.001000 Sess: 0
+
+Epoch: [7 | 10] LR: 0.000500 Sess: 0
+
+Epoch: [8 | 10] LR: 0.000500 Sess: 0
+
+Epoch: [9 | 10] LR: 0.000250 Sess: 0
+
+Epoch: [10 | 10] LR: 0.000250 Sess: 0
 Best acc:
-83.76946366782006
-tensor([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+98.62673010380622
+Labels 1: tensor([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0], device='cuda:0')
-Sal2, i=10??:
-tensor([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0], device='cuda:0')
-After Squeeze: torch.Size([3, 32, 32])
+Labels 2: tensor([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1], device='cuda:0')
+torch.Size([1, 3, 32, 32])
 Truth: 0
-Predicted: 1
-After Squeeze: torch.Size([3, 32, 32])
-Truth: 0
-Predicted: 0
-Traceback (most recent call last):
-  File "svhnSal.py", line 410, in <module>
-    main()
-  File "svhnSal.py", line 394, in main
-    best_model = get_best_model(ses, args.checkpoint)
-  File "/home/abanyi17/RPSnet-master/util.py", line 29, in get_best_model
-    a = np.argmax(best_acc)
-  File "<__array_function__ internals>", line 6, in argmax
-  File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 1188, in argmax
-    return _wrapfunc(a, 'argmax', axis=axis, out=out)
-  File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 55, in _wrapfunc
-    return _wrapit(obj, method, *args, **kwds)
-  File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 44, in _wrapit
-    result = getattr(asarray(obj), method)(*args, **kwds)
-ValueError: attempt to get argmax of an empty sequence
+torch.Size([1, 3, 32, 32])
+Truth: 1
+session_0_0_log.txt
+f: [[1.0000000e-03 4.2145400e-01 1.0215810e+00 7.9624478e+01 9.1933391e+01
+  0.0000000e+00]
+ [1.0000000e-03 1.2538300e-01 7.8022900e-01 9.5561646e+01 9.7577855e+01
+  9.1933391e+01]
+ [1.0000000e-03 8.0620000e-02 7.5971700e-01 9.7234721e+01 9.6604671e+01
+  9.7577855e+01]
+ [1.0000000e-03 6.8875000e-02 5.0598700e-01 9.7664240e+01 9.8032007e+01
+  9.7577855e+01]
+ [1.0000000e-03 5.9775000e-02 7.6714700e-01 9.7971038e+01 9.5490917e+01
+  9.8032007e+01]
+ [1.0000000e-03 5.6495000e-02 5.0502900e-01 9.8073304e+01 9.7123702e+01
+  9.8032007e+01]
+ [5.0000000e-04 3.9737000e-02 4.4435000e-01 9.8740080e+01 9.8529412e+01
+  9.8032007e+01]
+ [5.0000000e-04 3.8096000e-02 4.2460300e-01 9.8711446e+01 9.8518599e+01
+  9.8529412e+01]
+ [2.5000000e-04 2.9990000e-02 3.3734800e-01 9.9087785e+01 9.8561851e+01
+  9.8529412e+01]
+ [2.5000000e-04 2.8598000e-02 3.6446400e-01 9.9149145e+01 9.8626730e+01
+  9.8561851e+01]]
+f type: <class 'numpy.ndarray'>
+f[-1,-1]: 98.561851
+f[-1,-2]: 98.62673
+best_acc:
+[98.62673]
+best_acc_b:
+[0]
+98.62673 0
+tensor([[5033.,   31.,   22.,  ...,    0.,    0.,    0.],
+        [  61., 4046.,   21.,  ...,    0.,    0.,    0.],
+        [   0.,    0.,    0.,  ...,    0.,    0.,    0.],
+        ...,
+        [   0.,    0.,    0.,  ...,    0.,    0.,    0.],
+        [   0.,    0.,    0.,  ...,    0.,    0.,    0.],
+        [   0.,    0.,    0.,  ...,    0.,    0.,    0.]])
+done with session 0
+#################################################################################
+10
 Using TensorFlow backend.
-{'epochs': 1, 'checkpoint': 'results/svhn/RPS_net_svhn', 'savepoint': 'results/svhn/pathnet_svhn', 'dataset': 'SVHN', 'num_class': 10, 'class_per_task': 2, 'M': 8, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 128, 'test_batch': 128, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [6, 8, 16], 'gamma': 0.5, 'rigidness_coff': 2.5, 'jump': 1}
+/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/torch/nn/_reduction.py:42: UserWarning: size_average and reduce args will be deprecated, please use reduction='none' instead.
+  warnings.warn(warning.format(ret))
+The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
+The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
+{'epochs': 10, 'checkpoint': 'results/svhn/RPS_net_svhn', 'savepoint': 'results/svhn/pathnet_svhn', 'dataset': 'SVHN', 'num_class': 10, 'class_per_task': 2, 'M': 8, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 128, 'test_batch': 128, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [6, 8, 16], 'gamma': 0.5, 'rigidness_coff': 2.5, 'jump': 1}
     Total params: 89.55M
+session_0_0_log.txt
+f: [[1.0000000e-03 4.2145400e-01 1.0215810e+00 7.9624478e+01 9.1933391e+01
+  0.0000000e+00]
+ [1.0000000e-03 1.2538300e-01 7.8022900e-01 9.5561646e+01 9.7577855e+01
+  9.1933391e+01]
+ [1.0000000e-03 8.0620000e-02 7.5971700e-01 9.7234721e+01 9.6604671e+01
+  9.7577855e+01]
+ [1.0000000e-03 6.8875000e-02 5.0598700e-01 9.7664240e+01 9.8032007e+01
+  9.7577855e+01]
+ [1.0000000e-03 5.9775000e-02 7.6714700e-01 9.7971038e+01 9.5490917e+01
+  9.8032007e+01]
+ [1.0000000e-03 5.6495000e-02 5.0502900e-01 9.8073304e+01 9.7123702e+01
+  9.8032007e+01]
+ [5.0000000e-04 3.9737000e-02 4.4435000e-01 9.8740080e+01 9.8529412e+01
+  9.8032007e+01]
+ [5.0000000e-04 3.8096000e-02 4.2460300e-01 9.8711446e+01 9.8518599e+01
+  9.8529412e+01]
+ [2.5000000e-04 2.9990000e-02 3.3734800e-01 9.9087785e+01 9.8561851e+01
+  9.8529412e+01]
+ [2.5000000e-04 2.8598000e-02 3.6446400e-01 9.9149145e+01 9.8626730e+01
+  9.8561851e+01]]
+f type: <class 'numpy.ndarray'>
+f[-1,-1]: 98.561851
+f[-1,-2]: 98.62673
+best_acc:
+[98.62673]
+best_acc_b:
+[0]
+98.62673 0
+Starting with session 1
+test case : 0
+#################################################################################
+path
+ [[1. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 1. 0.]
+ [0. 0. 0. 0. 0. 1. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 1. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 1. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 1. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 1.]
+ [0. 1. 0. 0. 0. 0. 0. 0.]]
+fixed_path
+ [[1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]]
+train_path
+ [[0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 1. 0.]
+ [0. 0. 0. 0. 0. 1. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 1. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 1. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 1. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 1.]
+ [0. 1. 0. 0. 0. 0. 0. 0.]]
+infer_path
+ [[1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 1. 0.]
+ [1. 0. 0. 0. 0. 1. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 1. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 1. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 1. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 1.]
+ [1. 1. 0. 0. 0. 0. 0. 0.]]
+Number of layers being trained :  11
+
+Epoch: [1 | 10] LR: 0.001000 Sess: 1
+
+Epoch: [2 | 10] LR: 0.001000 Sess: 1
+
+Epoch: [3 | 10] LR: 0.001000 Sess: 1
+
+Epoch: [4 | 10] LR: 0.001000 Sess: 1
+
+Epoch: [5 | 10] LR: 0.001000 Sess: 1
+
+Epoch: [6 | 10] LR: 0.001000 Sess: 1
+
+Epoch: [7 | 10] LR: 0.000500 Sess: 1
+
+Epoch: [8 | 10] LR: 0.000500 Sess: 1
+
+Epoch: [9 | 10] LR: 0.000250 Sess: 1
+
+Epoch: [10 | 10] LR: 0.000250 Sess: 1
+Best acc:
+96.18508152983534
+Labels 1: tensor([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0], device='cuda:0')
+Labels 2: tensor([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1], device='cuda:0')
+torch.Size([1, 3, 32, 32])
+Truth: 0
+torch.Size([1, 3, 32, 32])
+Truth: 1
+session_1_0_log.txt
+f: [[1.0000000e-03 6.7702200e-01 9.0542000e-01 8.3921274e+01 9.3748720e+01
+  0.0000000e+00]
+ [1.0000000e-03 3.8112400e-01 7.4105400e-01 9.7886748e+01 9.5352488e+01
+  9.3748720e+01]
+ [1.0000000e-03 3.4974300e-01 7.6401000e-01 9.8947544e+01 9.5311540e+01
+  9.5352488e+01]
+ [1.0000000e-03 3.3724800e-01 8.0029900e-01 9.9306146e+01 9.5639118e+01
+  9.5352488e+01]
+ [1.0000000e-03 3.3354300e-01 7.3451700e-01 9.9391210e+01 9.6185082e+01
+  9.5639118e+01]
+ [1.0000000e-03 3.2737600e-01 7.4138400e-01 9.9529647e+01 9.5659592e+01
+  9.6185082e+01]
+ [5.0000000e-04 3.1420100e-01 7.7703200e-01 9.9886582e+01 9.5912100e+01
+  9.6185082e+01]
+ [5.0000000e-04 3.1146900e-01 7.5424000e-01 9.9944959e+01 9.5577697e+01
+  9.6185082e+01]
+ [2.5000000e-04 3.0955700e-01 7.5754600e-01 9.9956634e+01 9.5564048e+01
+  9.6185082e+01]
+ [2.5000000e-04 3.0928000e-01 7.4954900e-01 9.9959970e+01 9.5932574e+01
+  9.6185082e+01]]
+f type: <class 'numpy.ndarray'>
+f[-1,-1]: 96.185082
+f[-1,-2]: 95.932574
+best_acc:
+[96.185082]
+best_acc_b:
+[0]
+96.185082 0
+tensor([[4822.,   19.,  146.,  ...,    0.,    0.,    0.],
+        [  24., 3903.,  181.,  ...,    0.,    0.,    0.],
+        [  11.,    9., 2850.,  ...,    0.,    0.,    0.],
+        ...,
+        [   0.,    0.,    0.,  ...,    0.,    0.,    0.],
+        [   0.,    0.,    0.,  ...,    0.,    0.,    0.],
+        [   0.,    0.,    0.,  ...,    0.,    0.,    0.]])
+done with session 1
+#################################################################################
+10
+Using TensorFlow backend.
+/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/torch/nn/_reduction.py:42: UserWarning: size_average and reduce args will be deprecated, please use reduction='none' instead.
+  warnings.warn(warning.format(ret))
+The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
+The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
+{'epochs': 10, 'checkpoint': 'results/svhn/RPS_net_svhn', 'savepoint': 'results/svhn/pathnet_svhn', 'dataset': 'SVHN', 'num_class': 10, 'class_per_task': 2, 'M': 8, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 128, 'test_batch': 128, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [6, 8, 16], 'gamma': 0.5, 'rigidness_coff': 2.5, 'jump': 1}
+    Total params: 89.55M
+session_1_0_log.txt
+96.185082 0
+Starting with session 2
+test case : 0
+#################################################################################
+path
+ [[0. 0. 0. 0. 1. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 1.]
+ [0. 0. 0. 1. 0. 0. 0. 0.]
+ [0. 0. 0. 1. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 1. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 1. 0.]
+ [0. 0. 0. 0. 0. 1. 0. 0.]]
+fixed_path
+ [[1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 1. 0.]
+ [1. 0. 0. 0. 0. 1. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 1. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 1. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 1. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 1.]
+ [1. 1. 0. 0. 0. 0. 0. 0.]]
+train_path
+ [[0. 0. 0. 0. 1. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 1.]
+ [0. 0. 0. 1. 0. 0. 0. 0.]
+ [0. 0. 0. 1. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 1. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 1. 0.]
+ [0. 0. 0. 0. 0. 1. 0. 0.]]
+infer_path
+ [[1. 0. 0. 0. 1. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 1. 1.]
+ [1. 0. 0. 1. 0. 1. 0. 0.]
+ [1. 0. 0. 1. 0. 0. 0. 0.]
+ [1. 0. 1. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 1. 0. 0. 0. 0.]
+ [1. 1. 0. 0. 0. 0. 1. 0.]
+ [1. 0. 0. 0. 0. 0. 1. 1.]
+ [1. 1. 0. 0. 0. 1. 0. 0.]]
+Number of layers being trained :  11
+
+Epoch: [1 | 10] LR: 0.001000 Sess: 2
+
+Epoch: [2 | 10] LR: 0.001000 Sess: 2
+
+Epoch: [3 | 10] LR: 0.001000 Sess: 2
+
+Epoch: [4 | 10] LR: 0.001000 Sess: 2
+
+Epoch: [5 | 10] LR: 0.001000 Sess: 2
+
+Epoch: [6 | 10] LR: 0.001000 Sess: 2
+
+Epoch: [7 | 10] LR: 0.000500 Sess: 2
+
+Epoch: [8 | 10] LR: 0.000500 Sess: 2
+
+Epoch: [9 | 10] LR: 0.000250 Sess: 2
+
+Epoch: [10 | 10] LR: 0.000250 Sess: 2
+Best acc:
+93.83612075714179
+Labels 1: tensor([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0], device='cuda:0')
+Labels 2: tensor([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1], device='cuda:0')
+torch.Size([1, 3, 32, 32])
+Truth: 0
+torch.Size([1, 3, 32, 32])
+Truth: 1
+session_2_0_log.txt
+93.836121 0
+tensor([[4769.,   34.,   28.,  ...,    0.,    0.,    0.],
+        [  42., 3914.,   40.,  ...,    0.,    0.,    0.],
+        [  25.,   23., 2512.,  ...,    0.,    0.,    0.],
+        ...,
+        [   0.,    0.,    0.,  ...,    0.,    0.,    0.],
+        [   0.,    0.,    0.,  ...,    0.,    0.,    0.],
+        [   0.,    0.,    0.,  ...,    0.,    0.,    0.]])
+done with session 2
+#################################################################################
+10
+Using TensorFlow backend.
+/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/torch/nn/_reduction.py:42: UserWarning: size_average and reduce args will be deprecated, please use reduction='none' instead.
+  warnings.warn(warning.format(ret))
+{'epochs': 10, 'checkpoint': 'results/svhn/RPS_net_svhn', 'savepoint': 'results/svhn/pathnet_svhn', 'dataset': 'SVHN', 'num_class': 10, 'class_per_task': 2, 'M': 8, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 128, 'test_batch': 128, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [6, 8, 16], 'gamma': 0.5, 'rigidness_coff': 2.5, 'jump': 1}
+    Total params: 89.55M
+session_2_0_log.txt
+93.836121 0
+Starting with session 3
+test case : 0
+#################################################################################
+path
+ [[0. 0. 0. 1. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 1. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 1.]
+ [0. 0. 0. 1. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 1. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 1.]
+ [0. 0. 0. 0. 0. 0. 1. 0.]
+ [0. 0. 0. 1. 0. 0. 0. 0.]]
+fixed_path
+ [[1. 0. 0. 0. 1. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 1. 1.]
+ [1. 0. 0. 1. 0. 1. 0. 0.]
+ [1. 0. 0. 1. 0. 0. 0. 0.]
+ [1. 0. 1. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 1. 0. 0. 0. 0.]
+ [1. 1. 0. 0. 0. 0. 1. 0.]
+ [1. 0. 0. 0. 0. 0. 1. 1.]
+ [1. 1. 0. 0. 0. 1. 0. 0.]]
+train_path
+ [[0. 0. 0. 1. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 1. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 1.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 1. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 1.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 1. 0. 0. 0. 0.]]
+infer_path
+ [[1. 0. 0. 1. 1. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 1. 1. 1.]
+ [1. 0. 0. 1. 0. 1. 0. 1.]
+ [1. 0. 0. 1. 0. 0. 0. 0.]
+ [1. 0. 1. 0. 1. 0. 0. 0.]
+ [1. 0. 0. 1. 0. 0. 0. 0.]
+ [1. 1. 0. 0. 0. 0. 1. 1.]
+ [1. 0. 0. 0. 0. 0. 1. 1.]
+ [1. 1. 0. 1. 0. 1. 0. 0.]]
+Number of layers being trained :  10
+
+Epoch: [1 | 10] LR: 0.001000 Sess: 3
 Traceback (most recent call last):
-  File "svhnSal.py", line 410, in <module>
+  File "svhn.py", line 372, in <module>
     main()
-  File "svhnSal.py", line 266, in main
+  File "svhn.py", line 340, in main
+    pred = main_learner.learn()
+  File "/home/abanyi17/RPSnet-master/learner.py", line 98, in learn
+    pred = self.test(epoch, self.infer_path, -1)
+  File "/home/abanyi17/RPSnet-master/learner.py", line 257, in test
+    outputs = self.model(inputs, path, -1)
+  File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/torch/nn/modules/module.py", line 1102, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/abanyi17/RPSnet-master/rps_net.py", line 469, in forward
+    y = y + self.conv6[j](x)
+RuntimeError: CUDA out of memory. Tried to allocate 32.00 MiB (GPU 0; 11.17 GiB total capacity; 10.36 GiB already allocated; 20.88 MiB free; 10.66 GiB reserved in total by PyTorch) If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF
+Using TensorFlow backend.
+/home/abanyi17/RPSnet-master/util.py:21: UserWarning: loadtxt: Empty input file: "results/svhn/RPS_net_svhn/session_3_0_log.txt"
+  f = np.loadtxt(checkpoint+"/"+file, skiprows=1)
+{'epochs': 10, 'checkpoint': 'results/svhn/RPS_net_svhn', 'savepoint': 'results/svhn/pathnet_svhn', 'dataset': 'SVHN', 'num_class': 10, 'class_per_task': 2, 'M': 8, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 128, 'test_batch': 128, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [6, 8, 16], 'gamma': 0.5, 'rigidness_coff': 2.5, 'jump': 1}
+    Total params: 89.55M
+session_3_0_log.txt
+Traceback (most recent call last):
+  File "svhn.py", line 372, in <module>
+    main()
+  File "svhn.py", line 226, in main
     load_test_case = get_best_model(ses-1, args.checkpoint)
-  File "/home/abanyi17/RPSnet-master/util.py", line 29, in get_best_model
+  File "/home/abanyi17/RPSnet-master/util.py", line 33, in get_best_model
     a = np.argmax(best_acc)
   File "<__array_function__ internals>", line 6, in argmax
   File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 1188, in argmax
@@ -103,4 +472,3 @@ Traceback (most recent call last):
   File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 44, in _wrapit
     result = getattr(asarray(obj), method)(*args, **kwds)
 ValueError: attempt to get argmax of an empty sequence
-slurmstepd: error: *** JOB 18962 ON csm-gpu-001 CANCELLED AT 2024-09-24T14:10:00 ***
