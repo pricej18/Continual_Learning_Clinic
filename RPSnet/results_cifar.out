@@ -1,225 +1,0 @@
-Thu Sep 19 15:09:16 2024       
-+-----------------------------------------------------------------------------+
-| NVIDIA-SMI 470.161.03   Driver Version: 470.161.03   CUDA Version: 11.4     |
-|-------------------------------+----------------------+----------------------+
-| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
-| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
-|                               |                      |               MIG M. |
-|===============================+======================+======================|
-|   0  Tesla K80           Off  | 00000000:04:00.0 Off |                    0 |
-| N/A   61C    P0   146W / 149W |    573MiB / 11441MiB |     98%      Default |
-|                               |                      |                  N/A |
-+-------------------------------+----------------------+----------------------+
-|   1  Tesla K80           Off  | 00000000:05:00.0 Off |                    0 |
-| N/A   46C    P0   148W / 149W |    573MiB / 11441MiB |     98%      Default |
-|                               |                      |                  N/A |
-+-------------------------------+----------------------+----------------------+
-|   2  Tesla K80           Off  | 00000000:83:00.0 Off |                    0 |
-| N/A   47C    P0   149W / 149W |    660MiB / 11441MiB |     98%      Default |
-|                               |                      |                  N/A |
-+-------------------------------+----------------------+----------------------+
-|   3  Tesla K80           Off  | 00000000:84:00.0 Off |                    0 |
-| N/A   42C    P0    75W / 149W |      0MiB / 11441MiB |     95%      Default |
-|                               |                      |                  N/A |
-+-------------------------------+----------------------+----------------------+
-                                                                               
-+-----------------------------------------------------------------------------+
-| Processes:                                                                  |
-|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
-|        ID   ID                                                   Usage      |
-|=============================================================================|
-|    0   N/A  N/A     47373      C   ...ps/amber22/bin/pmemd.cuda      570MiB |
-|    1   N/A  N/A      1893      C   ...ps/amber22/bin/pmemd.cuda      570MiB |
-|    2   N/A  N/A      3914      C   ...ps/amber22/bin/pmemd.cuda      657MiB |
-+-----------------------------------------------------------------------------+
-{'checkpoint': 'results/cifar100/RPS_CIFAR_M8_J1', 'labels_data': 'prepare/cifar100_10.pkl', 'savepoint': '', 'num_class': 100, 'class_per_task': 10, 'M': 8, 'jump': 2, 'rigidness_coff': 2.5, 'dataset': 'CIFAR', 'epochs': 100, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 128, 'test_batch': 128, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [20, 40, 60, 80], 'gamma': 0.5}
-    Total params: 89.59M
-Starting with session 0
-test case : 0
-#################################################################################
-path
- [[1. 0. 0. 0. 0. 0. 0. 0.]
- [1. 0. 0. 0. 0. 0. 0. 0.]
- [1. 0. 0. 0. 0. 0. 0. 0.]
- [1. 0. 0. 0. 0. 0. 0. 0.]
- [1. 0. 0. 0. 0. 0. 0. 0.]
- [1. 0. 0. 0. 0. 0. 0. 0.]
- [1. 0. 0. 0. 0. 0. 0. 0.]
- [1. 0. 0. 0. 0. 0. 0. 0.]
- [1. 0. 0. 0. 0. 0. 0. 0.]]
-fixed_path
- [[0. 0. 0. 0. 0. 0. 0. 0.]
- [0. 0. 0. 0. 0. 0. 0. 0.]
- [0. 0. 0. 0. 0. 0. 0. 0.]
- [0. 0. 0. 0. 0. 0. 0. 0.]
- [0. 0. 0. 0. 0. 0. 0. 0.]
- [0. 0. 0. 0. 0. 0. 0. 0.]
- [0. 0. 0. 0. 0. 0. 0. 0.]
- [0. 0. 0. 0. 0. 0. 0. 0.]
- [0. 0. 0. 0. 0. 0. 0. 0.]]
-train_path
- [[1. 0. 0. 0. 0. 0. 0. 0.]
- [1. 0. 0. 0. 0. 0. 0. 0.]
- [1. 0. 0. 0. 0. 0. 0. 0.]
- [1. 0. 0. 0. 0. 0. 0. 0.]
- [1. 0. 0. 0. 0. 0. 0. 0.]
- [1. 0. 0. 0. 0. 0. 0. 0.]
- [1. 0. 0. 0. 0. 0. 0. 0.]
- [1. 0. 0. 0. 0. 0. 0. 0.]
- [1. 0. 0. 0. 0. 0. 0. 0.]]
-Downloading https://www.cs.toronto.edu/~kriz/cifar-100-python.tar.gz to ./data/cifar-100-python.tar.gz
-  0%|          | 0/169001437 [00:00<?, ?it/s]  0%|          | 312320/169001437 [00:00<00:59, 2829395.89it/s]  1%|          | 952320/169001437 [00:00<00:36, 4658039.99it/s]  1%|          | 1768448/169001437 [00:00<00:27, 5982319.04it/s]  2%|▏         | 2808832/169001437 [00:00<00:22, 7442524.61it/s]  2%|▏         | 4128768/169001437 [00:00<00:18, 9154768.78it/s]  3%|▎         | 5504000/169001437 [00:00<00:15, 10438477.64it/s]  4%|▍         | 6664192/169001437 [00:00<00:15, 10791335.65it/s]  5%|▍         | 7746560/169001437 [00:00<00:15, 10646430.24it/s]  5%|▌         | 8880128/169001437 [00:00<00:14, 10756246.34it/s]  6%|▌         | 10112000/169001437 [00:01<00:14, 10947063.87it/s]  7%|▋         | 11376640/169001437 [00:01<00:13, 11446293.48it/s]  7%|▋         | 12524544/169001437 [00:01<00:13, 11447225.00it/s]  8%|▊         | 13735936/169001437 [00:01<00:13, 11573597.72it/s]  9%|▉         | 14895104/169001437 [00:01<00:13, 11034302.51it/s]  9%|▉         | 16004096/169001437 [00:01<00:14, 10267274.95it/s] 10%|█         | 17043456/169001437 [00:01<00:15, 9948392.70it/s]  11%|█         | 18046976/169001437 [00:01<00:15, 9656686.78it/s] 11%|█▏        | 19018752/169001437 [00:01<00:15, 9520163.42it/s] 12%|█▏        | 19975168/169001437 [00:02<00:15, 9466129.05it/s] 12%|█▏        | 20968448/169001437 [00:02<00:15, 9596571.36it/s] 13%|█▎        | 21936128/169001437 [00:02<00:15, 9543684.94it/s] 14%|█▎        | 22951936/169001437 [00:02<00:15, 9718754.53it/s] 14%|█▍        | 23925760/169001437 [00:02<00:15, 9624517.88it/s] 15%|█▍        | 24889344/169001437 [00:02<00:16, 8925916.88it/s] 15%|█▌        | 25792512/169001437 [00:02<00:17, 8399949.69it/s] 16%|█▌        | 26643456/169001437 [00:02<00:17, 8192805.09it/s] 16%|█▋        | 27469824/169001437 [00:02<00:17, 8018907.06it/s] 17%|█▋        | 28276736/169001437 [00:03<00:18, 7752631.12it/s] 17%|█▋        | 29120512/169001437 [00:03<00:17, 7809561.79it/s] 18%|█▊        | 29991936/169001437 [00:03<00:17, 8055261.32it/s] 18%|█▊        | 30801920/169001437 [00:03<00:17, 7899008.91it/s] 19%|█▊        | 31594496/169001437 [00:03<00:20, 6588648.84it/s] 19%|█▉        | 32289792/169001437 [00:03<00:23, 5838321.02it/s] 19%|█▉        | 32909312/169001437 [00:03<00:24, 5482157.77it/s] 20%|█▉        | 33482752/169001437 [00:03<00:25, 5233315.96it/s] 20%|██        | 34022400/169001437 [00:04<00:26, 5133626.94it/s] 20%|██        | 34545664/169001437 [00:04<00:26, 5022670.25it/s] 21%|██        | 35104768/169001437 [00:04<00:26, 5106117.87it/s] 21%|██        | 35696640/169001437 [00:04<00:25, 5206881.22it/s] 21%|██▏       | 36232192/169001437 [00:04<00:25, 5221856.81it/s] 22%|██▏       | 36848640/169001437 [00:04<00:24, 5416725.67it/s] 22%|██▏       | 37480448/169001437 [00:04<00:23, 5664069.74it/s] 23%|██▎       | 38050816/169001437 [00:04<00:23, 5666142.96it/s] 23%|██▎       | 38620160/169001437 [00:05<00:44, 2928085.92it/s] 23%|██▎       | 39686144/169001437 [00:05<00:30, 4293426.15it/s] 24%|██▍       | 40376320/169001437 [00:05<00:26, 4767306.16it/s] 24%|██▍       | 41120768/169001437 [00:05<00:24, 5271349.09it/s] 25%|██▍       | 41880576/169001437 [00:05<00:22, 5697790.33it/s] 25%|██▌       | 42656768/169001437 [00:05<00:20, 6073030.45it/s] 26%|██▌       | 43440128/169001437 [00:05<00:19, 6415548.14it/s] 26%|██▌       | 44224512/169001437 [00:05<00:18, 6777997.21it/s] 27%|██▋       | 44952576/169001437 [00:06<00:17, 6904832.68it/s] 27%|██▋       | 45760512/169001437 [00:06<00:17, 7194031.76it/s] 28%|██▊       | 46544896/169001437 [00:06<00:16, 7378101.56it/s] 28%|██▊       | 47360000/169001437 [00:06<00:16, 7596761.94it/s] 29%|██▊       | 48208896/169001437 [00:06<00:15, 7845144.42it/s] 29%|██▉       | 49008640/169001437 [00:06<00:15, 7820977.37it/s] 29%|██▉       | 49798144/169001437 [00:06<00:16, 7257823.58it/s] 30%|██▉       | 50536448/169001437 [00:06<00:18, 6538958.46it/s] 30%|███       | 51210240/169001437 [00:06<00:20, 5808585.03it/s] 31%|███       | 51816448/169001437 [00:07<00:21, 5422706.38it/s] 31%|███       | 52377600/169001437 [00:07<00:25, 4601002.89it/s] 31%|███▏      | 52866048/169001437 [00:07<00:29, 3961530.93it/s] 32%|███▏      | 53289984/169001437 [00:07<00:32, 3548194.72it/s] 32%|███▏      | 53665792/169001437 [00:07<00:33, 3457596.94it/s] 32%|███▏      | 54024192/169001437 [00:07<00:34, 3326152.39it/s] 32%|███▏      | 54376448/169001437 [00:07<00:34, 3370252.94it/s] 32%|███▏      | 54719488/169001437 [00:08<00:33, 3369084.88it/s] 33%|███▎      | 55061504/169001437 [00:08<00:33, 3374705.40it/s] 33%|███▎      | 55402496/169001437 [00:08<00:35, 3225043.98it/s] 33%|███▎      | 55728128/169001437 [00:08<00:36, 3088869.37it/s] 33%|███▎      | 56039424/169001437 [00:08<00:36, 3055413.09it/s] 33%|███▎      | 56346624/169001437 [00:08<00:36, 3050871.07it/s] 34%|███▎      | 56680448/169001437 [00:08<00:36, 3111742.57it/s] 34%|███▎      | 57032704/169001437 [00:08<00:34, 3227080.49it/s] 34%|███▍      | 57383936/169001437 [00:08<00:33, 3303303.59it/s] 34%|███▍      | 57776128/169001437 [00:08<00:32, 3459822.56it/s] 34%|███▍      | 58160128/169001437 [00:09<00:31, 3562353.13it/s] 35%|███▍      | 58544128/169001437 [00:09<00:30, 3639245.26it/s] 35%|███▍      | 58968064/169001437 [00:09<00:29, 3756168.04it/s] 35%|███▌      | 59440128/169001437 [00:09<00:27, 4027528.58it/s] 35%|███▌      | 59880448/169001437 [00:09<00:26, 4134227.75it/s] 36%|███▌      | 60344320/169001437 [00:09<00:25, 4253471.38it/s] 36%|███▌      | 60856320/169001437 [00:09<00:23, 4506364.73it/s] 36%|███▋      | 61336576/169001437 [00:09<00:23, 4580056.01it/s] 37%|███▋      | 61848576/169001437 [00:09<00:22, 4711856.29it/s] 37%|███▋      | 62405632/169001437 [00:10<00:21, 4966667.78it/s] 37%|███▋      | 62903296/169001437 [00:10<00:22, 4734210.93it/s] 38%|███▊      | 63512576/169001437 [00:10<00:21, 5008858.69it/s] 38%|███▊      | 64136192/169001437 [00:10<00:20, 5238970.65it/s] 38%|███▊      | 64792576/169001437 [00:10<00:19, 5450137.42it/s] 39%|███▊      | 65456128/169001437 [00:10<00:18, 5680778.49it/s] 39%|███▉      | 66136064/169001437 [00:10<00:17, 5838147.75it/s] 40%|███▉      | 66840576/169001437 [00:10<00:16, 6041435.09it/s] 40%|███▉      | 67520512/169001437 [00:10<00:16, 6219532.12it/s] 40%|████      | 68160512/169001437 [00:10<00:16, 6260143.18it/s] 41%|████      | 68880384/169001437 [00:11<00:15, 6494853.24it/s] 41%|████      | 69576704/169001437 [00:11<00:15, 6619643.65it/s] 42%|████▏     | 70296576/169001437 [00:11<00:14, 6788863.98it/s] 42%|████▏     | 70992896/169001437 [00:11<00:14, 6837701.90it/s] 42%|████▏     | 71768064/169001437 [00:11<00:13, 7063810.50it/s] 43%|████▎     | 72517632/169001437 [00:11<00:13, 7191867.01it/s] 43%|████▎     | 73296896/169001437 [00:11<00:13, 7323422.58it/s] 44%|████▍     | 74104832/169001437 [00:11<00:12, 7539861.56it/s] 44%|████▍     | 74904576/169001437 [00:11<00:12, 7672955.22it/s] 45%|████▍     | 75760640/169001437 [00:11<00:11, 7909450.14it/s] 45%|████▌     | 76568576/169001437 [00:12<00:11, 7932881.78it/s] 46%|████▌     | 77456384/169001437 [00:12<00:11, 8183358.02it/s] 46%|████▋     | 78320640/169001437 [00:12<00:11, 8227326.40it/s] 47%|████▋     | 79232000/169001437 [00:12<00:10, 8484833.01it/s] 47%|████▋     | 80112640/169001437 [00:12<00:10, 8508240.22it/s] 48%|████▊     | 81072128/169001437 [00:12<00:10, 8785885.03it/s] 48%|████▊     | 81951744/169001437 [00:12<00:09, 8705103.38it/s] 49%|████▉     | 82823168/169001437 [00:12<00:10, 8018028.37it/s] 49%|████▉     | 83635200/169001437 [00:12<00:11, 7605318.32it/s] 50%|████▉     | 84406272/169001437 [00:13<00:11, 7260074.85it/s] 50%|█████     | 85200896/169001437 [00:13<00:11, 7276776.38it/s] 51%|█████     | 86008832/169001437 [00:13<00:11, 7338034.61it/s] 51%|█████▏    | 86832128/169001437 [00:13<00:11, 7421287.27it/s] 52%|█████▏    | 87664640/169001437 [00:13<00:10, 7659594.21it/s] 52%|█████▏    | 88434688/169001437 [00:13<00:11, 7101870.80it/s] 53%|█████▎    | 89154560/169001437 [00:13<00:12, 6627956.58it/s] 53%|█████▎    | 89827328/169001437 [00:13<00:12, 6427403.69it/s] 54%|█████▎    | 90476544/169001437 [00:13<00:12, 6308152.96it/s] 54%|█████▍    | 91111424/169001437 [00:14<00:12, 6057458.81it/s] 54%|█████▍    | 91760640/169001437 [00:14<00:12, 6085696.15it/s] 55%|█████▍    | 92464128/169001437 [00:14<00:12, 6208847.09it/s] 55%|█████▌    | 93184000/169001437 [00:14<00:11, 6373925.49it/s] 56%|█████▌    | 93824000/169001437 [00:14<00:11, 6331195.78it/s] 56%|█████▌    | 94568448/169001437 [00:14<00:11, 6605641.48it/s] 56%|█████▋    | 95344640/169001437 [00:14<00:10, 6921588.84it/s] 57%|█████▋    | 96039936/169001437 [00:14<00:10, 6896342.15it/s] 57%|█████▋    | 96807936/169001437 [00:14<00:10, 7111801.43it/s] 58%|█████▊    | 97584128/169001437 [00:15<00:09, 7298453.47it/s] 58%|█████▊    | 98352128/169001437 [00:15<00:09, 7385599.01it/s] 59%|█████▊    | 99176448/169001437 [00:15<00:09, 7598178.08it/s] 59%|█████▉    | 99988480/169001437 [00:15<00:08, 7752894.22it/s] 60%|█████▉    | 100764672/169001437 [00:15<00:09, 7028571.76it/s] 60%|██████    | 101481472/169001437 [00:15<00:10, 6681148.27it/s] 60%|██████    | 102161408/169001437 [00:15<00:10, 6547099.98it/s] 61%|██████    | 102823936/169001437 [00:15<00:10, 6501251.54it/s] 61%|██████    | 103479296/169001437 [00:15<00:10, 6507208.48it/s] 62%|██████▏   | 104133632/169001437 [00:15<00:09, 6509052.58it/s] 62%|██████▏   | 104808448/169001437 [00:16<00:09, 6574798.31it/s] 62%|██████▏   | 105480192/169001437 [00:16<00:10, 6204155.99it/s] 63%|██████▎   | 106160128/169001437 [00:16<00:09, 6322448.54it/s] 63%|██████▎   | 106797056/169001437 [00:16<00:10, 5873341.19it/s] 64%|██████▎   | 107393024/169001437 [00:16<00:12, 5035234.94it/s] 64%|██████▍   | 107920384/169001437 [00:16<00:13, 4644880.03it/s] 64%|██████▍   | 108403712/169001437 [00:16<00:13, 4421104.57it/s] 64%|██████▍   | 108858368/169001437 [00:16<00:13, 4366340.60it/s] 65%|██████▍   | 109312000/169001437 [00:17<00:13, 4358313.35it/s] 65%|██████▍   | 109800448/169001437 [00:17<00:13, 4425182.68it/s] 65%|██████▌   | 110312448/169001437 [00:17<00:12, 4603631.53it/s] 66%|██████▌   | 110784512/169001437 [00:17<00:12, 4631988.60it/s] 66%|██████▌   | 111296512/169001437 [00:17<00:12, 4742334.22it/s] 66%|██████▌   | 111840256/169001437 [00:17<00:11, 4936804.52it/s] 66%|██████▋   | 112352256/169001437 [00:17<00:11, 4971847.19it/s] 67%|██████▋   | 112917504/169001437 [00:17<00:10, 5171473.87it/s]{'checkpoint': 'results/cifar100/RPS_CIFAR_M8_J1', 'labels_data': 'prepare/cifar100_10.pkl', 'savepoint': '', 'num_class': 100, 'class_per_task': 10, 'M': 8, 'jump': 2, 'rigidness_coff': 2.5, 'dataset': 'CIFAR', 'epochs': 100, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 128, 'test_batch': 128, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [20, 40, 60, 80], 'gamma': 0.5}
-    Total params: 89.59M
-Traceback (most recent call last):
-  File "cifar.py", line 219, in <module>
-    main()
-  File "cifar.py", line 134, in main
-    load_test_case = get_best_model(ses-1, args.checkpoint)
-  File "/home/pricej18/cln2024/rpsnet/RPSnet-master/util.py", line 29, in get_best_model
-    a = np.argmax(best_acc)
-  File "<__array_function__ internals>", line 6, in argmax
-  File "/home/pricej18/cln2024/rpsnet/RPSnet-master/RPSnet_env_svhn/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 1188, in argmax
-    return _wrapfunc(a, 'argmax', axis=axis, out=out)
-  File "/home/pricej18/cln2024/rpsnet/RPSnet-master/RPSnet_env_svhn/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 55, in _wrapfunc
-    return _wrapit(obj, method, *args, **kwds)
-  File "/home/pricej18/cln2024/rpsnet/RPSnet-master/RPSnet_env_svhn/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 44, in _wrapit
-    result = getattr(asarray(obj), method)(*args, **kwds)
-ValueError: attempt to get argmax of an empty sequence
- 67%|██████▋   | 113436672/169001437 [00:17<00:11, 4726211.18it/s] 67%|██████▋   | 113917952/169001437 [00:18<00:12, 4557363.28it/s] 68%|██████▊   | 114380800/169001437 [00:18<00:12, 4472000.02it/s] 68%|██████▊   | 114832384/169001437 [00:18<00:12, 4448026.04it/s] 68%|██████▊   | 115304448/169001437 [00:18<00:11, 4493394.07it/s] 68%|██████▊   | 115760128/169001437 [00:18<00:11, 4504377.34it/s] 69%|██████▉   | 116280320/169001437 [00:18<00:11, 4687661.10it/s] 69%|██████▉   | 116800512/169001437 [00:18<00:10, 4813416.33it/s] 69%|██████▉   | 117296128/169001437 [00:18<00:10, 4852201.33it/s] 70%|██████▉   | 117864448/169001437 [00:18<00:10, 5008349.98it/s] 70%|███████   | 118448128/169001437 [00:18<00:09, 5244032.77it/s] 70%|███████   | 119016448/169001437 [00:19<00:09, 5367847.93it/s] 71%|███████   | 119584768/169001437 [00:19<00:09, 5413571.96it/s] 71%|███████   | 120224768/169001437 [00:19<00:08, 5614031.31it/s] 72%|███████▏  | 120880128/169001437 [00:19<00:08, 5873105.24it/s] 72%|███████▏  | 121496576/169001437 [00:19<00:07, 5948789.92it/s] 72%|███████▏  | 122151936/169001437 [00:19<00:07, 6111325.33it/s] 73%|███████▎  | 122832896/169001437 [00:19<00:07, 6317600.87it/s] 73%|███████▎  | 123496448/169001437 [00:19<00:07, 6407643.11it/s] 74%|███████▎  | 124216320/169001437 [00:19<00:06, 6606929.86it/s] 74%|███████▍  | 124928000/169001437 [00:19<00:06, 6756828.93it/s] 74%|███████▍  | 125656064/169001437 [00:20<00:06, 6781917.12it/s] 75%|███████▍  | 126368768/169001437 [00:20<00:06, 6850434.21it/s] 75%|███████▌  | 127143936/169001437 [00:20<00:05, 7004624.58it/s] 76%|███████▌  | 127984640/169001437 [00:20<00:05, 7303434.26it/s] 76%|███████▌  | 128832512/169001437 [00:20<00:05, 7483904.36it/s] 77%|███████▋  | 129703936/169001437 [00:20<00:05, 7837682.29it/s] 77%|███████▋  | 130488320/169001437 [00:20<00:04, 7778090.09it/s] 78%|███████▊  | 131336192/169001437 [00:20<00:04, 7932237.39it/s] 78%|███████▊  | 132256768/169001437 [00:20<00:04, 8016797.23it/s] 79%|███████▉  | 133200896/169001437 [00:21<00:04, 8245301.09it/s] 79%|███████▉  | 134152192/169001437 [00:21<00:04, 8582764.36it/s] 80%|███████▉  | 135045120/169001437 [00:21<00:03, 8683346.70it/s] 80%|████████  | 135944192/169001437 [00:21<00:03, 8763540.38it/s] 81%|████████  | 136928256/169001437 [00:21<00:03, 9059737.15it/s] 82%|████████▏ | 137835520/169001437 [00:21<00:03, 9040275.17it/s] 82%|████████▏ | 138740736/169001437 [00:21<00:03, 8815106.85it/s] 83%|████████▎ | 139624448/169001437 [00:21<00:03, 8243573.89it/s] 83%|████████▎ | 140456960/169001437 [00:21<00:03, 7884804.79it/s] 84%|████████▎ | 141252608/169001437 [00:21<00:03, 7738681.21it/s] 84%|████████▍ | 142031872/169001437 [00:22<00:03, 7623131.81it/s] 85%|████████▍ | 142824448/169001437 [00:22<00:03, 7690006.83it/s] 85%|████████▍ | 143596544/169001437 [00:22<00:03, 7377747.49it/s] 85%|████████▌ | 144337920/169001437 [00:22<00:03, 6794136.82it/s] 86%|████████▌ | 145027072/169001437 [00:22<00:03, 6568934.34it/s] 86%|████████▌ | 145690624/169001437 [00:22<00:03, 6353656.43it/s] 87%|████████▋ | 146330624/169001437 [00:22<00:03, 6317533.43it/s] 87%|████████▋ | 146965504/169001437 [00:22<00:03, 6283858.34it/s] 87%|████████▋ | 147608576/169001437 [00:22<00:03, 6312181.30it/s] 88%|████████▊ | 148241408/169001437 [00:23<00:03, 6175054.46it/s] 88%|████████▊ | 148984832/169001437 [00:23<00:03, 6387188.27it/s] 89%|████████▊ | 149736448/169001437 [00:23<00:02, 6577952.42it/s] 89%|████████▉ | 150504448/169001437 [00:23<00:02, 6724570.37it/s] 90%|████████▉ | 151288832/169001437 [00:23<00:02, 6920596.55it/s] 90%|████████▉ | 152096768/169001437 [00:23<00:02, 7072063.83it/s] 90%|█████████ | 152912896/169001437 [00:23<00:02, 7224481.88it/s] 91%|█████████ | 153672704/169001437 [00:23<00:02, 7326421.51it/s] 91%|█████████▏| 154406912/169001437 [00:23<00:02, 6745588.63it/s] 92%|█████████▏| 155089920/169001437 [00:24<00:02, 6327514.52it/s] 92%|█████████▏| 155731968/169001437 [00:24<00:02, 6227499.31it/s] 93%|█████████▎| 156376064/169001437 [00:24<00:02, 6193678.34it/s] 93%|█████████▎| 157040640/169001437 [00:24<00:01, 6303227.87it/s] 93%|█████████▎| 157674496/169001437 [00:24<00:01, 6210346.80it/s] 94%|█████████▎| 158352384/169001437 [00:24<00:01, 6259347.55it/s] 94%|█████████▍| 159072256/169001437 [00:24<00:01, 6389153.36it/s] 95%|█████████▍| 159824896/169001437 [00:24<00:01, 6576938.29it/s] 95%|█████████▌| 160584704/169001437 [00:24<00:01, 6727076.06it/s] 95%|█████████▌| 161352704/169001437 [00:25<00:01, 6989348.42it/s] 96%|█████████▌| 162054144/169001437 [00:25<00:00, 6972356.96it/s] 96%|█████████▋| 162832384/169001437 [00:25<00:00, 7196085.75it/s] 97%|█████████▋| 163632128/169001437 [00:25<00:00, 7429607.96it/s] 97%|█████████▋| 164376576/169001437 [00:25<00:00, 6965269.31it/s] 98%|█████████▊| 165080064/169001437 [00:25<00:00, 6680936.10it/s] 98%|█████████▊| 165754880/169001437 [00:25<00:00, 6429064.99it/s] 98%|█████████▊| 166403072/169001437 [00:25<00:00, 6334052.39it/s] 99%|█████████▉| 167040000/169001437 [00:25<00:00, 6282821.42it/s] 99%|█████████▉| 167670784/169001437 [00:26<00:00, 6280876.35it/s]100%|█████████▉| 168328192/169001437 [00:26<00:00, 6347001.47it/s]100%|█████████▉| 168984576/169001437 [00:26<00:00, 6406437.87it/s]169001984it [00:26, 6447543.02it/s]                               Number of layers being trained :  13
-
-Epoch: [1 | 100] LR: 0.001000 Sess: 0
-
-torch.Size([128, 3, 32, 32]) 100 torch.Size([128, 100])
-torch.Size([128, 100])
-Traceback (most recent call last):
-  File "cifar.py", line 219, in <module>
-    main()
-  File "cifar.py", line 189, in main
-    main_learner.learn()
-  File "/home/pricej18/cln2024/rpsnet/RPSnet-master/learner.py", line 96, in learn
-    self.train(epoch, self.infer_path, -1)
-  File "/home/pricej18/cln2024/rpsnet/RPSnet-master/learner.py", line 189, in train
-    prec1, prec5 = accuracy(output=outputs.data[:,0:self.args.class_per_task*(1+self.args.sess)], target=targets.cuda().data, topk=(1, 5))
-  File "/home/pricej18/cln2024/rpsnet/RPSnet-master/utils/eval.py", line 33, in accuracy
-    correct_k = correct[:k].view(-1).float().sum(0, keepdim=True)
-RuntimeError: view size is not compatible with input tensor's size and stride (at least one dimension spans across two contiguous subspaces). Use .reshape(...) instead.
-{'checkpoint': 'results/cifar100/RPS_CIFAR_M8_J1', 'labels_data': 'prepare/cifar100_10.pkl', 'savepoint': '', 'num_class': 100, 'class_per_task': 10, 'M': 8, 'jump': 2, 'rigidness_coff': 2.5, 'dataset': 'CIFAR', 'epochs': 100, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 128, 'test_batch': 128, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [20, 40, 60, 80], 'gamma': 0.5}
-    Total params: 89.59M
-Traceback (most recent call last):
-  File "cifar.py", line 219, in <module>
-    main()
-  File "cifar.py", line 134, in main
-    load_test_case = get_best_model(ses-1, args.checkpoint)
-  File "/home/pricej18/cln2024/rpsnet/RPSnet-master/util.py", line 29, in get_best_model
-    a = np.argmax(best_acc)
-  File "<__array_function__ internals>", line 6, in argmax
-  File "/home/pricej18/cln2024/rpsnet/RPSnet-master/RPSnet_env_svhn/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 1188, in argmax
-    return _wrapfunc(a, 'argmax', axis=axis, out=out)
-  File "/home/pricej18/cln2024/rpsnet/RPSnet-master/RPSnet_env_svhn/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 55, in _wrapfunc
-    return _wrapit(obj, method, *args, **kwds)
-  File "/home/pricej18/cln2024/rpsnet/RPSnet-master/RPSnet_env_svhn/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 44, in _wrapit
-    result = getattr(asarray(obj), method)(*args, **kwds)
-ValueError: attempt to get argmax of an empty sequence
-{'checkpoint': 'results/cifar100/RPS_CIFAR_M8_J1', 'labels_data': 'prepare/cifar100_10.pkl', 'savepoint': '', 'num_class': 100, 'class_per_task': 10, 'M': 8, 'jump': 2, 'rigidness_coff': 2.5, 'dataset': 'CIFAR', 'epochs': 100, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 128, 'test_batch': 128, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [20, 40, 60, 80], 'gamma': 0.5}
-    Total params: 89.59M
-Traceback (most recent call last):
-  File "cifar.py", line 219, in <module>
-    main()
-  File "cifar.py", line 134, in main
-    load_test_case = get_best_model(ses-1, args.checkpoint)
-  File "/home/pricej18/cln2024/rpsnet/RPSnet-master/util.py", line 29, in get_best_model
-    a = np.argmax(best_acc)
-  File "<__array_function__ internals>", line 6, in argmax
-  File "/home/pricej18/cln2024/rpsnet/RPSnet-master/RPSnet_env_svhn/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 1188, in argmax
-    return _wrapfunc(a, 'argmax', axis=axis, out=out)
-  File "/home/pricej18/cln2024/rpsnet/RPSnet-master/RPSnet_env_svhn/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 55, in _wrapfunc
-    return _wrapit(obj, method, *args, **kwds)
-  File "/home/pricej18/cln2024/rpsnet/RPSnet-master/RPSnet_env_svhn/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 44, in _wrapit
-    result = getattr(asarray(obj), method)(*args, **kwds)
-ValueError: attempt to get argmax of an empty sequence
-{'checkpoint': 'results/cifar100/RPS_CIFAR_M8_J1', 'labels_data': 'prepare/cifar100_10.pkl', 'savepoint': '', 'num_class': 100, 'class_per_task': 10, 'M': 8, 'jump': 2, 'rigidness_coff': 2.5, 'dataset': 'CIFAR', 'epochs': 100, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 128, 'test_batch': 128, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [20, 40, 60, 80], 'gamma': 0.5}
-    Total params: 89.59M
-Traceback (most recent call last):
-  File "cifar.py", line 219, in <module>
-    main()
-  File "cifar.py", line 134, in main
-    load_test_case = get_best_model(ses-1, args.checkpoint)
-  File "/home/pricej18/cln2024/rpsnet/RPSnet-master/util.py", line 29, in get_best_model
-    a = np.argmax(best_acc)
-  File "<__array_function__ internals>", line 6, in argmax
-  File "/home/pricej18/cln2024/rpsnet/RPSnet-master/RPSnet_env_svhn/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 1188, in argmax
-    return _wrapfunc(a, 'argmax', axis=axis, out=out)
-  File "/home/pricej18/cln2024/rpsnet/RPSnet-master/RPSnet_env_svhn/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 55, in _wrapfunc
-    return _wrapit(obj, method, *args, **kwds)
-  File "/home/pricej18/cln2024/rpsnet/RPSnet-master/RPSnet_env_svhn/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 44, in _wrapit
-    result = getattr(asarray(obj), method)(*args, **kwds)
-ValueError: attempt to get argmax of an empty sequence
-{'checkpoint': 'results/cifar100/RPS_CIFAR_M8_J1', 'labels_data': 'prepare/cifar100_10.pkl', 'savepoint': '', 'num_class': 100, 'class_per_task': 10, 'M': 8, 'jump': 2, 'rigidness_coff': 2.5, 'dataset': 'CIFAR', 'epochs': 100, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 128, 'test_batch': 128, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [20, 40, 60, 80], 'gamma': 0.5}
-    Total params: 89.59M
-Traceback (most recent call last):
-  File "cifar.py", line 219, in <module>
-    main()
-  File "cifar.py", line 134, in main
-    load_test_case = get_best_model(ses-1, args.checkpoint)
-  File "/home/pricej18/cln2024/rpsnet/RPSnet-master/util.py", line 29, in get_best_model
-    a = np.argmax(best_acc)
-  File "<__array_function__ internals>", line 6, in argmax
-  File "/home/pricej18/cln2024/rpsnet/RPSnet-master/RPSnet_env_svhn/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 1188, in argmax
-    return _wrapfunc(a, 'argmax', axis=axis, out=out)
-  File "/home/pricej18/cln2024/rpsnet/RPSnet-master/RPSnet_env_svhn/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 55, in _wrapfunc
-    return _wrapit(obj, method, *args, **kwds)
-  File "/home/pricej18/cln2024/rpsnet/RPSnet-master/RPSnet_env_svhn/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 44, in _wrapit
-    result = getattr(asarray(obj), method)(*args, **kwds)
-ValueError: attempt to get argmax of an empty sequence
-{'checkpoint': 'results/cifar100/RPS_CIFAR_M8_J1', 'labels_data': 'prepare/cifar100_10.pkl', 'savepoint': '', 'num_class': 100, 'class_per_task': 10, 'M': 8, 'jump': 2, 'rigidness_coff': 2.5, 'dataset': 'CIFAR', 'epochs': 100, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 128, 'test_batch': 128, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [20, 40, 60, 80], 'gamma': 0.5}
-    Total params: 89.59M
-Traceback (most recent call last):
-  File "cifar.py", line 219, in <module>
-    main()
-  File "cifar.py", line 134, in main
-    load_test_case = get_best_model(ses-1, args.checkpoint)
-  File "/home/pricej18/cln2024/rpsnet/RPSnet-master/util.py", line 29, in get_best_model
-    a = np.argmax(best_acc)
-  File "<__array_function__ internals>", line 6, in argmax
-  File "/home/pricej18/cln2024/rpsnet/RPSnet-master/RPSnet_env_svhn/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 1188, in argmax
-    return _wrapfunc(a, 'argmax', axis=axis, out=out)
-  File "/home/pricej18/cln2024/rpsnet/RPSnet-master/RPSnet_env_svhn/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 55, in _wrapfunc
-    return _wrapit(obj, method, *args, **kwds)
-  File "/home/pricej18/cln2024/rpsnet/RPSnet-master/RPSnet_env_svhn/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 44, in _wrapit
-    result = getattr(asarray(obj), method)(*args, **kwds)
-ValueError: attempt to get argmax of an empty sequence
-{'checkpoint': 'results/cifar100/RPS_CIFAR_M8_J1', 'labels_data': 'prepare/cifar100_10.pkl', 'savepoint': '', 'num_class': 100, 'class_per_task': 10, 'M': 8, 'jump': 2, 'rigidness_coff': 2.5, 'dataset': 'CIFAR', 'epochs': 100, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 128, 'test_batch': 128, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [20, 40, 60, 80], 'gamma': 0.5}
-    Total params: 89.59M
-Traceback (most recent call last):
-  File "cifar.py", line 219, in <module>
-    main()
-  File "cifar.py", line 134, in main
-    load_test_case = get_best_model(ses-1, args.checkpoint)
-  File "/home/pricej18/cln2024/rpsnet/RPSnet-master/util.py", line 29, in get_best_model
-    a = np.argmax(best_acc)
-  File "<__array_function__ internals>", line 6, in argmax
-  File "/home/pricej18/cln2024/rpsnet/RPSnet-master/RPSnet_env_svhn/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 1188, in argmax
-    return _wrapfunc(a, 'argmax', axis=axis, out=out)
-  File "/home/pricej18/cln2024/rpsnet/RPSnet-master/RPSnet_env_svhn/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 55, in _wrapfunc
-    return _wrapit(obj, method, *args, **kwds)
-  File "/home/pricej18/cln2024/rpsnet/RPSnet-master/RPSnet_env_svhn/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 44, in _wrapit
-    result = getattr(asarray(obj), method)(*args, **kwds)
-ValueError: attempt to get argmax of an empty sequence
-{'checkpoint': 'results/cifar100/RPS_CIFAR_M8_J1', 'labels_data': 'prepare/cifar100_10.pkl', 'savepoint': '', 'num_class': 100, 'class_per_task': 10, 'M': 8, 'jump': 2, 'rigidness_coff': 2.5, 'dataset': 'CIFAR', 'epochs': 100, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 128, 'test_batch': 128, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [20, 40, 60, 80], 'gamma': 0.5}
-    Total params: 89.59M
-Traceback (most recent call last):
-  File "cifar.py", line 219, in <module>
-    main()
-  File "cifar.py", line 134, in main
-    load_test_case = get_best_model(ses-1, args.checkpoint)
-  File "/home/pricej18/cln2024/rpsnet/RPSnet-master/util.py", line 29, in get_best_model
-    a = np.argmax(best_acc)
-  File "<__array_function__ internals>", line 6, in argmax
-  File "/home/pricej18/cln2024/rpsnet/RPSnet-master/RPSnet_env_svhn/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 1188, in argmax
-    return _wrapfunc(a, 'argmax', axis=axis, out=out)
-  File "/home/pricej18/cln2024/rpsnet/RPSnet-master/RPSnet_env_svhn/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 55, in _wrapfunc
-    return _wrapit(obj, method, *args, **kwds)
-  File "/home/pricej18/cln2024/rpsnet/RPSnet-master/RPSnet_env_svhn/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 44, in _wrapit
-    result = getattr(asarray(obj), method)(*args, **kwds)
-ValueError: attempt to get argmax of an empty sequence
-Done CODE
