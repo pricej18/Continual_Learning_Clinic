@@ -47,7 +47,7 @@ import matplotlib.pyplot as plt
 
 class args:
     epochs = 10
-    checkpoint = "results/mnist/RPS_net_minst"
+    checkpoint = "results/mnist/RPS_net_mnist"
     savepoint = "results/mnist/pathnet_mnist"
     dataset = "MNIST"
     num_class = 10
