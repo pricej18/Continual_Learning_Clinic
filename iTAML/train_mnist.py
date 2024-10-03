@@ -175,8 +175,7 @@ def main():
         
         if(ses==0):
             torch.save(model.state_dict(), os.path.join(args.savepoint, 'base_model.pth.tar'))
-            #args.epochs = 5
-            args.epochs = 1
+            args.epochs = 5
         if(ses==4):
             args.lr = 0.05
         if(start_sess==ses and start_sess!=0): 
