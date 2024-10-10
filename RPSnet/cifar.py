@@ -17,6 +17,8 @@ import torch.nn.parallel
 import torch.backends.cudnn as cudnn
 import torch.optim as optim
 import torch.utils.data as data
+from torch.utils.data import Dataset, Subset, DataLoader
+import torchvision
 import torchvision.transforms as transforms
 import torchvision.datasets as datasets
 from utils import Bar, Logger, AverageMeter, accuracy, mkdir_p, savefig
@@ -38,6 +40,11 @@ from learner import Learner
 from util import *
 from cifar_dataset import CIFAR100
 
+# Saliency Imports
+from captum.attr import Saliency
+from captum.attr import visualization as viz
+import matplotlib.pyplot as plt
+
 
 class args:
 
@@ -53,7 +60,7 @@ class args:
     dataset = "CIFAR"
     
 #    epochs = 100
-    epochs = 2
+    epochs = 1
     L = 9
     N = 1
     lr = 0.001
@@ -72,15 +79,172 @@ class args:
     
 state = {key:value for key, value in args.__dict__.items() if not key.startswith('__') and not callable(key)}
 print(state)
+classes = ('aquarium fish', 'baby', 'bear', 'beaver', 'bed', 'bee',
+    'beetle', 'bicycle', 'bottles', 'bowls',
+    'orchids', 'poppies', 'roses',
+    'sunflowers', 'tulips', 'bottles', 'bowls', 'cans', 'cups', 'plates',
+	'apples', 'mushrooms', 'oranges', 'pears', 'sweet peppers', 'clock',
+    'computer keyboard', 'lamp', 'telephone', 'television', 'bed', 'chair',
+    'couch', 'table', 'wardrobe', 'bee', 'beetle', 'butterfly', 'caterpillar',
+    'cockroach', 'bear', 'leopard', 'lion', 'tiger', 'wolf', 'bridge',
+    'castle', 'house', 'road', 'skyscraper', 'cloud', 'forest', 'mountain',
+    'plain', 'sea', 'camel', 'cattle', 'chimpanzee', 'elephant', 'kangaroo',
+	'fox', 'porcupine', 'possum', 'raccoon', 'skunk', 'crab', 'lobster',
+    'snail', 'spider', 'worm', 'baby', 'boy', 'girl', 'man', 'woman',
+    'crocodile', 'dinosaur', 'lizard', 'snake', 'turtle', 'hamster', 'mouse',
+    'rabbit', 'shrew', 'squirrel', 'maple', 'oak', 'palm', 'pine', 'willow',
+	'bicycle', 'bus', 'motorcycle', 'pickup truck', 'train', 'lawn-mower',
+    'rocket', 'streetcar', 'tank', 'tractor'
+    )
+
 
 # Use CUDA
 use_cuda = torch.cuda.is_available()
-seed = random.randint(1, 10000)
-random.seed(seed)
+#seed = random.randint(1, 10000)
+seed = 7572 
+#random.seed(seed)
 torch.manual_seed(seed)
 if use_cuda:
     torch.cuda.manual_seed_all(seed)
 
+
+def get_indices(dataset,class_name):
+    indices =  []
+    for i in range(len(dataset.targets)):
+      for j in class_name:
+        if dataset.targets[i] == j:
+            indices.append(i)
+    return indices
+    
+    
+def load_saliency_data(desired_classes, imgs_per_class):
+    print("Not Random..")
+    transform = transforms.Compose(
+    [transforms.ToTensor(),
+    transforms.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761))])
+
+    saliencySet = torchvision.datasets.CIFAR100(root='cifar_data/', train=False,
+                  download=True, transform=transform)
+
+    idx = get_indices(saliencySet,desired_classes)
+
+    #subset_indices = [0, 2, 4, 6, 8]
+    subset = Subset(saliencySet, idx)
+
+    # Create a DataLoader for the subset
+    saliencyLoader = DataLoader(subset, batch_size=64)
+
+    #saliencyLoader = torch.utils.data.DataLoader(saliencySet, batch_size=64, 
+    #                                             shuffle=False,sampler = torch.utils.data.sampler.SubsetRandomSampler(idx))
+
+    dataiter = iter(saliencyLoader)
+    images, labels = next(dataiter)
+
+    salIdx = []
+    salLabels = []
+    for i in range(len(desired_classes)):
+      num=0
+      while len(salIdx) < imgs_per_class*(i+1):
+        if labels[num]==desired_classes[i]:
+          salIdx.append(num)
+          salLabels.append(desired_classes[i])
+        num += 1
+    salImgs = images[salIdx]
+    
+    return salImgs, torch.tensor(salLabels)
+    
+    
+    
+def create_saliency_map(model, path, ses):
+    '''
+    # Get Images, one for each class
+    data_iter = iter(saliency_loader)
+    sal_imgs, sal_labels = next(data_iter)
+    print(sal_labels)
+
+    selected_labels = []
+    for i in range(len(saliency_loader)-1):
+        if len(selected_labels) > 9: break
+        num = -1
+        for img in sal_imgs:
+            num = num + 1
+            if len(selected_labels) > 9: break
+            if selected_labels and sal_labels[num] in torch.index_select(sal_labels,0,torch.tensor(selected_labels)): continue
+            else: selected_labels.append(num)
+            sal_imgs, sal_labels = next(data_iter)
+    print("Selected Labels:", selected_labels)
+    selected_imgs = torch.index_select(sal_imgs, 0, torch.tensor(selected_labels))
+    print("Selected Imgs Length:", len(selected_imgs))
+    sal_imgs, sal_labels, selected_imgs = sal_imgs.cuda(), sal_labels.cuda(), selected_imgs.cuda()
+    sal_imgs, sal_labels = sal_imgs.cuda(), sal_labels.cuda()
+    
+    predicted = pred.squeeze()
+    '''
+    
+    sal_imgs, sal_labels = load_saliency_data([0,1,2,3,4], 5)
+    sal_imgs, sal_labels = sal_imgs.cuda(), sal_labels.cuda()
+    
+    model.eval()
+    outputs = model(sal_imgs, path, -1)
+    _, preds = torch.max(outputs, 1)
+    predicted = preds.squeeze() 
+    
+    
+    saliency = Saliency(model)
+    
+    fig, ax = plt.subplots(2,10,figsize=(17,5))
+    for ind in range(0,10):
+        #input = selected_imgs[ind].unsqueeze(0)
+        input = sal_imgs[ind].unsqueeze(0)
+        #input.requires_grad = True
+
+        #grads = saliency.attribute(input, target=sal_labels[selected_labels[ind]].item(), abs=False, additional_forward_args = (path, -1))
+        #grads = saliency.attribute(input, target=selected_imgs[ind].item(), abs=False, additional_forward_args = (path, -1))
+        grads = saliency.attribute(input, target=sal_labels[ind].item(), abs=False, additional_forward_args = (path, -1))
+        grads = np.transpose(grads.squeeze().cpu().detach().numpy(), (1, 2, 0))
+
+        #print('Truth:', classes[sal_labels[ind]])
+        #print('Predicted:', classes[predicted[selected_labels[ind]]])
+        #print('Predicted:', classes[predicted[ind]])
+
+
+        print('Truth:', classes[sal_labels[ind]])
+        print('Predicted:', classes[predicted[ind]])
+
+
+        # Denormalization
+        MEAN = torch.tensor([0.5071, 0.4867, 0.4408])
+        STD = torch.tensor([0.2675, 0.2565, 0.2761])
+
+        original_image = sal_imgs[ind].cpu() * STD[:, None, None] + MEAN[:, None, None]
+        
+        original_image = np.transpose(original_image.detach().numpy(), (1, 2, 0))
+
+        methods=["original_image","blended_heat_map"]
+        signs=["all","absolute_value"]
+        titles=["Original Image","Saliency Map"]
+        colorbars=[False,True]
+
+        if ind > 4:
+            row = 1
+            ind = ind - 5
+        else: row = 0
+
+        for i in range(0,2):
+            #plt_fig_axis = (fig,ax[row][2*ind+i])
+            plt_fig_axis = (fig, ax[row, 2 * ind + i])
+            _ = viz.visualize_image_attr(grads, original_image,
+                                        method=methods[i],
+                                        sign=signs[i],
+                                        fig_size=(4,4),
+                                        plt_fig_axis=plt_fig_axis,
+                                        show_colorbar=colorbars[i],
+                                        title=titles[i])
+                
+    fig.savefig(f"SaliencyMaps/CIFAR100/Sess{ses}SalMap.png")
+    ## For Colab
+    #fig.savefig(f"/content/SaliencyMaps/CIFAR/Sess0SalMap.png")
+    fig.show()
 
 
 
@@ -176,6 +340,9 @@ def main():
         testloader = data.DataLoader(testset, batch_size=args.test_batch, shuffle=False, num_workers=args.workers)
         
         
+        ### Saliency
+        saliency_loader = testloader
+        
         args.sess=ses      
         if ses>0: 
             path_model=os.path.join(args.savepoint, 'session_'+str(ses-1)+'_'+str(load_test_case)+'_model_best.pth.tar')
@@ -187,8 +354,11 @@ def main():
                              testloader=testloader,old_model=copy.deepcopy(model),
                              use_cuda=use_cuda, path=path, 
                              fixed_path=fixed_path, train_path=train_path, infer_path=infer_path)
-        main_learner.learn()
+        pred = main_learner.learn()
 
+
+        ### Saliency
+        create_saliency_map(model, infer_path, ses)
         
         if(ses==0):
             fixed_path = path.copy()
