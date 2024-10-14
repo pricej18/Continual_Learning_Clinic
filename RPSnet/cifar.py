@@ -59,8 +59,8 @@ class args:
     rigidness_coff = 2.5
     dataset = "CIFAR"
     
-#    epochs = 100
-    epochs = 1
+    epochs = 100
+#    epochs = 1
     L = 9
     N = 1
     lr = 0.001
