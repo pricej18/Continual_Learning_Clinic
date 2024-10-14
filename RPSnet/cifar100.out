@@ -1,0 +1,115 @@
+Using TensorFlow backend.
+{'epochs': 10, 'checkpoint': 'results/cifar10/RPS_net_cifar10', 'savepoint': 'results/cifar10/pathnet_cifar10', 'dataset': 'CIFAR10', 'num_class': 10, 'class_per_task': 2, 'M': 8, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 128, 'test_batch': 128, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [6, 8, 16], 'gamma': 0.5, 'rigidness_coff': 2.5, 'jump': 1}
+    Total params: 89.55M
+Starting with session 0
+test case : 0
+#################################################################################
+path
+ [[1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]]
+fixed_path
+ [[0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]]
+train_path
+ [[1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]]
+infer_path
+ [[1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]]
+Number of layers being trained :  13
+
+Epoch: [1 | 10] LR: 0.001000 Sess: 0
+Traceback (most recent call last):
+  File "cifar10.py", line 420, in <module>
+    main()
+  File "cifar10.py", line 390, in main
+    main_learner.learn()
+  File "/home/abanyi17/RPSnet-master/learner.py", line 97, in learn
+    self.train(epoch, self.infer_path, -1)
+  File "/home/abanyi17/RPSnet-master/learner.py", line 161, in train
+    outputs = self.model(inputs, path, -1)
+  File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/torch/nn/modules/module.py", line 1102, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/abanyi17/RPSnet-master/rps_net.py", line 458, in forward
+    y = self.conv5[0](x)
+  File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/torch/nn/modules/module.py", line 1102, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/torch/nn/modules/container.py", line 141, in forward
+    input = module(input)
+  File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/torch/nn/modules/module.py", line 1102, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/torch/nn/modules/conv.py", line 446, in forward
+    return self._conv_forward(input, self.weight, self.bias)
+  File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/torch/nn/modules/conv.py", line 443, in _conv_forward
+    self.padding, self.dilation, self.groups)
+RuntimeError: CUDA out of memory. Tried to allocate 64.00 MiB (GPU 0; 11.17 GiB total capacity; 1.46 GiB already allocated; 1.50 MiB free; 1.71 GiB reserved in total by PyTorch) If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF
+Using TensorFlow backend.
+/home/abanyi17/RPSnet-master/util.py:21: UserWarning: loadtxt: Empty input file: "results/cifar10/RPS_net_cifar10/session_0_0_log.txt"
+  f = np.loadtxt(checkpoint+"/"+file, skiprows=1)
+{'epochs': 10, 'checkpoint': 'results/cifar10/RPS_net_cifar10', 'savepoint': 'results/cifar10/pathnet_cifar10', 'dataset': 'CIFAR10', 'num_class': 10, 'class_per_task': 2, 'M': 8, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 128, 'test_batch': 128, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [6, 8, 16], 'gamma': 0.5, 'rigidness_coff': 2.5, 'jump': 1}
+    Total params: 89.55M
+session_0_0_log.txt
+Traceback (most recent call last):
+  File "cifar10.py", line 420, in <module>
+    main()
+  File "cifar10.py", line 279, in main
+    load_test_case = get_best_model(ses-1, args.checkpoint)
+  File "/home/abanyi17/RPSnet-master/util.py", line 33, in get_best_model
+    a = np.argmax(best_acc)
+  File "<__array_function__ internals>", line 6, in argmax
+  File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 1188, in argmax
+    return _wrapfunc(a, 'argmax', axis=axis, out=out)
+  File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 55, in _wrapfunc
+    return _wrapit(obj, method, *args, **kwds)
+  File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 44, in _wrapit
+    result = getattr(asarray(obj), method)(*args, **kwds)
+ValueError: attempt to get argmax of an empty sequence
+Using TensorFlow backend.
+{'epochs': 10, 'checkpoint': 'results/cifar10/RPS_net_cifar10', 'savepoint': 'results/cifar10/pathnet_cifar10', 'dataset': 'CIFAR10', 'num_class': 10, 'class_per_task': 2, 'M': 8, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 128, 'test_batch': 128, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [6, 8, 16], 'gamma': 0.5, 'rigidness_coff': 2.5, 'jump': 1}
+    Total params: 89.55M
+session_1_0_log.txt
+Traceback (most recent call last):
+  File "cifar10.py", line 420, in <module>
+    main()
+  File "cifar10.py", line 279, in main
+    load_test_case = get_best_model(ses-1, args.checkpoint)
+  File "/home/abanyi17/RPSnet-master/util.py", line 33, in get_best_model
+    a = np.argmax(best_acc)
+  File "<__array_function__ internals>", line 6, in argmax
+  File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 1188, in argmax
+    return _wrapfunc(a, 'argmax', axis=axis, out=out)
+  File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 55, in _wrapfunc
+    return _wrapit(obj, method, *args, **kwds)
+  File "/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/numpy/core/fromnumeric.py", line 44, in _wrapit
+    result = getattr(asarray(obj), method)(*args, **kwds)
+ValueError: attempt to get argmax of an empty sequence
+python3: can't open file 'cifar100.py': [Errno 2] No such file or directory
+python3: can't open file 'cifar100.py': [Errno 2] No such file or directory

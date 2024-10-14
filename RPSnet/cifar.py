@@ -79,23 +79,6 @@ class args:
     
 state = {key:value for key, value in args.__dict__.items() if not key.startswith('__') and not callable(key)}
 print(state)
-classes = ('aquarium fish', 'baby', 'bear', 'beaver', 'bed', 'bee',
-    'beetle', 'bicycle', 'bottles', 'bowls',
-    'orchids', 'poppies', 'roses',
-    'sunflowers', 'tulips', 'bottles', 'bowls', 'cans', 'cups', 'plates',
-	'apples', 'mushrooms', 'oranges', 'pears', 'sweet peppers', 'clock',
-    'computer keyboard', 'lamp', 'telephone', 'television', 'bed', 'chair',
-    'couch', 'table', 'wardrobe', 'bee', 'beetle', 'butterfly', 'caterpillar',
-    'cockroach', 'bear', 'leopard', 'lion', 'tiger', 'wolf', 'bridge',
-    'castle', 'house', 'road', 'skyscraper', 'cloud', 'forest', 'mountain',
-    'plain', 'sea', 'camel', 'cattle', 'chimpanzee', 'elephant', 'kangaroo',
-	'fox', 'porcupine', 'possum', 'raccoon', 'skunk', 'crab', 'lobster',
-    'snail', 'spider', 'worm', 'baby', 'boy', 'girl', 'man', 'woman',
-    'crocodile', 'dinosaur', 'lizard', 'snake', 'turtle', 'hamster', 'mouse',
-    'rabbit', 'shrew', 'squirrel', 'maple', 'oak', 'palm', 'pine', 'willow',
-	'bicycle', 'bus', 'motorcycle', 'pickup truck', 'train', 'lawn-mower',
-    'rocket', 'streetcar', 'tank', 'tractor'
-    )
 
 
 # Use CUDA
@@ -118,24 +101,28 @@ def get_indices(dataset,class_name):
     
     
 def load_saliency_data(desired_classes, imgs_per_class):
-    print("Not Random..")
-    transform = transforms.Compose(
-    [transforms.ToTensor(),
-    transforms.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761))])
 
-    saliencySet = torchvision.datasets.CIFAR100(root='cifar_data/', train=False,
-                  download=True, transform=transform)
+    if not os.path.isdir("SaliencyMaps/" + args.dataset):
+        mkdir_p("SaliencyMaps/" + args.dataset)
+    
+    saliencySet = torch.utils.data.Dataset()
+    if args.dataset == "MNIST":       
+        saliencySet = datasets.MNIST(root='SaliencyMaps/Datasets/MNIST/', train=False,
+                  download=True,
+                  transform=transforms.Compose([transforms.ToTensor()]))
+    elif args.dataset == "CIFAR10":       
+        saliencySet = datasets.CIFAR10(root='SaliencyMaps/Datasets/CIFAR10/', train=False,
+                  download=True,
+                  transform=transforms.Compose(
+                                        [transforms.ToTensor(),
+                                        transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))]))
 
     idx = get_indices(saliencySet,desired_classes)
 
-    #subset_indices = [0, 2, 4, 6, 8]
     subset = Subset(saliencySet, idx)
 
     # Create a DataLoader for the subset
-    saliencyLoader = DataLoader(subset, batch_size=64)
-
-    #saliencyLoader = torch.utils.data.DataLoader(saliencySet, batch_size=64, 
-    #                                             shuffle=False,sampler = torch.utils.data.sampler.SubsetRandomSampler(idx))
+    saliencyLoader = DataLoader(subset, batch_size=args.test_batch)
 
     dataiter = iter(saliencyLoader)
     images, labels = next(dataiter)
@@ -151,12 +138,84 @@ def load_saliency_data(desired_classes, imgs_per_class):
         num += 1
     salImgs = images[salIdx]
     
-    return salImgs, torch.tensor(salLabels)
+    return salImgs, torch.tensor(salLabels), saliencySet.classes
+
+
+    
+def create_saliency_map(model, path, ses, desired_classes, imgs_per_class):
+    
+    sal_imgs, sal_labels, classes = load_saliency_data(desired_classes, imgs_per_class)
+    sal_imgs, sal_labels = sal_imgs.cuda(), sal_labels.cuda()
+    
+    model.eval()
+    outputs = model(sal_imgs, path, -1)
+    _, pred = torch.max(outputs, 1)
+    predicted = pred.squeeze()         
+    
+    saliency = Saliency(model)
+    
+    fig, ax = plt.subplots(2,len(desired_classes)*imgs_per_class,figsize=(15,5))
+    for ind in range(len(desired_classes)*imgs_per_class):
+        input = sal_imgs[ind].unsqueeze(0)
+        #input.requires_grad = True
+
+        grads = saliency.attribute(input, target=sal_labels[ind].item(), abs=False, additional_forward_args = (path, -1))
+        
+        #squeeze_grads = grads.squeeze().cpu().detach()
+        #grads = np.transpose(squeeze_grads.numpy(), (1, 2, 0))
+        grads = np.transpose(grads.squeeze().cpu().detach().numpy(), (1, 2, 0))
+
+
+        print('Truth:', classes[sal_labels[ind]])
+        print('Predicted:', classes[predicted[ind]])
+
+
+
+        #original_image = (sal_imgs[ind].cpu().detach().numpy() * 255.0).astype('uint8')
+        
+        # Denormalization
+        MEAN = torch.tensor([0.5071, 0.4867, 0.4408])
+        STD = torch.tensor([0.2675, 0.2565, 0.2761])
+
+        original_image = sal_imgs[ind].cpu() * STD[:, None, None] + MEAN[:, None, None]
+        
+        original_image = np.transpose(original_image.detach().numpy(), (1, 2, 0))
+        
+        
+        methods=["original_image","blended_heat_map"]
+        signs=["all","absolute_value"]
+        titles=["Original Image","Saliency Map"]
+        colorbars=[False,True]
+
+        # Check if image was misclassified
+        if predicted[ind] != sal_labels[ind]: cmap = "Reds" 
+        else: cmap = "Blues"
+
+
+        if ind > 4:
+            row = 1
+            ind = ind - 5
+        else: row = 0
+
+        for i in range(2):
+            plt_fig_axis = (fig,ax[row][2*ind+i])
+            _ = viz.visualize_image_attr(grads, original_image,
+                                        method=methods[i],
+                                        sign=signs[i],
+                                        fig_size=(4,4),
+                                        plt_fig_axis=plt_fig_axis,
+                                        cmap=cmap,
+                                        show_colorbar=colorbars[i],
+                                        title=titles[i])
+    
+    fig.tight_layout()
+    fig.savefig(f"SaliencyMaps/{args.dataset}/Sess{ses}SalMap.png")
+    fig.show()
     
     
-    
+'''    
 def create_saliency_map(model, path, ses):
-    '''
+
     # Get Images, one for each class
     data_iter = iter(saliency_loader)
     sal_imgs, sal_labels = next(data_iter)
@@ -179,7 +238,7 @@ def create_saliency_map(model, path, ses):
     sal_imgs, sal_labels = sal_imgs.cuda(), sal_labels.cuda()
     
     predicted = pred.squeeze()
-    '''
+
     
     sal_imgs, sal_labels = load_saliency_data([0,1,2,3,4], 5)
     sal_imgs, sal_labels = sal_imgs.cuda(), sal_labels.cuda()
@@ -245,7 +304,7 @@ def create_saliency_map(model, path, ses):
     ## For Colab
     #fig.savefig(f"/content/SaliencyMaps/CIFAR/Sess0SalMap.png")
     fig.show()
-
+'''
 
 
 def main():

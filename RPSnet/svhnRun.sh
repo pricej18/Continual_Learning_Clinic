@@ -1,6 +1,6 @@
 #!/bin/sh
 #SBATCH --partition=gpu
-#SBATCH --gres=gpu:2
+#SBATCH --gres=gpu:1
 #SBATCH --output=svhn.out
 
-. ./SVHN2G.sh
+. ./SVHN.sh

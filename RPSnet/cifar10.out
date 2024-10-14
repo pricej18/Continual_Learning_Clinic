@@ -68,15 +68,32 @@ Epoch: [9 | 10] LR: 0.000250 Sess: 0
 
 Epoch: [10 | 10] LR: 0.000250 Sess: 0
 Best acc:
-97.3
-torch.Size([1, 3, 32, 32])
-Truth: plane
-torch.Size([1, 3, 32, 32])
-Truth: car
+97.8
+Files already downloaded and verified
+Truth: airplane
+Predicted: automobile
+Truth: airplane
+Predicted: airplane
+Truth: airplane
+Predicted: automobile
+Truth: airplane
+Predicted: bird
+Truth: airplane
+Predicted: automobile
+Truth: automobile
+Predicted: automobile
+Truth: automobile
+Predicted: automobile
+Truth: automobile
+Predicted: automobile
+Truth: automobile
+Predicted: automobile
+Truth: automobile
+Predicted: automobile
 session_0_0_log.txt
-97.3 0
-tensor([[921.,  19.,   0.,  ...,   0.,   0.,   0.],
-        [  9., 957.,   0.,  ...,   0.,   0.,   0.],
+97.8 0
+tensor([[947.,  14.,  39.,  ...,   0.,   0.,   0.],
+        [ 14., 969.,  17.,  ...,   0.,   0.,   0.],
         [  0.,   0.,   0.,  ...,   0.,   0.,   0.],
         ...,
         [  0.,   0.,   0.,  ...,   0.,   0.,   0.],
@@ -93,20 +110,20 @@ The PostScript backend does not support transparency; partially transparent arti
 {'epochs': 10, 'checkpoint': 'results/cifar10/RPS_net_cifar10', 'savepoint': 'results/cifar10/pathnet_cifar10', 'dataset': 'CIFAR10', 'num_class': 10, 'class_per_task': 2, 'M': 8, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 64, 'test_batch': 64, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [6, 8, 16], 'gamma': 0.5, 'rigidness_coff': 2.5, 'jump': 1}
     Total params: 89.55M
 session_0_0_log.txt
-97.3 0
+97.8 0
 Starting with session 1
 test case : 0
 #################################################################################
 path
- [[1. 0. 0. 0. 0. 0. 0. 0.]
- [0. 0. 0. 1. 0. 0. 0. 0.]
- [0. 0. 0. 0. 0. 0. 0. 1.]
- [0. 0. 1. 0. 0. 0. 0. 0.]
+ [[0. 0. 0. 0. 0. 0. 0. 1.]
+ [0. 0. 0. 0. 0. 0. 1. 0.]
+ [0. 0. 0. 0. 1. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 1. 0. 0. 0.]
  [0. 0. 1. 0. 0. 0. 0. 0.]
  [0. 0. 0. 0. 0. 0. 1. 0.]
- [0. 0. 1. 0. 0. 0. 0. 0.]
- [0. 0. 0. 1. 0. 0. 0. 0.]
- [0. 0. 0. 0. 0. 0. 0. 1.]]
+ [0. 0. 0. 0. 0. 0. 1. 0.]
+ [0. 1. 0. 0. 0. 0. 0. 0.]]
 fixed_path
  [[1. 0. 0. 0. 0. 0. 0. 0.]
  [1. 0. 0. 0. 0. 0. 0. 0.]
@@ -118,25 +135,25 @@ fixed_path
  [1. 0. 0. 0. 0. 0. 0. 0.]
  [1. 0. 0. 0. 0. 0. 0. 0.]]
 train_path
- [[0. 0. 0. 0. 0. 0. 0. 0.]
- [0. 0. 0. 1. 0. 0. 0. 0.]
- [0. 0. 0. 0. 0. 0. 0. 1.]
- [0. 0. 1. 0. 0. 0. 0. 0.]
+ [[0. 0. 0. 0. 0. 0. 0. 1.]
+ [0. 0. 0. 0. 0. 0. 1. 0.]
+ [0. 0. 0. 0. 1. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 1. 0. 0. 0.]
  [0. 0. 1. 0. 0. 0. 0. 0.]
  [0. 0. 0. 0. 0. 0. 1. 0.]
- [0. 0. 1. 0. 0. 0. 0. 0.]
- [0. 0. 0. 1. 0. 0. 0. 0.]
- [0. 0. 0. 0. 0. 0. 0. 1.]]
+ [0. 0. 0. 0. 0. 0. 1. 0.]
+ [0. 1. 0. 0. 0. 0. 0. 0.]]
 infer_path
- [[1. 0. 0. 0. 0. 0. 0. 0.]
- [1. 0. 0. 1. 0. 0. 0. 0.]
- [1. 0. 0. 0. 0. 0. 0. 1.]
- [1. 0. 1. 0. 0. 0. 0. 0.]
+ [[1. 0. 0. 0. 0. 0. 0. 1.]
+ [1. 0. 0. 0. 0. 0. 1. 0.]
+ [1. 0. 0. 0. 1. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 1. 0. 0. 0.]
  [1. 0. 1. 0. 0. 0. 0. 0.]
  [1. 0. 0. 0. 0. 0. 1. 0.]
- [1. 0. 1. 0. 0. 0. 0. 0.]
- [1. 0. 0. 1. 0. 0. 0. 0.]
- [1. 0. 0. 0. 0. 0. 0. 1.]]
+ [1. 0. 0. 0. 0. 0. 1. 0.]
+ [1. 1. 0. 0. 0. 0. 0. 0.]]
 Number of layers being trained :  12
 
 Epoch: [1 | 10] LR: 0.001000 Sess: 1
@@ -159,16 +176,33 @@ Epoch: [9 | 10] LR: 0.000250 Sess: 1
 
 Epoch: [10 | 10] LR: 0.000250 Sess: 1
 Best acc:
-87.85
-torch.Size([1, 3, 32, 32])
-Truth: plane
-torch.Size([1, 3, 32, 32])
-Truth: car
+89.025
+Files already downloaded and verified
+Truth: airplane
+Predicted: automobile
+Truth: airplane
+Predicted: airplane
+Truth: airplane
+Predicted: automobile
+Truth: airplane
+Predicted: automobile
+Truth: airplane
+Predicted: automobile
+Truth: automobile
+Predicted: automobile
+Truth: automobile
+Predicted: automobile
+Truth: automobile
+Predicted: automobile
+Truth: automobile
+Predicted: automobile
+Truth: automobile
+Predicted: automobile
 session_1_0_log.txt
-87.85 0
-tensor([[835.,  20.,  71.,  ...,   0.,   0.,   0.],
-        [  9., 948.,  14.,  ...,   0.,   0.,   0.],
-        [ 36.,   4., 839.,  ...,   0.,   0.,   0.],
+89.025 0
+tensor([[850.,  15.,  79.,  ...,   0.,   0.,   0.],
+        [ 15., 942.,  15.,  ...,   0.,   0.,   0.],
+        [ 29.,   1., 855.,  ...,   0.,   0.,   0.],
         ...,
         [  0.,   0.,   0.,  ...,   0.,   0.,   0.],
         [  0.,   0.,   0.,  ...,   0.,   0.,   0.],
