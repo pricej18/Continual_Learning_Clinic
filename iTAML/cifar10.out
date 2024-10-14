@@ -1,0 +1,790 @@
+Start Time: 
+2024-10-13_20:08:56
+
+{'checkpoint': 'results/cifar100/meta_cifar10_T5_42', 'savepoint': 'models/cifar100/meta_cifar10_T5_42', 'data_path': '../Datasets/CIFAR10/', 'num_class': 10, 'class_per_task': 2, 'num_task': 5, 'test_samples_per_class': 1000, 'dataset': 'cifar10', 'optimizer': 'radam', 'epochs': 20, 'lr': 0.01, 'train_batch': 256, 'test_batch': 256, 'workers': 16, 'sess': 0, 'schedule': [5, 10, 15], 'gamma': 0.2, 'random_classes': False, 'validation': 0, 'memory': 2000, 'mu': 1, 'beta': 1.0, 'r': 1}
+  Total params: 1.23M 
+Files already downloaded and verified
+Files already downloaded and verified
+0
+[2, 2, 2, 2, 2]
+{'min_class': 0, 'max_class': 2, 'task': 0, 'max_task': 5, 'n_train_data': 10000, 'n_test_data': 2000}
+{0: 2000}
+
+Epoch: [1 | 20] LR: 0.010000 Sess: 0
+/home/abanyi17/iTAML-master/radam.py:45: UserWarning: This overload of addcmul_ is deprecated:
+	addcmul_(Number value, Tensor tensor1, Tensor tensor2)
+Consider using one of the following signatures instead:
+	addcmul_(Tensor tensor1, Tensor tensor2, *, Number value) (Triggered internally at  ../torch/csrc/utils/python_arg_parser.cpp:1050.)
+  exp_avg_sq.mul_(beta2).addcmul_(1 - beta2, grad, grad)
+82.75
+{0: 922, 1: 733}
+
+Epoch: [2 | 20] LR: 0.010000 Sess: 0
+87.75
+{0: 896, 1: 859}
+
+Epoch: [3 | 20] LR: 0.010000 Sess: 0
+66.25
+{0: 991, 1: 334}
+
+Epoch: [4 | 20] LR: 0.010000 Sess: 0
+91.39999999999999
+{0: 854, 1: 974}
+
+Epoch: [5 | 20] LR: 0.010000 Sess: 0
+84.4
+{0: 994, 1: 694}
+
+Epoch: [6 | 20] LR: 0.002000 Sess: 0
+95.75
+{0: 940, 1: 975}
+
+Epoch: [7 | 20] LR: 0.002000 Sess: 0
+96.1
+{0: 959, 1: 963}
+
+Epoch: [8 | 20] LR: 0.002000 Sess: 0
+96.0
+{0: 974, 1: 946}
+
+Epoch: [9 | 20] LR: 0.002000 Sess: 0
+95.80000000000001
+{0: 989, 1: 927}
+
+Epoch: [10 | 20] LR: 0.002000 Sess: 0
+96.85
+{0: 974, 1: 963}
+
+Epoch: [11 | 20] LR: 0.000400 Sess: 0
+97.55
+{0: 973, 1: 978}
+
+Epoch: [12 | 20] LR: 0.000400 Sess: 0
+97.2
+{0: 977, 1: 967}
+
+Epoch: [13 | 20] LR: 0.000400 Sess: 0
+97.55
+{0: 977, 1: 974}
+
+Epoch: [14 | 20] LR: 0.000400 Sess: 0
+97.65
+{0: 978, 1: 975}
+
+Epoch: [15 | 20] LR: 0.000400 Sess: 0
+97.35
+{0: 974, 1: 973}
+
+Epoch: [16 | 20] LR: 0.000080 Sess: 0
+97.69999999999999
+{0: 976, 1: 978}
+
+Epoch: [17 | 20] LR: 0.000080 Sess: 0
+97.65
+{0: 973, 1: 980}
+
+Epoch: [18 | 20] LR: 0.000080 Sess: 0
+97.8
+{0: 977, 1: 979}
+
+Epoch: [19 | 20] LR: 0.000080 Sess: 0
+97.75
+{0: 972, 1: 983}
+
+Epoch: [20 | 20] LR: 0.000080 Sess: 0
+The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
+The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
+97.8
+{0: 975, 1: 981}
+2000
+Training meta tasks:	 0
+97.8
+{0: 977, 1: 979}
+Files already downloaded and verified
+Truth: airplane
+Predicted: airplane
+Truth: airplane
+Predicted: airplane
+Truth: airplane
+Predicted: airplane
+Truth: airplane
+Predicted: airplane
+Truth: airplane
+Predicted: airplane
+Truth: automobile
+Predicted: automobile
+Truth: automobile
+Predicted: automobile
+Truth: automobile
+Predicted: automobile
+Truth: automobile
+Predicted: automobile
+Truth: automobile
+Predicted: automobile
+1
+[2, 2, 2, 2, 2]
+{'min_class': 2, 'max_class': 4, 'task': 1, 'max_task': 5, 'n_train_data': 12000, 'n_test_data': 4000}
+{0: 2000, 1: 2000}
+
+Epoch: [1 | 20] LR: 0.010000 Sess: 1
+77.64999999999999
+30.45
+{1: 978, 0: 575, 3: 369, 2: 240}
+
+Epoch: [2 | 20] LR: 0.010000 Sess: 1
+89.44999999999999
+23.6
+{1: 918, 0: 871, 2: 266, 3: 206}
+
+Epoch: [3 | 20] LR: 0.010000 Sess: 1
+70.6
+36.05
+{1: 984, 0: 428, 2: 563, 3: 158}
+
+Epoch: [4 | 20] LR: 0.010000 Sess: 1
+80.8
+27.7
+{1: 971, 0: 645, 2: 315, 3: 239}
+
+Epoch: [5 | 20] LR: 0.010000 Sess: 1
+80.55
+37.55
+{1: 978, 0: 633, 3: 581, 2: 170}
+
+Epoch: [6 | 20] LR: 0.002000 Sess: 1
+89.25
+35.95
+{1: 990, 0: 795, 3: 410, 2: 309}
+
+Epoch: [7 | 20] LR: 0.002000 Sess: 1
+84.2
+43.65
+{1: 994, 0: 690, 2: 412, 3: 461}
+
+Epoch: [8 | 20] LR: 0.002000 Sess: 1
+91.05
+42.05
+{1: 983, 0: 838, 2: 316, 3: 525}
+
+Epoch: [9 | 20] LR: 0.002000 Sess: 1
+86.8
+43.849999999999994
+{1: 991, 0: 745, 3: 470, 2: 407}
+
+Epoch: [10 | 20] LR: 0.002000 Sess: 1
+90.3
+39.150000000000006
+{1: 989, 0: 817, 3: 516, 2: 267}
+
+Epoch: [11 | 20] LR: 0.000400 Sess: 1
+89.65
+44.95
+{1: 996, 0: 797, 3: 556, 2: 343}
+
+Epoch: [12 | 20] LR: 0.000400 Sess: 1
+90.3
+44.95
+{1: 988, 0: 818, 2: 384, 3: 515}
+
+Epoch: [13 | 20] LR: 0.000400 Sess: 1
+89.5
+44.400000000000006
+{1: 991, 0: 799, 3: 528, 2: 360}
+
+Epoch: [14 | 20] LR: 0.000400 Sess: 1
+90.3
+43.75
+{1: 993, 0: 813, 3: 552, 2: 323}
+
+Epoch: [15 | 20] LR: 0.000400 Sess: 1
+87.85
+47.45
+{1: 992, 0: 765, 3: 542, 2: 407}
+
+Epoch: [16 | 20] LR: 0.000080 Sess: 1
+90.19999999999999
+47.5
+{1: 990, 0: 814, 3: 576, 2: 374}
+
+Epoch: [17 | 20] LR: 0.000080 Sess: 1
+88.7
+47.300000000000004
+{1: 993, 0: 781, 3: 547, 2: 399}
+
+Epoch: [18 | 20] LR: 0.000080 Sess: 1
+89.7
+47.75
+{1: 993, 0: 801, 3: 554, 2: 401}
+
+Epoch: [19 | 20] LR: 0.000080 Sess: 1
+89.85
+47.8
+{1: 993, 0: 804, 3: 570, 2: 386}
+
+Epoch: [20 | 20] LR: 0.000080 Sess: 1
+The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
+The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
+89.2
+48.349999999999994
+{1: 993, 0: 791, 3: 569, 2: 398}
+2000
+Training meta tasks:	 0
+Training meta tasks:	 1
+96.2
+85.19999999999999
+{0: 931, 1: 993, 2: 939, 3: 765}
+Files already downloaded and verified
+Truth: airplane
+Predicted: automobile
+Truth: airplane
+Predicted: airplane
+Truth: airplane
+Predicted: airplane
+Truth: airplane
+Predicted: airplane
+Truth: airplane
+Predicted: airplane
+Truth: automobile
+Predicted: automobile
+Truth: automobile
+Predicted: automobile
+Truth: automobile
+Predicted: automobile
+Truth: automobile
+Predicted: automobile
+Truth: automobile
+Predicted: automobile
+2
+[2, 2, 2, 2, 2]
+{'min_class': 4, 'max_class': 6, 'task': 2, 'max_task': 5, 'n_train_data': 12000, 'n_test_data': 6000}
+{0: 2000, 1: 2000, 2: 2000}
+
+Epoch: [1 | 20] LR: 0.010000 Sess: 2
+84.25
+46.55
+2.55
+{1: 939, 0: 746, 3: 748, 2: 183, 4: 37, 5: 14}
+
+Epoch: [2 | 20] LR: 0.010000 Sess: 2
+74.9
+45.85
+12.65
+{1: 855, 0: 643, 3: 802, 2: 115, 5: 178, 4: 75}
+
+Epoch: [3 | 20] LR: 0.010000 Sess: 2
+77.85
+36.95
+32.9
+{1: 977, 0: 580, 2: 444, 3: 295, 5: 288, 4: 370}
+
+Epoch: [4 | 20] LR: 0.010000 Sess: 2
+85.1
+28.55
+38.7
+{1: 936, 0: 766, 2: 442, 3: 129, 5: 393, 4: 381}
+
+Epoch: [5 | 20] LR: 0.010000 Sess: 2
+87.19999999999999
+34.1
+36.1
+{1: 922, 0: 822, 3: 611, 2: 71, 5: 406, 4: 316}
+
+Epoch: [6 | 20] LR: 0.002000 Sess: 2
+86.44999999999999
+31.0
+52.15
+{1: 968, 0: 761, 2: 253, 3: 367, 4: 413, 5: 630}
+
+Epoch: [7 | 20] LR: 0.002000 Sess: 2
+84.85
+38.3
+48.15
+{1: 972, 0: 725, 2: 485, 3: 281, 4: 345, 5: 618}
+
+Epoch: [8 | 20] LR: 0.002000 Sess: 2
+89.35
+36.5
+41.95
+{1: 978, 0: 809, 3: 512, 2: 218, 5: 500, 4: 339}
+
+Epoch: [9 | 20] LR: 0.002000 Sess: 2
+83.75
+37.8
+47.5
+{1: 987, 0: 688, 2: 337, 3: 419, 5: 531, 4: 419}
+
+Epoch: [10 | 20] LR: 0.002000 Sess: 2
+87.1
+36.650000000000006
+43.05
+{1: 967, 0: 775, 3: 467, 2: 266, 4: 361, 5: 500}
+
+Epoch: [11 | 20] LR: 0.000400 Sess: 2
+83.25
+41.0
+48.0
+{1: 979, 0: 686, 3: 405, 2: 415, 4: 414, 5: 546}
+
+Epoch: [12 | 20] LR: 0.000400 Sess: 2
+82.05
+43.7
+47.95
+{1: 978, 0: 663, 3: 464, 2: 410, 5: 555, 4: 404}
+
+Epoch: [13 | 20] LR: 0.000400 Sess: 2
+80.0
+47.349999999999994
+46.25
+{1: 982, 0: 618, 3: 503, 2: 444, 5: 513, 4: 412}
+
+Epoch: [14 | 20] LR: 0.000400 Sess: 2
+80.5
+46.8
+47.349999999999994
+{1: 985, 0: 625, 3: 465, 2: 471, 4: 433, 5: 514}
+
+Epoch: [15 | 20] LR: 0.000400 Sess: 2
+79.7
+45.7
+48.45
+{1: 988, 0: 606, 3: 469, 2: 445, 4: 479, 5: 490}
+
+Epoch: [16 | 20] LR: 0.000080 Sess: 2
+80.25
+47.0
+47.400000000000006
+{1: 988, 0: 617, 3: 470, 2: 470, 4: 436, 5: 512}
+
+Epoch: [17 | 20] LR: 0.000080 Sess: 2
+82.05000000000001
+46.15
+46.400000000000006
+{1: 985, 0: 656, 3: 478, 2: 445, 4: 403, 5: 525}
+
+Epoch: [18 | 20] LR: 0.000080 Sess: 2
+81.0
+46.85
+46.75
+{1: 987, 0: 633, 3: 467, 2: 470, 4: 431, 5: 504}
+
+Epoch: [19 | 20] LR: 0.000080 Sess: 2
+81.44999999999999
+46.55
+46.35
+{1: 986, 0: 643, 3: 488, 2: 443, 4: 414, 5: 513}
+
+Epoch: [20 | 20] LR: 0.000080 Sess: 2
+The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
+The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
+80.75
+47.8
+48.0
+{1: 989, 0: 626, 3: 495, 2: 461, 4: 467, 5: 493}
+1998
+Training meta tasks:	 0
+Training meta tasks:	 1
+Training meta tasks:	 2
+97.44999999999999
+86.05
+92.05000000000001
+{0: 959, 1: 990, 2: 814, 3: 907, 4: 909, 5: 932}
+Files already downloaded and verified
+Truth: airplane
+Predicted: deer
+Truth: airplane
+Predicted: airplane
+Truth: airplane
+Predicted: airplane
+Truth: airplane
+Predicted: airplane
+Truth: airplane
+Predicted: airplane
+Truth: automobile
+Predicted: automobile
+Truth: automobile
+Predicted: automobile
+Truth: automobile
+Predicted: automobile
+Truth: automobile
+Predicted: automobile
+Truth: automobile
+Predicted: automobile
+3
+[2, 2, 2, 2, 2]
+{'min_class': 6, 'max_class': 8, 'task': 3, 'max_task': 5, 'n_train_data': 11998, 'n_test_data': 8000}
+{0: 2000, 1: 2000, 2: 2000, 3: 2000}
+
+Epoch: [1 | 20] LR: 0.010000 Sess: 3
+80.4
+36.2
+44.4
+16.599999999999998
+{1: 961, 0: 647, 2: 465, 3: 259, 4: 537, 5: 351, 6: 153, 7: 179}
+
+Epoch: [2 | 20] LR: 0.010000 Sess: 3
+81.6
+29.1
+31.65
+54.2
+{1: 950, 0: 682, 2: 277, 3: 305, 5: 493, 4: 140, 6: 584, 7: 500}
+
+Epoch: [3 | 20] LR: 0.010000 Sess: 3
+74.5
+40.599999999999994
+20.25
+47.0
+{1: 945, 0: 545, 3: 597, 2: 215, 5: 188, 4: 217, 6: 494, 7: 446}
+
+Epoch: [4 | 20] LR: 0.010000 Sess: 3
+80.5
+15.45
+26.4
+64.6
+{1: 861, 0: 749, 3: 156, 2: 153, 4: 183, 5: 345, 7: 476, 6: 816}
+
+Epoch: [5 | 20] LR: 0.010000 Sess: 3
+71.89999999999999
+27.7
+41.8
+63.099999999999994
+{1: 961, 0: 477, 2: 244, 3: 310, 4: 607, 5: 229, 7: 696, 6: 566}
+
+Epoch: [6 | 20] LR: 0.002000 Sess: 3
+76.44999999999999
+32.5
+32.4
+71.55000000000001
+{1: 952, 0: 577, 2: 380, 3: 270, 5: 461, 4: 187, 7: 654, 6: 777}
+
+Epoch: [7 | 20] LR: 0.002000 Sess: 3
+77.7
+31.949999999999996
+34.35
+73.9
+{1: 931, 0: 623, 2: 422, 3: 217, 5: 495, 4: 192, 7: 701, 6: 777}
+
+Epoch: [8 | 20] LR: 0.002000 Sess: 3
+79.85
+33.5
+33.75
+74.25
+{1: 945, 0: 652, 2: 331, 3: 339, 5: 435, 4: 240, 7: 709, 6: 776}
+
+Epoch: [9 | 20] LR: 0.002000 Sess: 3
+71.65
+40.25
+38.25
+74.6
+{1: 957, 0: 476, 2: 370, 3: 435, 4: 263, 5: 502, 7: 751, 6: 741}
+
+Epoch: [10 | 20] LR: 0.002000 Sess: 3
+69.25
+44.3
+26.25
+74.15
+{1: 967, 0: 418, 2: 385, 3: 501, 4: 314, 5: 211, 7: 675, 6: 808}
+
+Epoch: [11 | 20] LR: 0.000400 Sess: 3
+68.75
+42.7
+31.799999999999997
+72.55
+{1: 964, 0: 411, 2: 433, 3: 421, 5: 395, 4: 241, 7: 742, 6: 709}
+
+Epoch: [12 | 20] LR: 0.000400 Sess: 3
+68.35
+42.0
+35.35
+75.80000000000001
+{1: 951, 0: 416, 2: 484, 3: 356, 5: 431, 4: 276, 7: 749, 6: 767}
+
+Epoch: [13 | 20] LR: 0.000400 Sess: 3
+66.75
+42.9
+35.5
+74.9
+{1: 962, 0: 373, 2: 475, 3: 383, 4: 257, 5: 453, 7: 747, 6: 751}
+
+Epoch: [14 | 20] LR: 0.000400 Sess: 3
+66.9
+43.0
+34.099999999999994
+72.44999999999999
+{1: 961, 0: 377, 2: 486, 3: 374, 5: 487, 4: 195, 7: 756, 6: 693}
+
+Epoch: [15 | 20] LR: 0.000400 Sess: 3
+72.75
+41.45
+32.8
+74.25
+{1: 954, 0: 501, 2: 410, 3: 419, 5: 455, 4: 201, 7: 730, 6: 755}
+
+Epoch: [16 | 20] LR: 0.000080 Sess: 3
+72.89999999999999
+41.0
+33.85
+75.5
+{1: 952, 0: 506, 2: 409, 3: 411, 5: 462, 4: 215, 7: 745, 6: 765}
+
+Epoch: [17 | 20] LR: 0.000080 Sess: 3
+69.3
+41.75
+35.65
+74.25
+{1: 957, 0: 429, 2: 444, 3: 391, 5: 493, 4: 220, 7: 741, 6: 744}
+
+Epoch: [18 | 20] LR: 0.000080 Sess: 3
+67.15
+42.5
+35.45
+74.15
+{1: 962, 0: 381, 2: 469, 3: 381, 5: 485, 4: 224, 7: 741, 6: 742}
+
+Epoch: [19 | 20] LR: 0.000080 Sess: 3
+71.05
+41.25
+34.35
+75.55
+{1: 959, 0: 462, 2: 424, 3: 401, 5: 456, 4: 231, 7: 718, 6: 793}
+
+Epoch: [20 | 20] LR: 0.000080 Sess: 3
+The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
+The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
+67.1
+43.75
+35.95
+75.45
+{1: 953, 0: 389, 2: 511, 3: 364, 4: 271, 5: 448, 7: 738, 6: 771}
+2000
+Training meta tasks:	 0
+Training meta tasks:	 1
+Training meta tasks:	 2
+Training meta tasks:	 3
+97.25
+85.25
+92.2
+96.05
+{0: 967, 1: 978, 2: 930, 3: 775, 4: 910, 5: 934, 6: 957, 7: 964}
+Files already downloaded and verified
+Truth: airplane
+Predicted: bird
+Truth: airplane
+Predicted: airplane
+Truth: airplane
+Predicted: bird
+Truth: airplane
+Predicted: airplane
+Truth: airplane
+Predicted: airplane
+Truth: automobile
+Predicted: automobile
+Truth: automobile
+Predicted: automobile
+Truth: automobile
+Predicted: automobile
+Truth: automobile
+Predicted: automobile
+Truth: automobile
+Predicted: automobile
+4
+[2, 2, 2, 2, 2]
+{'min_class': 8, 'max_class': 10, 'task': 4, 'max_task': 5, 'n_train_data': 12000, 'n_test_data': 10000}
+{0: 2000, 1: 2000, 2: 2000, 3: 2000, 4: 2000}
+
+Epoch: [1 | 20] LR: 0.010000 Sess: 4
+79.3
+36.25
+31.9
+62.0
+1.05
+{1: 872, 0: 714, 3: 430, 2: 295, 4: 273, 5: 365, 7: 766, 6: 474, 8: 16, 9: 5}
+
+Epoch: [2 | 20] LR: 0.010000 Sess: 4
+70.3
+26.55
+42.6
+59.60000000000001
+12.399999999999999
+{1: 910, 0: 496, 2: 232, 3: 299, 5: 713, 4: 139, 7: 393, 6: 799, 8: 184, 9: 64}
+
+Epoch: [3 | 20] LR: 0.010000 Sess: 4
+75.75
+21.3
+39.599999999999994
+62.3
+17.15
+{1: 921, 0: 594, 3: 294, 2: 132, 5: 503, 4: 289, 7: 726, 6: 520, 8: 296, 9: 47}
+
+Epoch: [4 | 20] LR: 0.010000 Sess: 4
+81.2
+9.850000000000001
+22.35
+65.9
+25.95
+{1: 811, 0: 813, 3: 161, 2: 36, 4: 60, 5: 387, 7: 507, 6: 811, 9: 363, 8: 156}
+
+Epoch: [5 | 20] LR: 0.010000 Sess: 4
+79.69999999999999
+10.7
+24.049999999999997
+69.44999999999999
+34.75
+{1: 873, 0: 721, 2: 120, 3: 94, 4: 133, 5: 348, 7: 575, 6: 814, 8: 475, 9: 220}
+
+Epoch: [6 | 20] LR: 0.002000 Sess: 4
+77.75
+20.2
+33.2
+65.95
+33.15
+{1: 959, 0: 596, 3: 296, 2: 108, 5: 552, 4: 112, 7: 658, 6: 661, 8: 531, 9: 132}
+
+Epoch: [7 | 20] LR: 0.002000 Sess: 4
+76.35
+23.75
+36.449999999999996
+70.15
+44.64999999999999
+{1: 877, 0: 650, 3: 258, 2: 217, 5: 596, 4: 133, 7: 673, 6: 730, 8: 569, 9: 324}
+
+Epoch: [8 | 20] LR: 0.002000 Sess: 4
+67.5
+30.5
+35.9
+68.4
+41.15
+{1: 945, 0: 405, 3: 354, 2: 256, 5: 567, 4: 151, 7: 633, 6: 735, 8: 601, 9: 222}
+
+Epoch: [9 | 20] LR: 0.002000 Sess: 4
+70.6
+27.55
+39.2
+71.1
+41.6
+{1: 895, 0: 517, 3: 171, 2: 380, 5: 606, 4: 178, 7: 603, 6: 819, 9: 258, 8: 574}
+
+Epoch: [10 | 20] LR: 0.002000 Sess: 4
+61.0
+35.1
+41.85
+69.05
+44.50000000000001
+{1: 942, 0: 278, 3: 308, 2: 394, 5: 584, 4: 253, 7: 675, 6: 706, 8: 683, 9: 207}
+
+Epoch: [11 | 20] LR: 0.000400 Sess: 4
+70.2
+33.65
+39.55
+72.69999999999999
+46.2
+{1: 926, 0: 478, 3: 367, 2: 306, 5: 552, 4: 239, 7: 743, 6: 711, 9: 302, 8: 622}
+
+Epoch: [12 | 20] LR: 0.000400 Sess: 4
+68.1
+36.05
+41.4
+74.45
+45.5
+{1: 942, 0: 420, 3: 380, 2: 341, 5: 525, 4: 303, 7: 747, 6: 742, 9: 274, 8: 636}
+
+Epoch: [13 | 20] LR: 0.000400 Sess: 4
+70.5
+32.25
+39.400000000000006
+75.4
+47.25
+{1: 927, 0: 483, 3: 410, 2: 235, 5: 554, 4: 234, 7: 679, 6: 829, 9: 282, 8: 663}
+
+Epoch: [14 | 20] LR: 0.000400 Sess: 4
+68.0
+35.3
+38.95
+75.35
+47.0
+{1: 936, 0: 424, 3: 377, 2: 329, 5: 541, 4: 238, 7: 659, 6: 848, 9: 270, 8: 670}
+
+Epoch: [15 | 20] LR: 0.000400 Sess: 4
+68.44999999999999
+33.8
+41.7
+73.4
+46.1
+{1: 944, 0: 425, 3: 412, 2: 264, 5: 585, 4: 249, 7: 677, 6: 791, 9: 287, 8: 635}
+
+Epoch: [16 | 20] LR: 0.000080 Sess: 4
+69.1
+35.349999999999994
+41.8
+73.8
+46.55
+{1: 941, 0: 441, 3: 419, 2: 288, 5: 583, 4: 253, 7: 733, 6: 743, 9: 305, 8: 626}
+
+Epoch: [17 | 20] LR: 0.000080 Sess: 4
+68.9
+34.1
+41.6
+75.35
+46.95
+{1: 938, 0: 440, 3: 386, 2: 296, 5: 562, 4: 270, 7: 661, 6: 846, 8: 667, 9: 272}
+
+Epoch: [18 | 20] LR: 0.000080 Sess: 4
+70.6
+31.95
+41.55
+75.0
+48.900000000000006
+{1: 924, 0: 488, 3: 379, 2: 260, 5: 604, 4: 227, 7: 661, 6: 839, 9: 297, 8: 681}
+
+Epoch: [19 | 20] LR: 0.000080 Sess: 4
+69.95
+34.85
+42.349999999999994
+74.55000000000001
+48.9
+{1: 927, 0: 472, 3: 377, 2: 320, 5: 582, 4: 265, 7: 700, 6: 791, 9: 310, 8: 668}
+
+Epoch: [20 | 20] LR: 0.000080 Sess: 4
+The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
+The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
+70.5
+34.0
+42.0
+74.65
+49.35
+{1: 923, 0: 487, 3: 395, 2: 285, 5: 568, 4: 272, 7: 671, 6: 822, 9: 312, 8: 675}
+2000
+Training meta tasks:	 0
+Training meta tasks:	 1
+Training meta tasks:	 2
+Training meta tasks:	 3
+Training meta tasks:	 4
+97.9
+87.25
+92.0
+96.85
+95.05
+{0: 976, 1: 982, 2: 919, 3: 826, 4: 937, 5: 903, 6: 972, 7: 965, 8: 960, 9: 941}
+Files already downloaded and verified
+Truth: airplane
+Predicted: ship
+Truth: airplane
+Predicted: airplane
+Truth: airplane
+Predicted: airplane
+Truth: airplane
+Predicted: airplane
+Truth: airplane
+Predicted: airplane
+Truth: automobile
+Predicted: truck
+Truth: automobile
+Predicted: automobile
+Truth: automobile
+Predicted: automobile
+Truth: automobile
+Predicted: automobile
+Truth: automobile
+Predicted: cat
+End Time: 
+2024-10-13_21:12:33
+

@@ -1,0 +1,29 @@
+nvcc: NVIDIA (R) Cuda compiler driver
+Copyright (c) 2005-2021 NVIDIA Corporation
+Built on Mon_Oct_11_21:27:02_PDT_2021
+Cuda compilation tools, release 11.4, V11.4.152
+Build cuda_11.4.r11.4/compiler.30521435_0
+
+
+
+Collecting numpy==1.18.2
+  Using cached numpy-1.18.2-cp37-cp37m-manylinux1_x86_64.whl (20.2 MB)
+Collecting matplotlib==3.2.1
+  Using cached matplotlib-3.2.1-cp37-cp37m-manylinux1_x86_64.whl (12.4 MB)
+Collecting pandas==1.0.3
+  Using cached pandas-1.0.3-cp37-cp37m-manylinux1_x86_64.whl (10.0 MB)
+Collecting Pillow==7.0.0
+  Using cached Pillow-7.0.0-cp37-cp37m-manylinux1_x86_64.whl (2.1 MB)
+Collecting scipy==1.4.1
+  Using cached scipy-1.4.1-cp37-cp37m-manylinux1_x86_64.whl (26.1 MB)
+Collecting torch==1.4.0
+  Using cached torch-1.4.0-cp37-cp37m-manylinux1_x86_64.whl (753.4 MB)
+ERROR: Could not install packages due to an OSError: [Errno 28] No space left on device
+
+WARNING: You are using pip version 22.0.4; however, version 24.0 is available.
+You should consider upgrading via the '/home/abanyi17/iTAML-master/gpuEnv/bin/python3 -m pip install --upgrade pip' command.
+
+
+
+
+
