@@ -399,8 +399,6 @@ def main():
         testloader = data.DataLoader(testset, batch_size=args.test_batch, shuffle=False, num_workers=args.workers)
         
         
-        ### Saliency
-        saliency_loader = testloader
         
         args.sess=ses      
         if ses>0: 
@@ -413,11 +411,11 @@ def main():
                              testloader=testloader,old_model=copy.deepcopy(model),
                              use_cuda=use_cuda, path=path, 
                              fixed_path=fixed_path, train_path=train_path, infer_path=infer_path)
-        pred = main_learner.learn()
+        main_learner.learn()
 
 
         ### Saliency
-        create_saliency_map(model, infer_path, ses)
+        create_saliency_map(model, infer_path, ses, [0,1,2,3,4,5,6,7,8,9], 1)
         
         if(ses==0):
             fixed_path = path.copy()
