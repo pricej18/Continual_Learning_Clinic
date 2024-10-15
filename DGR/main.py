@@ -40,6 +40,9 @@ def handle_inputs():
     check_for_errors(args, **kwargs)                 # -check whether incompatible options are selected
     return args
 
+def set_saliency(self, mode):
+        self.saliency = mode
+
 def create_saliency_map(model, saliency_loader, pred, ses):
     ##### Create Saliency Maps
     data_iter = iter(saliency_loader)
