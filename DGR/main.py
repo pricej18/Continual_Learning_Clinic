@@ -40,6 +40,56 @@ def handle_inputs():
     check_for_errors(args, **kwargs)                 # -check whether incompatible options are selected
     return args
 
+def create_saliency_map(model, saliency_loader, pred, ses):
+    ##### Create Saliency Maps
+    data_iter = iter(saliency_loader)
+    sal_imgs, sal_labels = next(data_iter)
+    sal_imgs, sal_labels = sal_imgs.cuda(), sal_labels.cuda()
+    predicted = pred.squeeze()
+    
+    
+    model.set_saliency(True)
+    saliency = Saliency(model)
+    #print(sal_labels)
+    
+    fig, ax = plt.subplots(1,4,figsize=(10,4))
+    for ind in range(0,2):
+        input = sal_imgs[ind+1].unsqueeze(0)
+        input.requires_grad = True
+
+        grads = saliency.attribute(input, target=sal_labels[ind+1].item(), abs=False)
+        squeeze_grads = grads.squeeze().cpu().detach()
+        squeeze_grads = torch.unsqueeze(squeeze_grads,0).numpy()
+        grads = np.transpose(squeeze_grads, (1, 2, 0))
+
+        print('Truth:', classes[sal_labels[ind+1]])
+        print('Predicted:', classes[predicted[ind+1]])
+        
+        original_image = np.transpose((sal_imgs[ind+1].cpu().detach().numpy() / 2) + 0.5, (1, 2, 0))       
+
+        methods=["original_image","blended_heat_map"]
+        signs=["all","absolute_value"]
+        titles=["Original Image","Saliency Map"]
+        colorbars=[False,True]
+        for i in range(0,2):
+            plt_fig_axis = (fig,ax[2*ind+i])
+            if i==1:
+                _ = viz.visualize_image_attr(grads, original_image,
+                                            method=methods[i],
+                                            sign=signs[i],
+                                            plt_fig_axis=plt_fig_axis,
+                                            show_colorbar=colorbars[i],
+                                            title=titles[i])
+            else:
+                ax[2*ind+i].imshow(original_image, cmap='gray')
+                ax[2*ind+i].set_title('Original Image')
+                ax[2*ind+i].tick_params(left = False, right = False , labelleft = False , 
+                                labelbottom = False, bottom = False) 
+            
+    fig.savefig(f"SaliencyMaps/MNIST/Sess{ses}SalMap.png")
+    fig.show()  
+    model.set_saliency(False)
+
 
 def run(args, verbose=False):
 
@@ -458,7 +508,7 @@ def run(args, verbose=False):
         print("\n Accuracy of final model on test-set:")
     accs = []
     for i in range(args.contexts):
-        acc = evaluate.test_acc(
+        acc, pred = evaluate.test_acc(
             model, test_datasets[i], verbose=False, test_size=None, context_id=i, allowed_classes=list(
                 range(config['classes_per_context']*i, config['classes_per_context']*(i+1))
             ) if (args.scenario=="task" and not checkattr(args, 'singlehead')) else None,
@@ -480,6 +530,16 @@ def run(args, verbose=False):
         file_name = "{}/dict-{}--n{}{}".format(args.r_dir, param_stamp, "All" if args.acc_n is None else args.acc_n,
                                                "--S{}".format(args.eval_s) if checkattr(args, 'gen_classifier') else "")
         utils.save_object(plotting_dict, file_name)
+   
+    ##Saliency
+    saliencyloader = get_data_loader(dataset, batch_size,cuda=cuda)
+    ses = 0
+    create_saliency_map(model, saliency_loader, pred, ses)
+
+    
+
+
+    
 
     #-------------------------------------------------------------------------------------------------#
 
