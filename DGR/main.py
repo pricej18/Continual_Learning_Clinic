@@ -6,7 +6,7 @@ import torch
 from torch import optim
 # -custom-written libraries
 import utils
-from utils import checkattr
+from utils import checkattr, get_data_loader
 from data.load import get_context_set
 from models import define_models as define
 from models.cl.continual_learner import ContinualLearner
