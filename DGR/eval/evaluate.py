@@ -72,7 +72,7 @@ def test_acc(model, dataset, batch_size=128, test_size=1024, verbose=True, conte
     model.train(mode=mode)
     if verbose:
         print('=> accuracy: {:.3f}'.format(accuracy))
-    return accuracy
+    return accuracy, predicted
 
 
 def test_all_so_far(model, datasets, current_context, iteration, test_size=None, no_context_mask=False,
