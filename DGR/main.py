@@ -510,12 +510,18 @@ def run(args, verbose=False):
     for i in range(args.contexts):
         acc, pred = evaluate.test_acc(
             model, test_datasets[i], verbose=False, test_size=None, context_id=i, allowed_classes=list(
-                range(config['classes_per_context']*i, config['classes_per_context']*(i+1))
+                range(config['classes_per_context']*i, config['classes_per_context']*(i+1))       
             ) if (args.scenario=="task" and not checkattr(args, 'singlehead')) else None,
         )
         if verbose:
             print(" - Context {}: {:.4f}".format(i + 1, acc))
         accs.append(acc)
+          
+        ##Saliency
+        saliencyloader = get_data_loader(dataset, batch_size,cuda=cuda)
+        
+        create_saliency_map(model, saliency_loader, pred, i)
+
     average_accs = sum(accs) / args.contexts
     if verbose:
         print('=> average accuracy over all {} contexts: {:.4f}\n\n'.format(args.contexts, average_accs))
@@ -531,11 +537,7 @@ def run(args, verbose=False):
                                                "--S{}".format(args.eval_s) if checkattr(args, 'gen_classifier') else "")
         utils.save_object(plotting_dict, file_name)
    
-    ##Saliency
-    saliencyloader = get_data_loader(dataset, batch_size,cuda=cuda)
-    ses = 0
-    create_saliency_map(model, saliency_loader, pred, ses)
-
+  
     
 
 
