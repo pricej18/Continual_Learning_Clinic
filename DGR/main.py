@@ -522,7 +522,7 @@ def run(args, verbose=False):
           
         ##Saliency
         batch_size=args.batch
-        saliencyloader = get_data_loader(test_datasets, batch_size,cuda=cuda)
+        saliency_loader = get_data_loader(test_datasets, batch_size,cuda=cuda)
         
         create_saliency_map(model, saliency_loader, pred, i)
 
