@@ -29,20 +29,56 @@ def load_saliency_data(desired_classes, imgs_per_class, args=None):
     transform = transforms.Compose(
     [transforms.ToTensor()])
 
-    if not os.path.isdir("SaliencyMaps/" + args.experiment):
-        os.makedirs("SaliencyMaps/" + args.experiment)
+    if args.experiment:
+        if not os.path.isdir("SaliencyMaps/" + args.experiment):
+            os.makedirs("SaliencyMaps/" + args.experiment)
+    else:
+        if not os.path.isdir("SaliencyMaps/" + args.dataset):
+            mkdir_p("SaliencyMaps/" + args.dataset)
     
     saliencySet = torch.utils.data.Dataset()
-    if args.experiment == "splitMNIST":       
-        saliencySet = datasets.MNIST(root="../Datasets/MNIST/", train=False,
-                  download=True, transform=transform)
+    if args.dataset == "mnist":       
+        saliencySet = datasets.MNIST(root=args.data_path, train=False,
+                  download=True,
+                  transform=transforms.Compose([transforms.ToTensor()]))
+        MEAN = torch.tensor([0.0, 0.0, 0.0])
+        STD = torch.tensor([1.0, 1.0, 1.0])
+                  
+    elif args.dataset == "svhn":       
+        saliencySet = datasets.SVHN(root=args.data_path, split='train',
+                  download=True,
+                  transform=transforms.Compose(
+                                        [transforms.ToTensor(),
+                                        transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))]))
+        saliencySet.classes = ['0','1','2','3','4','5','6','7','8','9']
+        saliencySet.targets = saliencySet.labels
+        MEAN = torch.tensor([0.485, 0.456, 0.406])
+        STD = torch.tensor([0.229, 0.224, 0.225])
+        
+    elif args.dataset == "cifar10":       
+        saliencySet = datasets.CIFAR10(root=args.data_path, train=False,
+                  download=True,
+                  transform=transforms.Compose(
+                                        [transforms.ToTensor(),
+                                        transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))]))
+        MEAN = torch.tensor([0.4914, 0.4822, 0.4465])
+        STD = torch.tensor([0.2023, 0.1994, 0.2010])
+        
+    elif args.dataset == "cifar100":       
+        saliencySet = datasets.CIFAR100(root=args.data_path, train=False,
+                  download=True,
+                  transform=transforms.Compose(
+                                        [transforms.ToTensor(),
+                                        transforms.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761))]))
+        MEAN = torch.tensor([0.5071, 0.4867, 0.4408])
+        STD = torch.tensor([0.2675, 0.2565, 0.2761])
 
     idx = get_indices(saliencySet,desired_classes)
 
     subset = Subset(saliencySet, idx)
 
     # Create a DataLoader for the subset
-    saliencyLoader = DataLoader(subset, batch_size=32)
+    saliencyLoader = DataLoader(subset, batch_size=args.test_batch)
 
     dataiter = iter(saliencyLoader)
     images, labels = next(dataiter)
@@ -58,7 +94,7 @@ def load_saliency_data(desired_classes, imgs_per_class, args=None):
         num += 1
     salImgs = images[salIdx]
     
-    return salImgs, torch.tensor(salLabels), saliencySet.classes
+    return salImgs, torch.tensor(salLabels), saliencySet.classes, MEAN, STD
     
     
     
