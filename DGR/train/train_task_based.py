@@ -384,7 +384,8 @@ def train_cl(model, train_datasets, iters=2000, batch_size=32, baseline='none',
                 allowed_classes = active_classes[-1] if per_context and not per_context_singlehead else active_classes
                 model.construct_memory_set(dataset=class_dataset, n=samples_per_class, label_set=allowed_classes)
             model.compute_means = True
-
+        PATH = f"savedModels/model{context}"  
+        torch.save(model.state_dict(), PATH)
         # Run the callbacks after finishing each context
         for context_cb in context_cbs:
             if context_cb is not None:
@@ -419,6 +420,7 @@ def train_cl(model, train_datasets, iters=2000, batch_size=32, baseline='none',
                             lambda y, x=model.classes_per_context: y % x
                         )
                         previous_datasets = [MemorySetDataset(model.memory_sets, target_transform=target_transform)]
+                    
 
 #------------------------------------------------------------------------------------------------------------#
 
