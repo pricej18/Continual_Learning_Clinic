@@ -29,7 +29,7 @@ def train_cl(model, train_datasets, iters=2000, batch_size=32, baseline='none',
     # Set model in training-mode
     model.train()
     if not os.path.isdir("savedModels/"):
-      mkdir("savedModels/")
+      os.mkdir("savedModels/")
     # Use cuda?
     cuda = model._is_on_cuda()
     device = model._device()
