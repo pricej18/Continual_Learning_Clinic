@@ -1,3 +1,4 @@
+import os
 import torch
 from torch import optim
 from torch.utils.data.dataloader import DataLoader
@@ -27,7 +28,8 @@ def train_cl(model, train_datasets, iters=2000, batch_size=32, baseline='none',
 
     # Set model in training-mode
     model.train()
-
+    if not os.path.isdir("savedModels/"):
+      mkdir("savedModels/")
     # Use cuda?
     cuda = model._is_on_cuda()
     device = model._device()
@@ -384,6 +386,9 @@ def train_cl(model, train_datasets, iters=2000, batch_size=32, baseline='none',
                 allowed_classes = active_classes[-1] if per_context and not per_context_singlehead else active_classes
                 model.construct_memory_set(dataset=class_dataset, n=samples_per_class, label_set=allowed_classes)
             model.compute_means = True
+       
+      
+##SALIENCY
         PATH = f"savedModels/model{context}"  
         torch.save(model.state_dict(), PATH)
         # Run the callbacks after finishing each context
