@@ -176,3 +176,12 @@ def create_saliency_map_dgr(args, config, device, depth, desired_classes, imgs_p
         loadedModel.to(device)
         ### Saliency
         create_saliency_map(loadedModel, ses, args, desired_classes, imgs_per_class)
+
+def main():
+    # Ask for Algorithm
+    # Ask for Class
+    # Create Saliency
+    
+if __name__ == '__main__':
+    main()
+
