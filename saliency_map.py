@@ -11,6 +11,10 @@ from captum.attr import visualization as viz
 import matplotlib.pyplot as plt
 from torch.utils.data import Dataset, Subset, DataLoader
 
+# iTAML Imports
+
+# RPSnet Imports
+
 # DGR Imports
 from models import define_models as define
 
@@ -29,12 +33,17 @@ def load_saliency_data(desired_classes, imgs_per_class, args=None):
     transform = transforms.Compose(
     [transforms.ToTensor()])
 
+    if not os.path.isdir("SaliencyMaps/" + args.experiment):
+        os.makedirs("SaliencyMaps/" + args.experiment)
+        
+    '''
     if args.experiment:
         if not os.path.isdir("SaliencyMaps/" + args.experiment):
             os.makedirs("SaliencyMaps/" + args.experiment)
     else:
         if not os.path.isdir("SaliencyMaps/" + args.dataset):
             mkdir_p("SaliencyMaps/" + args.dataset)
+    '''
     
     saliencySet = torch.utils.data.Dataset()
     if args.dataset == "mnist":       
@@ -179,9 +188,32 @@ def create_saliency_map_dgr(args, config, device, depth, desired_classes, imgs_p
 
 def main():
     # Ask for Algorithm
+    
+    algorithm = input("Which algorithm are you using? ")
+    dataset = input("Which dataset are you using? ")
+    
+
+    model_path = f"saved_models/{algorithm}/{dataset}"
+    if algorithm == "DGR":
+        args, config, device, depth = load_dgr_data()
+        model = load_model(model_path, args, config, device, depth)
+    else:
+        model = load_model(model_path)
+
+    desired_classes = [0,1]
+    imgs_per_class = 5
+    
+    if dataset == "CIFAR100": num_sess = 10
+    else: num_sess = 5
+    
+    for ses in range(num_sess):
+        if algorithm == "DGR":
+            create_saliency_map_dgr(args, config, device, depth, desired_classes, imgs_per_class)
+        else:
+            create_saliency_map(loadedModel, ses, dataset, desired_classes, imgs_per_class)
+    
     # Ask for Class
     # Create Saliency
-    
+
 if __name__ == '__main__':
     main()
-
