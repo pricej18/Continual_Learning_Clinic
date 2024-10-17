@@ -6,7 +6,7 @@ import torch
 from torch import optim
 # -custom-written libraries
 import utils
-from utils import checkattr, get_data_loader
+from utils import checkattr
 from data.load import get_context_set
 from models import define_models as define
 from models.cl.continual_learner import ContinualLearner
@@ -40,131 +40,14 @@ def handle_inputs():
     check_for_errors(args, **kwargs)                 # -check whether incompatible options are selected
     return args
 
-def get_indices(dataset,class_name):
-    indices =  []
-    for i in range(len(dataset.targets)):
-      for j in class_name:
-        if dataset.targets[i] == j:
-            indices.append(i)
-    return indices
-    
-    
-def load_saliency_data(desired_classes, imgs_per_class):
-    transform = transforms.Compose(
-    [transforms.ToTensor(),
-    #transforms.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761))
-    ])
-
-    if not os.path.isdir("SaliencyMaps/" + args.dataset):
-        mkdir_p("SaliencyMaps/" + args.dataset)
-    
-    saliencySet = torch.utils.data.Dataset()
-    if args.dataset == "mnist":       
-        saliencySet = datasets.MNIST(root='SaliencyMaps/Datasets/mnist/', train=False,
-                  download=True, transform=transform)
-
-    idx = get_indices(saliencySet,desired_classes)
-
-    subset = Subset(saliencySet, idx)
-
-    # Create a DataLoader for the subset
-    saliencyLoader = DataLoader(subset, batch_size=args.test_batch)
-
-    dataiter = iter(saliencyLoader)
-    images, labels = next(dataiter)
-
-    salIdx = []
-    salLabels = []
-    for i in range(len(desired_classes)):
-      num=0
-      while len(salIdx) < imgs_per_class*(i+1):
-        if labels[num]==desired_classes[i]:
-          salIdx.append(num)
-          salLabels.append(desired_classes[i])
-        num += 1
-    salImgs = images[salIdx]
-    
-    return salImgs, torch.tensor(salLabels), saliencySet.classes
-    
-    
-    
-def create_saliency_map(model, ses, desired_classes, imgs_per_class):
-    
-    sal_imgs, sal_labels, classes = load_saliency_data(desired_classes, imgs_per_class)
-    sal_imgs, sal_labels = sal_imgs.cuda(), sal_labels.cuda()
-    
-    outputs2, outputs = model(sal_imgs)
-    pred = torch.argmax(outputs2[:,0:args.class_per_task*(1+args.sess)], 1, keepdim=False)
-    predicted = pred.squeeze()        
-    
-    
-    model.set_saliency(True)
-    saliency = Saliency(model)
-    
-    fig, ax = plt.subplots(2,2*imgs_per_class,figsize=(15,5))
-    for ind in range(2*imgs_per_class):
-        input = sal_imgs[ind].unsqueeze(0)
-        input.requires_grad = True
-
-        grads = saliency.attribute(input, target=sal_labels[ind].item(), abs=False)
-        squeeze_grads = grads.squeeze().cpu().detach()
-        squeeze_grads = torch.unsqueeze(squeeze_grads,0).numpy()
-        grads = np.transpose(squeeze_grads, (1, 2, 0))
-        
-        print('Truth:', classes[sal_labels[ind]])
-        print('Predicted:', classes[predicted[ind]])
-
-
-        #original_image = np.transpose((sal_imgs[ind].cpu().detach().numpy() / 2) + 0.5, (1, 2, 0))
-        original_image = np.transpose((sal_imgs[ind].cpu().detach().numpy()), (1, 2, 0))
-        
-        
-        methods=["original_image","blended_heat_map"]
-        signs=["all","absolute_value"]
-        titles=["Original Image","Saliency Map"]
-        colorbars=[False,True]
-
-        # Check if image was misclassified
-        if predicted[ind] != sal_labels[ind]: cmap = "Reds" 
-        else: cmap = "Blues"
-
-
-        if ind > imgs_per_class-1:
-            row = 1
-            ind = ind - imgs_per_class
-        else: row = 0
-
-        for i in range(2):
-            plt_fig_axis = (fig,ax[row][2*ind+i])
-            if i==1:
-                _ = viz.visualize_image_attr(grads, original_image,
-                                            method=methods[i],
-                                            sign=signs[i],
-                                            fig_size=(4,4),
-                                            plt_fig_axis=plt_fig_axis,
-                                            cmap=cmap,
-                                            show_colorbar=colorbars[i],
-                                            title=titles[i])
-            else:
-                ax[row][2*ind+i].imshow(original_image, cmap='gray')
-                ax[row][2*ind+i].set_title('Original Image')
-                ax[row][2*ind+i].tick_params(left = False, right = False , labelleft = False , 
-                                labelbottom = False, bottom = False) 
-    
-    fig.tight_layout()
-    fig.savefig(f"SaliencyMaps/{args.dataset}/Sess{ses}SalMap.png")
-    fig.show()
-    model.set_saliency(False)
-
-
 
 def run(args, verbose=False):
 
     # Create plots- and results-directories if needed
     if not os.path.isdir(args.r_dir):
-        os.makedirs(args.r_dir)
+        os.mkdir(args.r_dir)
     if checkattr(args, 'pdf') and not os.path.isdir(args.p_dir):
-        os.makedirs(args.p_dir)
+        os.mkdir(args.p_dir)
 
     # If only want param-stamp, get it printed to screen and exit
     if checkattr(args, 'get_stamp'):
@@ -575,19 +458,14 @@ def run(args, verbose=False):
         print("\n Accuracy of final model on test-set:")
     accs = []
     for i in range(args.contexts):
-        acc, pred = evaluate.test_acc(
+        acc = evaluate.test_acc(
             model, test_datasets[i], verbose=False, test_size=None, context_id=i, allowed_classes=list(
-                range(config['classes_per_context']*i, config['classes_per_context']*(i+1))       
+                range(config['classes_per_context']*i, config['classes_per_context']*(i+1))
             ) if (args.scenario=="task" and not checkattr(args, 'singlehead')) else None,
         )
         if verbose:
             print(" - Context {}: {:.4f}".format(i + 1, acc))
         accs.append(acc)
-          
-    
-        ### Saliency
-        create_saliency_map(model, i, [0,1], 5)
-
     average_accs = sum(accs) / args.contexts
     if verbose:
         print('=> average accuracy over all {} contexts: {:.4f}\n\n'.format(args.contexts, average_accs))
@@ -602,12 +480,6 @@ def run(args, verbose=False):
         file_name = "{}/dict-{}--n{}{}".format(args.r_dir, param_stamp, "All" if args.acc_n is None else args.acc_n,
                                                "--S{}".format(args.eval_s) if checkattr(args, 'gen_classifier') else "")
         utils.save_object(plotting_dict, file_name)
-   
-  
-    
-
-
-    
 
     #-------------------------------------------------------------------------------------------------#
 
