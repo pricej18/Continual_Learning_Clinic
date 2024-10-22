@@ -18,7 +18,7 @@ from params.param_stamp import get_param_stamp, get_param_stamp_from_args, visdo
 from params.param_values import set_method_options,check_for_errors,set_default_values
 from eval import evaluate, callbacks as cb
 from visual import visual_plt
-
+from saliency import get_indices, load_saliency_data, create_saliency_map
 
 ## Function for specifying input-options and organizing / checking them
 def handle_inputs():
@@ -525,6 +525,9 @@ def run(args, verbose=False):
         # -print name of generated plot on screen
         if verbose:
             print("\nGenerated plot: {}\n".format(plot_name))
+    
+    for ses in range(1, 6):
+        create_saliency_map(model, ses, [0,1], 5)
 
 
 
