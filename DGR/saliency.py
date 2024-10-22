@@ -35,6 +35,7 @@ from captum.attr import visualization as viz
 import matplotlib.pyplot as plt
 
 
+
 #################################################################
 ####### SALIENCY FUNCTIONS
 
@@ -55,14 +56,13 @@ def load_saliency_data(desired_classes, imgs_per_class, dataset_argument):
     #transforms.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761))
     ])
 
-    ### Replace all instances of args.dataset with the dataset_argument
-    if not os.path.isdir("SaliencyMaps/" + args.dataset):
-        mkdir_p("SaliencyMaps/" + args.dataset)
+    if not os.path.isdir("SaliencyMaps/" + dataset_argument):
+        mkdir_p("SaliencyMaps/" + dataset_argument)
     
     saliencySet = torch.utils.data.Dataset()
     
-    if args.dataset == "mnist":
-    ### This line should be changed to - if args.dataset == "splitMNIST":
+    if dataset_argument == "splitMNIST":
+    ### This line should be changed to - if dataset_argument == "splitMNIST":
         saliencySet = datasets.MNIST(root='SaliencyMaps/Datasets/mnist/', train=False,
                   download=True, transform=transform)
 
@@ -157,6 +157,6 @@ def create_saliency_map(model, ses, desired_classes, imgs_per_class, dataset_arg
                                 labelbottom = False, bottom = False) 
     
     fig.tight_layout()
-    fig.savefig(f"SaliencyMaps/{args.dataset}/Sess{ses}SalMap.png")
+    fig.savefig(f"SaliencyMaps/{dataset_argument}/Sess{ses}SalMap.png")
     fig.show()
     model.set_saliency(False)
