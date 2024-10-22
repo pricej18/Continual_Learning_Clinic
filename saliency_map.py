@@ -1,4 +1,4 @@
-## SALIENCY MAP-MAKING
+## SALIENCY MAP-MAKING (DGR Implementation)
 
 import torch
 import torchvision.transforms as transforms
