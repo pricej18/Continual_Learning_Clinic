@@ -47,13 +47,15 @@ def get_indices(dataset,class_name):
             indices.append(i)
     return indices
     
-    
-def load_saliency_data(desired_classes, imgs_per_class):
+
+### Add a dataset_argument to the function call. You can name it whatever you want
+def load_saliency_data(desired_classes, imgs_per_class, dataset_argument):
     transform = transforms.Compose(
     [transforms.ToTensor(),
     #transforms.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761))
     ])
 
+    ### Replace all instances of args.dataset with the dataset_argument
     if not os.path.isdir("SaliencyMaps/" + args.dataset):
         mkdir_p("SaliencyMaps/" + args.dataset)
     
@@ -86,10 +88,10 @@ def load_saliency_data(desired_classes, imgs_per_class):
     return salImgs, torch.tensor(salLabels), saliencySet.classes
     
     
+### Add a dataset_argument to the function call. You can name it whatever you want
+def create_saliency_map(model, ses, desired_classes, imgs_per_class, dataset_argument):
     
-def create_saliency_map(model, ses, desired_classes, imgs_per_class):
-    
-    sal_imgs, sal_labels, classes = load_saliency_data(desired_classes, imgs_per_class)
+    sal_imgs, sal_labels, classes = load_saliency_data(desired_classes, imgs_per_class, dataset_argument)
     sal_imgs, sal_labels = sal_imgs.cuda(), sal_labels.cuda()
     
     with torch.no_grad():
