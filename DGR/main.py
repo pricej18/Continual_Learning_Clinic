@@ -525,9 +525,9 @@ def run(args, verbose=False):
         # -print name of generated plot on screen
         if verbose:
             print("\nGenerated plot: {}\n".format(plot_name))
-    
+    dataset_argument = args.experiment
     for ses in range(1, 6):
-        create_saliency_map(model, ses, [0,1], 5, splitMNIST)
+        create_saliency_map(model, ses, [0,1], 5, dataset_argument)
 
         # Add a dataset argument to the function & pass args.experiment
         #create_saliency_map(model, ses, [0,1], 5, dataset_argument)
