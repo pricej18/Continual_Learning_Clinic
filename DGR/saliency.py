@@ -60,7 +60,9 @@ def load_saliency_data(desired_classes, imgs_per_class, dataset_argument):
         mkdir_p("SaliencyMaps/" + args.dataset)
     
     saliencySet = torch.utils.data.Dataset()
-    if args.dataset == "mnist":       
+    
+    if args.dataset == "mnist":
+    ### This line should be changed to - if args.dataset == "splitMNIST":
         saliencySet = datasets.MNIST(root='SaliencyMaps/Datasets/mnist/', train=False,
                   download=True, transform=transform)
 
