@@ -529,6 +529,8 @@ def run(args, verbose=False):
     for ses in range(1, 6):
         create_saliency_map(model, ses, [0,1], 5)
 
+        # Add a dataset argument to the function & pass args.experiment
+        #create_saliency_map(model, ses, [0,1], 5, dataset_argument)
 
 
 if __name__ == '__main__':
