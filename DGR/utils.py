@@ -1,5 +1,8 @@
 import os
+import errno
 import numpy as np
+import time
+import math
 import pickle
 import torch
 from torchvision import transforms
@@ -63,6 +66,19 @@ def load_object(path):
     with open(path + '.pkl', 'rb') as f:
         return pickle.load(f)
 
+def mkdir_p(path):
+    '''make dir if not exist'''
+    try:
+        os.makedirs(path)
+    except OSError as exc:  # Python >2.5
+        if exc.errno == errno.EEXIST and os.path.isdir(path):
+            pass
+        else:
+            raise
+
+def savefig(fname, dpi=None):
+    dpi = 150 if dpi == None else dpi
+    plt.savefig(fname, dpi=dpi)
 ##-------------------------------------------------------------------------------------------------------------------##
 
 #########################################
