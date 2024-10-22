@@ -1,12 +1,19 @@
  
  iTAML:
+   if not os.path.isdir("SaliencyMaps/" + args.dataset):
+    mkdir_p("SaliencyMaps/" + args.dataset)
+
  
 	outputs2, outputs = model(sal_imgs)
     pred = torch.argmax(outputs2[:,0:args.class_per_task*(1+args.sess)], 1, keepdim=False)
     predicted = pred.squeeze()        
  
  DGR:
- 
+
+  if not os.path.isdir("SaliencyMaps/" + dataset):
+    mkdir_p("SaliencyMaps/" + dataset)
+
+
 	with torch.no_grad():
 		scores = model.classify(sal_imgs)
 		_, pred = torch.max(scores.cpu(), 1)
