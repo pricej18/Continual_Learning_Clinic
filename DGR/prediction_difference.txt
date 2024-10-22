@@ -1,0 +1,13 @@
+ 
+ iTAML:
+ 
+	outputs2, outputs = model(sal_imgs)
+    pred = torch.argmax(outputs2[:,0:args.class_per_task*(1+args.sess)], 1, keepdim=False)
+    predicted = pred.squeeze()        
+ 
+ DGR:
+ 
+	with torch.no_grad():
+		scores = model.classify(sal_imgs)
+		_, pred = torch.max(scores.cpu(), 1)
+		predicted = pred.squeeze()
