@@ -99,11 +99,11 @@ def create_saliency_map(model, ses, desired_classes, imgs_per_class, args):
     with torch.no_grad():
         scores = model.classify(sal_imgs)
         _, pred = torch.max(scores.cpu(), 1)
-        predicted = pred.squeeze()
+    predicted = pred.squeeze()
     	       
     
     
-    
+   
     saliency = Saliency(model)
     
     fig, ax = plt.subplots(2,2*imgs_per_class,figsize=(15,5))
@@ -112,8 +112,8 @@ def create_saliency_map(model, ses, desired_classes, imgs_per_class, args):
         input.requires_grad = True
 
         grads = saliency.attribute(input, target=sal_labels[ind].item(), abs=False)
-        squeeze_grads = grads.squeeze().cpu().detach()
-        squeeze_grads = torch.unsqueeze(squeeze_grads,0).numpy()
+        squeeze_grads = grads.squeeze().detach()
+        squeeze_grads = torch.unsqueeze(squeeze_grads,0).cpu().numpy()
         grads = np.transpose(squeeze_grads, (1, 2, 0))
         
         print('Truth:', classes[sal_labels[ind]])
@@ -159,6 +159,6 @@ def create_saliency_map(model, ses, desired_classes, imgs_per_class, args):
     fig.tight_layout()
     fig.savefig(f"SaliencyMaps/{args.experiment}/Sess{ses}SalMap.png")
     fig.show()
-    
+   
 
     
