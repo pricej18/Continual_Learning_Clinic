@@ -42,27 +42,27 @@ import matplotlib.pyplot as plt
 
 def get_indices(dataset,class_name):
     indices =  []
-    for i in range(len(dataset.targets)):
+    for i in range(len(dataset.targets)): 
       for j in class_name:
         if dataset.targets[i] == j:
             indices.append(i)
     return indices
     
 
-### Add a dataset_argument to the function call. You can name it whatever you want
-def load_saliency_data(desired_classes, imgs_per_class, dataset_argument):
+### Add a args.experiment to the function call. You can name it whatever you want
+def load_saliency_data(desired_classes, imgs_per_class, args):
     transform = transforms.Compose(
     [transforms.ToTensor(),
     #transforms.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761))
     ])
 
-    if not os.path.isdir("SaliencyMaps/" + dataset_argument):
-        mkdir_p("SaliencyMaps/" + dataset_argument)
+    if not os.path.isdir(f'SaliencyMaps/{args.experiment}'):
+        mkdir_p(f'SaliencyMaps/{args.experiment}')
     
     saliencySet = torch.utils.data.Dataset()
     
-    if dataset_argument == "splitMNIST":
-    ### This line should be changed to - if dataset_argument == "splitMNIST":
+    if args.experiment == "splitMNIST":
+    ### This line should be changed to - if args.experiment == "splitMNIST":
         saliencySet = datasets.MNIST(root='SaliencyMaps/Datasets/mnist/', train=False,
                   download=True, transform=transform)
 
@@ -71,7 +71,7 @@ def load_saliency_data(desired_classes, imgs_per_class, dataset_argument):
     subset = Subset(saliencySet, idx)
 
     # Create a DataLoader for the subset
-    saliencyLoader = DataLoader(subset, batch_size=args.test_batch)
+    saliencyLoader = DataLoader(subset, batch_size=args.batch)
 
     dataiter = iter(saliencyLoader)
     images, labels = next(dataiter)
@@ -90,10 +90,10 @@ def load_saliency_data(desired_classes, imgs_per_class, dataset_argument):
     return salImgs, torch.tensor(salLabels), saliencySet.classes
     
     
-### Add a dataset_argument to the function call. You can name it whatever you want
-def create_saliency_map(model, ses, desired_classes, imgs_per_class, dataset_argument):
+### Add a args.experiment to the function call. You can name it whatever you want
+def create_saliency_map(model, ses, desired_classes, imgs_per_class, args):
     
-    sal_imgs, sal_labels, classes = load_saliency_data(desired_classes, imgs_per_class, dataset_argument)
+    sal_imgs, sal_labels, classes = load_saliency_data(desired_classes, imgs_per_class, args)
     sal_imgs, sal_labels = sal_imgs.cuda(), sal_labels.cuda()
     
     with torch.no_grad():
@@ -103,7 +103,7 @@ def create_saliency_map(model, ses, desired_classes, imgs_per_class, dataset_arg
     	       
     
     
-    model.set_saliency(True)
+    
     saliency = Saliency(model)
     
     fig, ax = plt.subplots(2,2*imgs_per_class,figsize=(15,5))
@@ -157,6 +157,8 @@ def create_saliency_map(model, ses, desired_classes, imgs_per_class, dataset_arg
                                 labelbottom = False, bottom = False) 
     
     fig.tight_layout()
-    fig.savefig(f"SaliencyMaps/{dataset_argument}/Sess{ses}SalMap.png")
+    fig.savefig(f"SaliencyMaps/{args.experiment}/Sess{ses}SalMap.png")
     fig.show()
-    model.set_saliency(False)
+    
+
+    
