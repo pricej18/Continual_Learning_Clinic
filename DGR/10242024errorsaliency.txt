@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/usr/lib64/python3.6/runpy.py", line 193, in _run_module_as_main
+    "__main__", mod_spec)
+  File "/usr/lib64/python3.6/runpy.py", line 85, in _run_code
+    exec(code, run_globals)
+  File "/home/robles27/DeepGenerativeReplay/main.py", line 540, in <module>
+    run(args, verbose=True)
+  File "/home/robles27/DeepGenerativeReplay/main.py", line 532, in run
+    create_saliency_map(model, ses, [0,1], 5, args)
+  File "/home/robles27/DeepGenerativeReplay/saliency.py", line 124, in create_saliency_map
+    original_image = np.transpose((sal_imgs[ind].detach().numpy()), (1, 2, 0))
+TypeError: can't convert cuda:0 device type tensor to numpy. Use Tensor.cpu() to copy the tensor to host memory first.
