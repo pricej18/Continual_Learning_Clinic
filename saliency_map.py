@@ -272,7 +272,7 @@ def create_saliency_map(model, ses, dataset, desired_classes, imgs_per_class):
 
         # Generate original images and saliency images
         for i in range(2):
-            print(f"Ind: {ind}\nRow: {row}\nCol: {col}\n")
+            #print(f"Ind: {ind}\nRow: {row}\nCol: {col}\n")
             plt_fig_axis = (fig, ax[row][(2 * col) + i])
             _ = viz.visualize_image_attr(grads, original_image,
                                          method=methods[i],
