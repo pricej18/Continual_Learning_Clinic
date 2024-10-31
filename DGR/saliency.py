@@ -92,30 +92,28 @@ def load_saliency_data(desired_classes, imgs_per_class, args):
     
 ### Add a args.experiment to the function call. You can name it whatever you want
 def create_saliency_map(model, ses, desired_classes, imgs_per_class, args):
-    
+
     sal_imgs, sal_labels, classes = load_saliency_data(desired_classes, imgs_per_class, args)
     sal_imgs, sal_labels = sal_imgs.cuda(), sal_labels.cuda()
-    
+
     with torch.no_grad():
         scores = model.classify(sal_imgs)
-        _, pred = torch.max(scores.cpu(), 1)
+        _, pred = torch.max(scores, 1)
     predicted = pred.squeeze()
-    	       
-    
-    
-   
+
+
     saliency = Saliency(model)
-    
+
     fig, ax = plt.subplots(2,2*imgs_per_class,figsize=(15,5))
     for ind in range(2*imgs_per_class):
         input = sal_imgs[ind].unsqueeze(0)
         input.requires_grad = True
 
         grads = saliency.attribute(input, target=sal_labels[ind].item(), abs=False)
-        squeeze_grads = grads.squeeze().detach()
-        squeeze_grads = torch.unsqueeze(squeeze_grads,0).cpu().numpy()
+        squeeze_grads = grads.squeeze().cpu().detach()
+        squeeze_grads = torch.unsqueeze(squeeze_grads,0).numpy()
         grads = np.transpose(squeeze_grads, (1, 2, 0))
-        
+
         print('Truth:', classes[sal_labels[ind]])
         print('Predicted:', classes[predicted[ind]])
 
@@ -159,6 +157,3 @@ def create_saliency_map(model, ses, desired_classes, imgs_per_class, args):
     fig.tight_layout()
     fig.savefig(f"SaliencyMaps/{args.experiment}/Sess{ses}SalMap.png")
     fig.show()
-   
-
-    
