@@ -23,7 +23,6 @@ chimpanzee
 clock
 cloud
 cockroach
-computer keyboard
 couch
 crab
 crocodile
@@ -38,6 +37,7 @@ girl
 hamster
 house
 kangaroo
+keyboard
 lamp
 lawn-mower
 leopard
@@ -87,8 +87,8 @@ tank
 telephone
 television
 tiger
-train
 tractor
+train
 trout
 tulips
 turtle
@@ -99,6 +99,7 @@ wolf
 woman
 worm
 
+## Not Updated
 classes = (
     'apples', 'aquarium fish', 'baby', 'bear', 'beaver', 'bed', 'bee', 'beetle',
     'bicycle', 'bottles', 'bowls', 'boy', 'bridge', 'bus', 'butterfly', 'camel',
