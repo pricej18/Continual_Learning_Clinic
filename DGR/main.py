@@ -525,12 +525,19 @@ def run(args, verbose=False):
         # -print name of generated plot on screen
         if verbose:
             print("\nGenerated plot: {}\n".format(plot_name))
-    dataset_argument = args.experiment
+    
+    
+    
     for ses in range(1, 6):
-        create_saliency_map(model, ses, [0,1], 5, dataset_argument)
+        loaded_model = define.define_classifier(args=args, config=config, device=device, depth=depth)
 
-        # Add a dataset argument to the function & pass args.experiment
-        #create_saliency_map(model, ses, [0,1], 5, dataset_argument)
+        path = f"savedModels/model{ses+1}"
+        loaded_model.load_state_dict(torch.load(path, map_location=torch.device('cpu')))
+        loaded_model.to(device)
+
+        create_saliency_map(loaded_model, ses, [0,1], 5, args)
+        pass
+
 
 
 if __name__ == '__main__':
