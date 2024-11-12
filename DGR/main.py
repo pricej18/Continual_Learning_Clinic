@@ -531,7 +531,7 @@ def run(args, verbose=False):
     for ses in range(1, 6):
         loaded_model = define.define_classifier(args=args, config=config, device=device, depth=depth)
 
-        path = f"savedModels/model{ses+1}"
+        path = f"savedModels/model{ses}"
         loaded_model.load_state_dict(torch.load(path, map_location=torch.device('cpu')))
         loaded_model.to(device)
 
