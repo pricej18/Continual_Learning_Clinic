@@ -15,6 +15,9 @@ from torch.utils.data import Dataset, Subset, DataLoader
 
 # iTAML Imports
 from basic_net import *
+from test import combined_path
+
+
 class iTAMLArgs:
     checkpoint = "results/cifar100/meta_mnist_T5_47"
     savepoint = "models/" + "/".join(checkpoint.split("/")[1:])
@@ -122,7 +125,8 @@ class cifar100Args:
     gamma = 0.5
 
 # DGR Imports
-#from models import define_models as define
+import define_models as define
+import dgr_parameters
 
 
 class SalGenArgs:
@@ -130,7 +134,9 @@ class SalGenArgs:
     dataset = "mnist"
     args = None
     desired_classes = [0,1]
-    class_per_task = 10 if dataset == "cifar100" else 2
+    class_per_task = 2
+    num_class = 10
+    distill = False
 
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 
@@ -140,16 +146,14 @@ def generate_predictions(algorithm, model, ses, images, **kwargs):
         model.set_saliency(True)
         outputs2 = model(images)
         pred = torch.argmax(outputs2[:, 0:SalGenArgs.class_per_task * (1 + ses)], 1, keepdim=False)
-        predicted = pred.squeeze()
     elif algorithm == "RPSnet":
         outputs = model(images, kwargs['infer_path'], -1)
         _, pred = torch.max(outputs, 1)
-        predicted = pred.squeeze()
     elif algorithm == "DGR":
-        model.eval()
         with torch.no_grad():
             scores = model.classify(images)
             _, pred = torch.max(scores, 1)
+    predicted = pred.squeeze()
 
     return predicted
 
@@ -226,9 +230,8 @@ def load_saliency_data(dataset, desired_classes, imgs_per_class):
             if labels[num] == desired_classes[i]:
                 salIdx.append(num)
                 salLabels.append(desired_classes[i])
-            #num += 1
-            #num += 2
-            num += 4
+            #num += 4
+            num += 16
     salImgs = images[salIdx]
 
     return salImgs, torch.tensor(salLabels), saliencySet.classes, MEAN, STD
@@ -347,27 +350,39 @@ def create_saliency_map(model, ses, dataset, desired_classes, imgs_per_class):
 
 
     fig.tight_layout()
-    fig.savefig(f"SaliencyMaps/{SalGenArgs.algorithm}/{SalGenArgs.dataset}/Sess{ses}SalMap.png")
+    if SalGenArgs.algorithm == "DGR" and SalGenArgs.distill:
+        fig_save_path = f"SaliencyMaps/{SalGenArgs.algorithm}/{SalGenArgs.dataset}/distill"
+    else:
+        fig_save_path = f"SaliencyMaps/{SalGenArgs.algorithm}/{SalGenArgs.dataset}"
+    fig.savefig(f"{fig_save_path}/Sess{ses}SalMap.png")
     plt.close()
-    torch.save(compare_grads, f"SaliencyMaps/{SalGenArgs.algorithm}/{SalGenArgs.dataset}/compare_dict_sess{ses}.pt")
+    torch.save(compare_grads, f"{fig_save_path}/compare_dict_sess{ses}.pt")
     #fig.show()
 
 
 def load_model(algorithm, dataset, ses, **kwargs):
-    if algorithm == "RPSnet": model_path = f"Saliency/{algorithm}/{dataset}/session_{ses}_0_model_best.pth.tar"
-    else: model_path = f"Saliency/{algorithm}/{dataset}/session_{ses}_model_best.pth.tar"
     model = None
+    match algorithm:
+        case "iTAML":
+            model_path = f"Saliency/{algorithm}/{dataset}/session_{ses}_model_best.pth.tar"
+            model = BasicNet1(kwargs['args'], 0, device=device)
+        case "RPSnet":
+            model_path = f"Saliency/{algorithm}/{dataset}/session_{ses}_0_model_best.pth.tar"
+            if dataset == "mnist":
+                model = RPS_net_mlp(kwargs['args'])
+            else:
+                model = RPS_net_cifar(kwargs['args'])
+        case "DGR":
+            if SalGenArgs.distill:
+                model_path = f"Saliency/{algorithm}/distill/model{ses+1}"
+            else:
+                model_path = f"Saliency/{algorithm}/model{ses + 1}"
+            model = define.define_classifier(args=dgr_parameters.args, config=dgr_parameters.config,
+                                            device=dgr_parameters.device, depth=dgr_parameters.depth)
 
-    if algorithm == "iTAML":
-        model = BasicNet1(kwargs['args'], 0, device=device)
-    elif algorithm == "RPSnet":
-        if dataset == "mnist":
-            model = RPS_net_mlp(kwargs['args'])
-        else:
-            model = RPS_net_cifar(kwargs['args'])
     model_data = torch.load(model_path, map_location=device, weights_only=False)
-    if algorithm == "iTAML": model.load_state_dict(model_data)
-    else: model.load_state_dict(model_data['state_dict'])
+    if algorithm == "RPSnet": model.load_state_dict(model_data['state_dict'])
+    else: model.load_state_dict(model_data)
     model.eval()
 
     return model
@@ -383,19 +398,24 @@ def main(algorithm = None, dataset = None, start_sess = 0):
     SalGenArgs.algorithm = algorithm
     SalGenArgs.dataset = dataset
 
-    num_sess = 10 if SalGenArgs.dataset == "cifar100" else 5
-    desired_classes = range(10) if SalGenArgs.dataset == "cifar100" else range(2)
-    imgs_per_class = 1 if SalGenArgs.dataset == "cifar100" else 5
+    if SalGenArgs.dataset == "cifar100":
+        num_sess = 10
+        imgs_per_class = 1
+        #imgs_per_class = 5
+        SalGenArgs.class_per_task = 10
+        SalGenArgs.num_class = 100
+    else:
+        num_sess = 5
+        imgs_per_class = 5
+        SalGenArgs.class_per_task = 2
+        SalGenArgs.num_class = 10
 
     model = None
     for ses in range(start_sess, num_sess):
-        if SalGenArgs.algorithm == "DGR":
-            print("DGR")
-            #args, config, device, depth = load_dgr_data()
-            #model = load_model(model_path, args, config, device, depth)
-        elif SalGenArgs.algorithm == "iTAML":
+        if SalGenArgs.algorithm == "iTAML":
             SalGenArgs.args = iTAMLArgs
             SalGenArgs.args.dataset = SalGenArgs.dataset
+            SalGenArgs.args.num_class = SalGenArgs.num_class
         else:
             if SalGenArgs.dataset == "mnist":
                 SalGenArgs.args = mnistArgs
@@ -408,17 +428,15 @@ def main(algorithm = None, dataset = None, start_sess = 0):
 
         print(f'Session {ses}')
         print('#################################################################################')
-        if SalGenArgs.algorithm == "DGR":
-            #create_saliency_map_dgr(args, config, device, depth, desired_classes, num_sess)
-            pass
-        else:
-            create_saliency_map(model, ses, SalGenArgs.dataset, SalGenArgs.desired_classes, imgs_per_class)
-            #create_saliency_map(model, ses, SalGenArgs.dataset, range(2), 5)
-            print('\n\n')
+        create_saliency_map(model, ses, SalGenArgs.dataset, SalGenArgs.desired_classes, imgs_per_class)
+        #create_saliency_map(model, ses, SalGenArgs.dataset, range(2), 5)
+        print('\n\n')
 
 if __name__ == '__main__':
 
+    SalGenArgs.algorithm = "DGR"
     SalGenArgs.dataset = "mnist"
+    SalGenArgs.distill = True
 
     params = ((0, [0,1]),
               (1, [2,3]),
@@ -439,59 +457,46 @@ if __name__ == '__main__':
 
     end_sess = 10 if SalGenArgs.dataset == "cifar100" else 5
 
-    #start_sess, SalGenArgs.desired_classes = 0, [0,1]
-    start_sess, SalGenArgs.desired_classes = 0, [0,1,2,3,4,5,6,7,8,9]
 
-    main("iTAML", "cifar100", start_sess)
-
-    '''
-    for k in range(end_sess):
+    #for k in range(end_sess):
+    for k in range(1):
 
         if SalGenArgs.dataset == "cifar100":
             start_sess, SalGenArgs.desired_classes = c100Params[k]
+            #start_sess, SalGenArgs.desired_classes = params[k]
         else:
             start_sess, SalGenArgs.desired_classes = params[k]
 
-        main("iTAML", "mnist", start_sess)
+        main(SalGenArgs.algorithm, SalGenArgs.dataset, start_sess)
 
-        save_path = f"CroppedMaps/{SalGenArgs.algorithm}/{SalGenArgs.dataset}"
+        if SalGenArgs.algorithm == "DGR" and SalGenArgs.distill:
+            save_path = f"CroppedMaps/{SalGenArgs.algorithm}/{SalGenArgs.dataset}/distill"
+        else:
+            save_path = f"CroppedMaps/{SalGenArgs.algorithm}/{SalGenArgs.dataset}"
         if not os.path.isdir(save_path):
             os.makedirs(save_path)
 
         imgs_per_sess = 10 if SalGenArgs.dataset == "cifar100" else 2
         for j in range(imgs_per_sess):
-            image_paths = [f'SaliencyMaps/{SalGenArgs.algorithm}/{SalGenArgs.dataset}/Sess{i}SalMap.png' for i in range(start_sess, end_sess)]
+            if SalGenArgs.algorithm == "DGR" and SalGenArgs.distill:
+                image_path = f"SaliencyMaps/{SalGenArgs.algorithm}/{SalGenArgs.dataset}/distill"
+            else:
+                image_path = f"SaliencyMaps/{SalGenArgs.algorithm}/{SalGenArgs.dataset}"
+            image_paths = [f'{image_path}/Sess{i}SalMap.png' for i in range(start_sess, end_sess)]
             crop_and_combine_images(image_paths,
                                     f"{save_path}/Class{SalGenArgs.desired_classes[j]}Cropped.png",
-                                    False, (j*5)+1)
-    
-    combined_path = f"CroppedMaps/{SalGenArgs.algorithm}/All{SalGenArgs.dataset.capitalize()}Cropped.png"
-    if SalGenArgs.dataset == "cifar100":
-        cropped_paths = [f'CroppedMaps/{SalGenArgs.algorithm}/{SalGenArgs.dataset}/Class{i}Cropped.png' for i in range(0, 10, 100)]
+                                    False, #j+1)#(j*5)+1)
+                                    (j*5)+4-j)
+
+
+    if SalGenArgs.algorithm == "DGR" and SalGenArgs.distill:
+        crop_path = f"CroppedMaps/{SalGenArgs.algorithm}/{SalGenArgs.dataset}/distill"
+        combined_path = f"CroppedMaps/{SalGenArgs.algorithm}/{SalGenArgs.dataset}/distill/All{SalGenArgs.dataset.capitalize()}Cropped.png"
     else:
-        cropped_paths = [f'CroppedMaps/{SalGenArgs.algorithm}/{SalGenArgs.dataset}/Class{i}Cropped.png' for i in range(2)]
-    combine_cropped(cropped_paths, combined_path)
-    '''
-
-    '''
-    save_path = f"CroppedMaps/{SalGenArgs.algorithm}/{SalGenArgs.dataset}"
-    if not os.path.isdir(save_path):
-        os.makedirs(save_path)
-
-    imgs_per_sess = 10 if SalGenArgs.dataset == "cifar100" else 2
-    for j in range(imgs_per_sess):
-        image_paths = [f'SaliencyMaps/{SalGenArgs.algorithm}/{SalGenArgs.dataset}/Sess{i}SalMap.png' for i in
-                       range(start_sess, end_sess)]
-        crop_and_combine_images(image_paths,
-                                f"{save_path}/Class{SalGenArgs.desired_classes[j]}Cropped.png",
-                                False, (j*5)+1)
-
-    combined_path = f"CroppedMaps/{SalGenArgs.algorithm}/All{SalGenArgs.dataset.capitalize()}Cropped.png"
+        crop_path = f"CroppedMaps/{SalGenArgs.algorithm}/{SalGenArgs.dataset}"
+        combined_path = f"CroppedMaps/{SalGenArgs.algorithm}/All{SalGenArgs.dataset.capitalize()}Cropped.png"
     if SalGenArgs.dataset == "cifar100":
-        cropped_paths = [f'CroppedMaps/{SalGenArgs.algorithm}/{SalGenArgs.dataset}/Class{i}Cropped.png' for i in
-                         range(0, 10, 100)]
+        cropped_paths = [f'{crop_path}/Class{i}Cropped.png' for i in range(0, 10, 100)]
     else:
-        cropped_paths = [f'CroppedMaps/{SalGenArgs.algorithm}/{SalGenArgs.dataset}/Class{i}Cropped.png' for i in
-                         range(2)]
+        cropped_paths = [f'{crop_path}/Class{i}Cropped.png' for i in range(10)]
     combine_cropped(cropped_paths, combined_path)
-    '''
