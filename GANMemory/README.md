@@ -1,0 +1,1 @@
+GANMemory folder
