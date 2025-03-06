@@ -165,7 +165,6 @@ class RPS_net_mlp(nn.Module):
 
         def forward(self, x):
 
-            print("Forward: " + str(x.shape))
             x = x.view(-1, 784)
             y = self.mlp1(x)
             y = F.relu(y)

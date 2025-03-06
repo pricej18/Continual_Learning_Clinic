@@ -1,0 +1,87 @@
+import torch
+import torchvision
+import torchvision.transforms as transforms
+import matplotlib.pyplot as plt
+import numpy as np
+import os
+from captum.attr import Saliency
+from networkx import config
+from torch.onnx.symbolic_opset11 import argsort
+from torch.xpu import device
+
+from main import SimpleNN
+
+# CIFAR-10 class names
+class_names = ['plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
+
+
+def load_model(model_path):
+    model = SimpleNN()
+    checkpoint = torch.load(model_path, weights_only=True)
+    model.load_state_dict(checkpoint['model_state_dict'])
+    model.eval()
+    return model
+
+
+def get_first_class_image():
+    transform = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+    ])
+    trainset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)
+    first_class_indices = [i for i, label in enumerate(trainset.targets) if label == 0]
+    first_class_image, true_label = trainset[first_class_indices[0]]
+    return first_class_image.unsqueeze(0), true_label
+
+
+def generate_saliency_map(model, image, true_label):
+    saliency = Saliency(model)
+    image.requires_grad = True
+    attribution = saliency.attribute(image, target=true_label)
+    return attribution
+
+
+def save_combined_saliency_image(image, attributions, predicted_labels, true_label, save_path):
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
+    num_models = len(attributions)
+    fig, axes = plt.subplots(1, num_models + 1, figsize=(15, 5))
+
+    # Original image
+    image_np = image.squeeze().cpu().detach().numpy().transpose(1, 2, 0)
+    image_np = (image_np - image_np.min()) / (image_np.max() - image_np.min())
+    axes[0].imshow(image_np)
+    axes[0].set_title('Original Image')
+    axes[0].axis('off')
+
+    # Saliency maps
+    for i in range(num_models):
+        attribution = attributions[i].squeeze().cpu().detach().numpy()
+        attribution = np.mean(attribution, axis=0)  # Aggregate across color channels
+        axes[i + 1].imshow(image_np)
+        axes[i + 1].imshow(attribution, cmap='Blues', alpha=0.5)
+        predicted_label_name = class_names[predicted_labels[i]]
+        true_label_name = class_names[true_label]
+        axes[i + 1].set_title(f'Session {i + 1}\nPredicted: {predicted_label_name}\nTrue: {true_label_name}')
+        axes[i + 1].axis('off')
+
+    plt.tight_layout()
+    plt.savefig(save_path)
+    plt.close()
+
+
+if __name__ == '__main__':
+    image, true_label = get_first_class_image()
+    attributions = []
+    predicted_labels = []
+    for task_id in range(10):
+        model_path = f'./saved_models/model_task_{task_id}.pth.tar'
+        model = load_model(model_path)
+        predicted_label = model(image).argmax(dim=1).item()
+        predicted_labels.append(predicted_label)
+        attribution = generate_saliency_map(model, image, true_label)
+        attributions.append(attribution)
+
+    save_path = './saliency_maps/combined_saliency.png'
+    save_combined_saliency_image(image, attributions, predicted_labels, true_label, save_path)
+
+    

@@ -318,8 +318,7 @@ class RPS_net_cifar(nn.Module):
             
             
             if len(self.final_layers) < 1:
-                #self.final_layer1 = nn.Linear(a5, 100)
-                self.final_layer1 = nn.Linear(a5, args.num_class)
+                self.final_layer1 = nn.Linear(a5, self.args.num_class)
                 self.final_layers.append(self.final_layer1)
 
             

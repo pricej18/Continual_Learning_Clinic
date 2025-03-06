@@ -1,0 +1,476 @@
+Using TensorFlow backend.
+The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
+The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
+{'epochs': 10, 'checkpoint': 'results/mnist/RPS_net_mnist', 'savepoint': 'results/mnist/pathnet_mnist', 'dataset': 'MNIST', 'num_class': 10, 'class_per_task': 2, 'M': 8, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 128, 'test_batch': 128, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [6, 8, 16], 'gamma': 0.5, 'rigidness_coff': 2.5, 'jump': 1}
+    Total params: 2.92M
+Load Shape:  (10000, 784)
+Starting with session 0
+test case : 0
+#################################################################################
+path
+ [[1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]]
+fixed_path
+ [[0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]]
+train_path
+ [[1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]]
+infer_path
+ [[1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]]
+Number of layers being trained :  3
+Start Epoch: 0
+Epochs: 10
+
+Epoch: [1 | 10] LR: 0.001000 Sess: 0
+
+Epoch: [2 | 10] LR: 0.001000 Sess: 0
+
+Epoch: [3 | 10] LR: 0.001000 Sess: 0
+
+Epoch: [4 | 10] LR: 0.001000 Sess: 0
+
+Epoch: [5 | 10] LR: 0.001000 Sess: 0
+
+Epoch: [6 | 10] LR: 0.001000 Sess: 0
+
+Epoch: [7 | 10] LR: 0.000500 Sess: 0
+
+Epoch: [8 | 10] LR: 0.000500 Sess: 0
+
+Epoch: [9 | 10] LR: 0.000250 Sess: 0
+
+Epoch: [10 | 10] LR: 0.000250 Sess: 0
+Best acc:
+99.95271867612293
+session_0_0_log.txt
+99.952719 0
+tensor([[9.7900e+02, 1.0000e+00, 0.0000e+00,  ..., 0.0000e+00, 0.0000e+00,
+         0.0000e+00],
+        [0.0000e+00, 1.1340e+03, 0.0000e+00,  ..., 0.0000e+00, 0.0000e+00,
+         0.0000e+00],
+        [0.0000e+00, 0.0000e+00, 0.0000e+00,  ..., 0.0000e+00, 0.0000e+00,
+         0.0000e+00],
+        ...,
+        [0.0000e+00, 0.0000e+00, 0.0000e+00,  ..., 0.0000e+00, 0.0000e+00,
+         0.0000e+00],
+        [0.0000e+00, 0.0000e+00, 0.0000e+00,  ..., 0.0000e+00, 0.0000e+00,
+         0.0000e+00],
+        [0.0000e+00, 0.0000e+00, 0.0000e+00,  ..., 0.0000e+00, 0.0000e+00,
+         0.0000e+00]])
+done with session 0
+#################################################################################
+10
+Using TensorFlow backend.
+/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/torch/nn/_reduction.py:42: UserWarning: size_average and reduce args will be deprecated, please use reduction='none' instead.
+  warnings.warn(warning.format(ret))
+The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
+The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
+{'epochs': 10, 'checkpoint': 'results/mnist/RPS_net_mnist', 'savepoint': 'results/mnist/pathnet_mnist', 'dataset': 'MNIST', 'num_class': 10, 'class_per_task': 2, 'M': 8, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 128, 'test_batch': 128, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [6, 8, 16], 'gamma': 0.5, 'rigidness_coff': 2.5, 'jump': 1}
+    Total params: 2.92M
+Load Shape:  (10000, 784)
+session_0_0_log.txt
+99.952719 0
+Starting with session 1
+test case : 0
+#################################################################################
+path
+ [[0. 0. 0. 0. 0. 0. 0. 1.]
+ [0. 0. 0. 0. 0. 1. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 1. 0. 0.]
+ [0. 0. 0. 0. 1. 0. 0. 0.]
+ [0. 0. 1. 0. 0. 0. 0. 0.]
+ [0. 0. 1. 0. 0. 0. 0. 0.]
+ [0. 0. 1. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 1. 0. 0.]]
+fixed_path
+ [[1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]]
+train_path
+ [[0. 0. 0. 0. 0. 0. 0. 1.]
+ [0. 0. 0. 0. 0. 1. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 1. 0. 0.]
+ [0. 0. 0. 0. 1. 0. 0. 0.]
+ [0. 0. 1. 0. 0. 0. 0. 0.]
+ [0. 0. 1. 0. 0. 0. 0. 0.]
+ [0. 0. 1. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 1. 0. 0.]]
+infer_path
+ [[1. 0. 0. 0. 0. 0. 0. 1.]
+ [1. 0. 0. 0. 0. 1. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 1. 0. 0.]
+ [1. 0. 0. 0. 1. 0. 0. 0.]
+ [1. 0. 1. 0. 0. 0. 0. 0.]
+ [1. 0. 1. 0. 0. 0. 0. 0.]
+ [1. 0. 1. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 1. 0. 0.]]
+Number of layers being trained :  3
+Start Epoch: 0
+Epochs: 10
+
+Epoch: [1 | 10] LR: 0.001000 Sess: 1
+
+Epoch: [2 | 10] LR: 0.001000 Sess: 1
+
+Epoch: [3 | 10] LR: 0.001000 Sess: 1
+
+Epoch: [4 | 10] LR: 0.001000 Sess: 1
+
+Epoch: [5 | 10] LR: 0.001000 Sess: 1
+
+Epoch: [6 | 10] LR: 0.001000 Sess: 1
+
+Epoch: [7 | 10] LR: 0.000500 Sess: 1
+
+Epoch: [8 | 10] LR: 0.000500 Sess: 1
+
+Epoch: [9 | 10] LR: 0.000250 Sess: 1
+
+Epoch: [10 | 10] LR: 0.000250 Sess: 1
+Best acc:
+99.54293961991822
+session_1_0_log.txt
+99.54294 0
+tensor([[9.7400e+02, 0.0000e+00, 2.0000e+00,  ..., 0.0000e+00, 0.0000e+00,
+         0.0000e+00],
+        [1.0000e+00, 1.1250e+03, 6.0000e+00,  ..., 0.0000e+00, 0.0000e+00,
+         0.0000e+00],
+        [1.0000e+00, 1.0000e+00, 1.0280e+03,  ..., 0.0000e+00, 0.0000e+00,
+         0.0000e+00],
+        ...,
+        [0.0000e+00, 0.0000e+00, 0.0000e+00,  ..., 0.0000e+00, 0.0000e+00,
+         0.0000e+00],
+        [0.0000e+00, 0.0000e+00, 0.0000e+00,  ..., 0.0000e+00, 0.0000e+00,
+         0.0000e+00],
+        [0.0000e+00, 0.0000e+00, 0.0000e+00,  ..., 0.0000e+00, 0.0000e+00,
+         0.0000e+00]])
+done with session 1
+#################################################################################
+10
+Using TensorFlow backend.
+/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/torch/nn/_reduction.py:42: UserWarning: size_average and reduce args will be deprecated, please use reduction='none' instead.
+  warnings.warn(warning.format(ret))
+The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
+The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
+{'epochs': 10, 'checkpoint': 'results/mnist/RPS_net_mnist', 'savepoint': 'results/mnist/pathnet_mnist', 'dataset': 'MNIST', 'num_class': 10, 'class_per_task': 2, 'M': 8, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 128, 'test_batch': 128, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [6, 8, 16], 'gamma': 0.5, 'rigidness_coff': 2.5, 'jump': 1}
+    Total params: 2.92M
+Load Shape:  (10000, 784)
+session_1_0_log.txt
+99.54294 0
+Starting with session 2
+test case : 0
+#################################################################################
+path
+ [[0. 0. 0. 1. 0. 0. 0. 0.]
+ [0. 1. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 1.]
+ [0. 0. 0. 1. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 1. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 1.]
+ [0. 0. 0. 1. 0. 0. 0. 0.]]
+fixed_path
+ [[1. 0. 0. 0. 0. 0. 0. 1.]
+ [1. 0. 0. 0. 0. 1. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 1. 0. 0.]
+ [1. 0. 0. 0. 1. 0. 0. 0.]
+ [1. 0. 1. 0. 0. 0. 0. 0.]
+ [1. 0. 1. 0. 0. 0. 0. 0.]
+ [1. 0. 1. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 1. 0. 0.]]
+train_path
+ [[0. 0. 0. 1. 0. 0. 0. 0.]
+ [0. 1. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 1.]
+ [0. 0. 0. 1. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 1. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 1.]
+ [0. 0. 0. 1. 0. 0. 0. 0.]]
+infer_path
+ [[1. 0. 0. 1. 0. 0. 0. 1.]
+ [1. 1. 0. 0. 0. 1. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 1. 0. 1.]
+ [1. 0. 0. 1. 1. 0. 0. 0.]
+ [1. 0. 1. 0. 0. 1. 0. 0.]
+ [1. 0. 1. 0. 0. 0. 0. 0.]
+ [1. 0. 1. 0. 0. 0. 0. 1.]
+ [1. 0. 0. 1. 0. 1. 0. 0.]]
+Number of layers being trained :  3
+Start Epoch: 0
+Epochs: 10
+
+Epoch: [1 | 10] LR: 0.001000 Sess: 2
+
+Epoch: [2 | 10] LR: 0.001000 Sess: 2
+
+Epoch: [3 | 10] LR: 0.001000 Sess: 2
+
+Epoch: [4 | 10] LR: 0.001000 Sess: 2
+
+Epoch: [5 | 10] LR: 0.001000 Sess: 2
+
+Epoch: [6 | 10] LR: 0.001000 Sess: 2
+
+Epoch: [7 | 10] LR: 0.000500 Sess: 2
+
+Epoch: [8 | 10] LR: 0.000500 Sess: 2
+
+Epoch: [9 | 10] LR: 0.000250 Sess: 2
+
+Epoch: [10 | 10] LR: 0.000250 Sess: 2
+Best acc:
+98.8227491294976
+session_2_0_log.txt
+98.822749 0
+tensor([[9.6900e+02, 1.0000e+00, 1.0000e+00,  ..., 0.0000e+00, 0.0000e+00,
+         0.0000e+00],
+        [0.0000e+00, 1.1240e+03, 5.0000e+00,  ..., 0.0000e+00, 0.0000e+00,
+         0.0000e+00],
+        [8.0000e+00, 2.0000e+00, 1.0050e+03,  ..., 0.0000e+00, 0.0000e+00,
+         0.0000e+00],
+        ...,
+        [0.0000e+00, 0.0000e+00, 0.0000e+00,  ..., 0.0000e+00, 0.0000e+00,
+         0.0000e+00],
+        [0.0000e+00, 0.0000e+00, 0.0000e+00,  ..., 0.0000e+00, 0.0000e+00,
+         0.0000e+00],
+        [0.0000e+00, 0.0000e+00, 0.0000e+00,  ..., 0.0000e+00, 0.0000e+00,
+         0.0000e+00]])
+done with session 2
+#################################################################################
+10
+Using TensorFlow backend.
+/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/torch/nn/_reduction.py:42: UserWarning: size_average and reduce args will be deprecated, please use reduction='none' instead.
+  warnings.warn(warning.format(ret))
+The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
+The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
+{'epochs': 10, 'checkpoint': 'results/mnist/RPS_net_mnist', 'savepoint': 'results/mnist/pathnet_mnist', 'dataset': 'MNIST', 'num_class': 10, 'class_per_task': 2, 'M': 8, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 128, 'test_batch': 128, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [6, 8, 16], 'gamma': 0.5, 'rigidness_coff': 2.5, 'jump': 1}
+    Total params: 2.92M
+Load Shape:  (10000, 784)
+session_2_0_log.txt
+98.822749 0
+Starting with session 3
+test case : 0
+#################################################################################
+path
+ [[0. 0. 0. 0. 1. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 1.]
+ [0. 0. 0. 1. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 1. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 1. 0. 0. 0. 0. 0. 0.]
+ [0. 1. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 1. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]]
+fixed_path
+ [[1. 0. 0. 1. 0. 0. 0. 1.]
+ [1. 1. 0. 0. 0. 1. 0. 0.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 1. 0. 1.]
+ [1. 0. 0. 1. 1. 0. 0. 0.]
+ [1. 0. 1. 0. 0. 1. 0. 0.]
+ [1. 0. 1. 0. 0. 0. 0. 0.]
+ [1. 0. 1. 0. 0. 0. 0. 1.]
+ [1. 0. 0. 1. 0. 1. 0. 0.]]
+train_path
+ [[0. 0. 0. 0. 1. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 1.]
+ [0. 0. 0. 1. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 1. 0. 0. 0. 0. 0. 0.]
+ [0. 1. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]]
+infer_path
+ [[1. 0. 0. 1. 1. 0. 0. 1.]
+ [1. 1. 0. 0. 0. 1. 0. 1.]
+ [1. 0. 0. 1. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 1. 0. 1.]
+ [1. 0. 0. 1. 1. 0. 0. 0.]
+ [1. 1. 1. 0. 0. 1. 0. 0.]
+ [1. 1. 1. 0. 0. 0. 0. 0.]
+ [1. 0. 1. 0. 0. 0. 0. 1.]
+ [1. 0. 0. 1. 0. 1. 0. 0.]]
+Number of layers being trained :  3
+Start Epoch: 0
+Epochs: 10
+
+Epoch: [1 | 10] LR: 0.001000 Sess: 3
+
+Epoch: [2 | 10] LR: 0.001000 Sess: 3
+
+Epoch: [3 | 10] LR: 0.001000 Sess: 3
+
+Epoch: [4 | 10] LR: 0.001000 Sess: 3
+
+Epoch: [5 | 10] LR: 0.001000 Sess: 3
+
+Epoch: [6 | 10] LR: 0.001000 Sess: 3
+
+Epoch: [7 | 10] LR: 0.000500 Sess: 3
+
+Epoch: [8 | 10] LR: 0.000500 Sess: 3
+
+Epoch: [9 | 10] LR: 0.000250 Sess: 3
+
+Epoch: [10 | 10] LR: 0.000250 Sess: 3
+Best acc:
+97.77971809903954
+session_3_0_log.txt
+97.779718 0
+tensor([[9.5900e+02, 0.0000e+00, 0.0000e+00,  ..., 0.0000e+00, 0.0000e+00,
+         0.0000e+00],
+        [0.0000e+00, 1.1210e+03, 4.0000e+00,  ..., 0.0000e+00, 0.0000e+00,
+         0.0000e+00],
+        [7.0000e+00, 1.0000e+00, 9.8200e+02,  ..., 0.0000e+00, 0.0000e+00,
+         0.0000e+00],
+        ...,
+        [0.0000e+00, 0.0000e+00, 0.0000e+00,  ..., 0.0000e+00, 0.0000e+00,
+         0.0000e+00],
+        [0.0000e+00, 0.0000e+00, 0.0000e+00,  ..., 0.0000e+00, 0.0000e+00,
+         0.0000e+00],
+        [0.0000e+00, 0.0000e+00, 0.0000e+00,  ..., 0.0000e+00, 0.0000e+00,
+         0.0000e+00]])
+done with session 3
+#################################################################################
+10
+Using TensorFlow backend.
+/home/abanyi17/RPSnet-master/captum/lib64/python3.6/site-packages/torch/nn/_reduction.py:42: UserWarning: size_average and reduce args will be deprecated, please use reduction='none' instead.
+  warnings.warn(warning.format(ret))
+The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
+The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
+{'epochs': 10, 'checkpoint': 'results/mnist/RPS_net_mnist', 'savepoint': 'results/mnist/pathnet_mnist', 'dataset': 'MNIST', 'num_class': 10, 'class_per_task': 2, 'M': 8, 'L': 9, 'N': 1, 'lr': 0.001, 'train_batch': 128, 'test_batch': 128, 'workers': 16, 'resume': False, 'arch': 'res-18', 'start_epoch': 0, 'evaluate': False, 'sess': 0, 'test_case': 0, 'schedule': [6, 8, 16], 'gamma': 0.5, 'rigidness_coff': 2.5, 'jump': 1}
+    Total params: 2.92M
+Load Shape:  (10000, 784)
+session_3_0_log.txt
+97.779718 0
+Starting with session 4
+test case : 0
+#################################################################################
+path
+ [[0. 0. 0. 0. 0. 0. 0. 1.]
+ [1. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 1. 0.]
+ [0. 0. 1. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 1.]
+ [0. 0. 0. 0. 0. 0. 1. 0.]
+ [0. 0. 1. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 1. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 1. 0. 0.]]
+fixed_path
+ [[1. 0. 0. 1. 1. 0. 0. 1.]
+ [1. 1. 0. 0. 0. 1. 0. 1.]
+ [1. 0. 0. 1. 0. 0. 0. 0.]
+ [1. 0. 0. 0. 0. 1. 0. 1.]
+ [1. 0. 0. 1. 1. 0. 0. 0.]
+ [1. 1. 1. 0. 0. 1. 0. 0.]
+ [1. 1. 1. 0. 0. 0. 0. 0.]
+ [1. 0. 1. 0. 0. 0. 0. 1.]
+ [1. 0. 0. 1. 0. 1. 0. 0.]]
+train_path
+ [[0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 1. 0.]
+ [0. 0. 1. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 1.]
+ [0. 0. 0. 0. 0. 0. 1. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 1. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0.]]
+infer_path
+ [[1. 0. 0. 1. 1. 0. 0. 1.]
+ [1. 1. 0. 0. 0. 1. 0. 1.]
+ [1. 0. 0. 1. 0. 0. 1. 0.]
+ [1. 0. 1. 0. 0. 1. 0. 1.]
+ [1. 0. 0. 1. 1. 0. 0. 1.]
+ [1. 1. 1. 0. 0. 1. 1. 0.]
+ [1. 1. 1. 0. 0. 0. 0. 0.]
+ [1. 0. 1. 1. 0. 0. 0. 1.]
+ [1. 0. 0. 1. 0. 1. 0. 0.]]
+Number of layers being trained :  1
+Start Epoch: 0
+Epochs: 10
+
+Epoch: [1 | 10] LR: 0.001000 Sess: 4
+
+Epoch: [2 | 10] LR: 0.001000 Sess: 4
+
+Epoch: [3 | 10] LR: 0.001000 Sess: 4
+
+Epoch: [4 | 10] LR: 0.001000 Sess: 4
+
+Epoch: [5 | 10] LR: 0.001000 Sess: 4
+
+Epoch: [6 | 10] LR: 0.001000 Sess: 4
+
+Epoch: [7 | 10] LR: 0.000500 Sess: 4
+
+Epoch: [8 | 10] LR: 0.000500 Sess: 4
+
+Epoch: [9 | 10] LR: 0.000250 Sess: 4
+
+Epoch: [10 | 10] LR: 0.000250 Sess: 4
+Best acc:
+77.62
+session_4_0_log.txt
+77.62 0
+tensor([[9.0300e+02, 1.0000e+00, 1.0000e+01,  ..., 0.0000e+00, 0.0000e+00,
+         0.0000e+00],
+        [0.0000e+00, 1.0680e+03, 3.0000e+00,  ..., 0.0000e+00, 0.0000e+00,
+         0.0000e+00],
+        [2.2000e+01, 2.8000e+01, 7.6300e+02,  ..., 0.0000e+00, 0.0000e+00,
+         0.0000e+00],
+        ...,
+        [0.0000e+00, 0.0000e+00, 0.0000e+00,  ..., 0.0000e+00, 0.0000e+00,
+         0.0000e+00],
+        [0.0000e+00, 0.0000e+00, 0.0000e+00,  ..., 0.0000e+00, 0.0000e+00,
+         0.0000e+00],
+        [0.0000e+00, 0.0000e+00, 0.0000e+00,  ..., 0.0000e+00, 0.0000e+00,
+         0.0000e+00]])
+done with session 4
+#################################################################################
+10
